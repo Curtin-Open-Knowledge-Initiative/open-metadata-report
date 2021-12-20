@@ -24,25 +24,20 @@ import numpy as np
 import plotly.graph_objects as go
 from typing import Optional, Callable, Union
 
+from google.cloud import bigquery
+
 from observatory.reports import report_utils
 from precipy.analytics_function import AnalyticsFunction
 from report_data_processing.sql import (
     hello_world
 )
 
-# Insert applicable graphs once created
-# from report_graphs import (
-#     Alluvial, OverallCoverage, BarLine, ValueAddBar, ValueAddByCrossrefType, ValueAddByCrossrefTypeHorizontal,
-#     PlotlyTable
-# )
-
-# Replace with applicable project name
-PROJECT_ID = 'coki-curtin-research-qualities'
+from parameters import *
 
 
 def get_data(af: AnalyticsFunction,
-             rerun: bool = False,
-             verbose: bool = True):
+             rerun: bool = RERUN,
+             verbose: bool = VERBOSE):
     """
     Template function for downloading data from BigQuery
 
@@ -66,8 +61,8 @@ def get_data(af: AnalyticsFunction,
 
 
 def make_bq_table(af: AnalyticsFunction,
-                  rerun: bool = False,
-                  verbose: bool = True):
+                  rerun: bool = RERUN,
+                  verbose: bool = VERBOSE):
     """
     Template function for running a query remotely and saving the new table in BigQuery
     """
