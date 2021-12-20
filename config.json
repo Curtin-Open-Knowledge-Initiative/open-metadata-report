@@ -1,0 +1,43 @@
+{
+  "cache_bucket_name": "output_cache",
+  "output_bucket_name": "output_files",
+  "logfile": "logs/precipy.log",
+  "loglevel": "DEBUG",
+  "constants": {
+    "PROJECT_ID": "utrecht-university",
+    "YEAR_RANGE": [1980,2026]
+  },
+  "ranges": {
+  },
+  "analytics": [
+    [
+      "get_data",
+      {
+      }
+    ],
+    [
+      "make_bq_table",
+      {
+      }
+    ],
+    [
+      "do_some_processing",
+      {
+        "depends": ["get_data", "make_bq_table"]
+      }
+    ],
+    [
+      "git_status",
+      {
+        "depends": ["get_data", "make_bq_table", "do_some_processing"]
+      }
+    ]
+  ],
+  "templates": [
+    "report_template.md"
+  ],
+  "filters": [
+    ["markdown", "html"],
+    ["xhtml2pdf", "pdf"]
+  ]
+}
