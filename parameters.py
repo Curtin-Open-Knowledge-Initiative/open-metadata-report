@@ -5,10 +5,12 @@ Main Location for Storing Parameters for Report
 RERUN = True
 VERBOSE = True
 
-PROJECT_ID = 'utrecht-university'
+# Files and Directories
+SQL_DIRECTORY = 'report_data_processing/sql'
+LOCAL_DATA = 'local_data.hd5'
 
 # BigQuery Tables
-
+PROJECT_ID = 'utrecht-university'
 SOURCES = ['mag', 'openalex']
 
 MAG_DATE = "20211011"
@@ -69,4 +71,14 @@ ALL_OBJECTS_SELECTOR = {
 SELECTOR = {
     'dois_only': DOIS_ONLY_SELECTOR,
     'all_objects': ALL_OBJECTS_SELECTOR
+}
+
+## Intermediate Tables
+
+INTERMEDIATE_TABLES = {
+    source: {
+        selector: f'{PROJECT_ID}.{source}.{source}_intermediate_{selector}{TABLE_DATES.get(source)}'
+        for selector in SELECTOR.keys()
+    }
+    for source in SOURCES
 }

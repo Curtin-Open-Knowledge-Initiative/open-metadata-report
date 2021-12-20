@@ -49,11 +49,13 @@ def source_to_intermediate(af: AnalyticsFunction,
         return
 
     query = load_sql_to_string('source_to_intermediate.sql',
-                               params=dict(
+                               parameters=dict(
                                    tables=TABLES[source],
-                                   selector=SELECTOR[selector][source],
-                               ))
-    destination_table = f'{PROJECT_ID}.{source}.{source}_intermediate{TABLE_DATES.get(source)}'
+                                   selector=SELECTOR[selector][source]
+                               ),
+                               directory=SQL_DIRECTORY
+                               )
+    destination_table = INTERMEDIATE_TABLES[source][selector]
 
     with bigquery.Client() as client:
         job_config = bigquery.QueryJobConfig(destination=destination_table,
@@ -68,29 +70,31 @@ def source_to_intermediate(af: AnalyticsFunction,
         print('...completed')
 
 
-def get_data(af: AnalyticsFunction,
-             rerun: bool = RERUN,
-             verbose: bool = VERBOSE):
+def query_intermediate(af: AnalyticsFunction,
+                       source: str,
+                       selector: str,
+                       rerun: bool = RERUN,
+                       verbose: bool = VERBOSE):
     """
-    Template function for downloading data from BigQuery
-
-    Change 'query', 'project_id' and output filenames
+    Query and download category data from the intermediate tables
     """
 
     if verbose:
-        print(f'Running {af.function_name}...')
+        print(f'Running {af.function_name} with source: {source}...')
     if not rerun:
         if verbose:
             print(f'...not running query, rerun: {rerun}')
         return
 
-    hello_world_query = pd.read_gbq(query=hello_world,
-                                    project_id=PROJECT_ID)
+    query = load_sql_to_string('intermediate_category_query.sql',
+                               parameters=dict(table=INTERMEDIATE_TABLES[source][selector]),
+                               directory=SQL_DIRECTORY)
 
-    hello_world_query.to_csv('hello_world.csv')
-    af.add_existing_file('hello_world.csv')
-    if verbose:
-        print('...completed')
+    categories = pd.read_gbq(query=query,
+                             project_id=PROJECT_ID)
+
+    with pd.HDFStore(LOCAL_DATA) as store:
+        store[f'{source}_{selector}_categories'] = categories
 
 
 def git_status(af):
