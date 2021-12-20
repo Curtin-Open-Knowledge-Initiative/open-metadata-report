@@ -28,11 +28,44 @@ from google.cloud import bigquery
 
 from observatory.reports import report_utils
 from precipy.analytics_function import AnalyticsFunction
-from report_data_processing.sql import (
-    hello_world
-)
-
+from report_data_processing.sql import load_sql_to_string
 from parameters import *
+
+
+def source_to_intermediate(af: AnalyticsFunction,
+                           source: str,
+                           selector: str,
+                           rerun: bool = RERUN,
+                           verbose: bool = VERBOSE):
+    """
+    Generate the intermediate table from source data
+    """
+
+    if verbose:
+        print(f'Running {af.function_name} with source: {source}...')
+    if not rerun:
+        if verbose:
+            print(f'...not running query, rerun: {rerun}')
+        return
+
+    query = load_sql_to_string('source_to_intermediate.sql',
+                               params=dict(
+                                   tables=TABLES[source],
+                                   selector=SELECTOR[selector][source],
+                               ))
+    destination_table = f'{PROJECT_ID}.{source}.{source}_intermediate{TABLE_DATES.get(source)}'
+
+    with bigquery.Client() as client:
+        job_config = bigquery.QueryJobConfig(destination=destination_table,
+                                             create_disposition='CREATE_IF_NEEDED',
+                                             write_disposition='WRITE_TRUNCATE')
+
+        # Start the query, passing in the extra configuration.
+        query_job = client.query(query, job_config=job_config)  # Make an API request.
+        query_job.result()  # Wait for the job to complete.
+
+    if verbose:
+        print('...completed')
 
 
 def get_data(af: AnalyticsFunction,
@@ -56,34 +89,6 @@ def get_data(af: AnalyticsFunction,
 
     hello_world_query.to_csv('hello_world.csv')
     af.add_existing_file('hello_world.csv')
-    if verbose:
-        print('...completed')
-
-
-def make_bq_table(af: AnalyticsFunction,
-                  rerun: bool = RERUN,
-                  verbose: bool = VERBOSE):
-    """
-    Template function for running a query remotely and saving the new table in BigQuery
-    """
-
-    if verbose:
-        print(f'Running {af.function_name}...')
-    if not rerun:
-        if verbose:
-            print(f'...not running query, rerun: {rerun}')
-        return
-
-    print('Generating the ROC DOI Table')
-    with bigquery.Client() as client:
-        job_config = bigquery.QueryJobConfig(destination=DESTINATION_TABLE,
-                                             create_disposition='CREATE_IF_NEEDED',
-                                             write_disposition='WRITE_TRUNCATE')
-
-        # Start the query, passing in the extra configuration.
-        query_job = client.query(QUERY, job_config=job_config)  # Make an API request.
-        query_job.result()  # Wait for the job to complete.
-
     if verbose:
         print('...completed')
 

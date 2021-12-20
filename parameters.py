@@ -65,3 +65,8 @@ FROM
 ALL_OBJECTS_SELECTOR = {
     source: f"""FROM `{TABLES[source].get('Papers')}` as papers""" for source in SOURCES
 }
+
+SELECTOR = {
+    'dois_only': DOIS_ONLY_SELECTOR,
+    'all_objects': ALL_OBJECTS_SELECTOR
+}
