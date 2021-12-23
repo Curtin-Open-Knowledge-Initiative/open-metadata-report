@@ -109,10 +109,11 @@ def crossref_member_status(af: AnalyticsFunction,
     results_received = 0
 
     l = []
-    while results_received <= total_results:
+    while results_received < total_results:
         r = requests.get('http://api.crossref.org/members/',
                          params=dict(cursor=cursor,
-                                     rows=200))
+                                     rows=500,
+                                     mailto='cn@cameronneylon.net'))
         r.raise_for_status()
         j = r.json()
         total_results = j['message']['total-results']
@@ -131,10 +132,13 @@ def crossref_member_status(af: AnalyticsFunction,
             for item in j['message']['items']
             for prefix_data in item['prefix']
         ])
+        print(f'{results_received} results so far...')
 
     df = pd.DataFrame(columns=['id', 'primary_name', 'prefix', 'name', 'public_references', 'collection_date'],
                       data=l)
-    df.drop_duplicates()
+    df.drop_duplicates(inplace=True)
+
+    df.to_csv(f'crossref_member_data{TODAY_STR}.csv', index=False)
 
     if push_to_gbq:
         client = bigquery.Client(project=PROJECT_ID)
@@ -146,7 +150,7 @@ def crossref_member_status(af: AnalyticsFunction,
 
         # Include target partition in the table id:
         job = client.load_table_from_dataframe(df,
-                                               table_id=CROSSREF_MEMBER_DATA_TABLE,
+                                               destination=CROSSREF_MEMBER_DATA_TABLE,
                                                job_config=job_config)  # Make an API request
         job.result()  # Wait for job to finish
 
@@ -175,4 +179,5 @@ def git_status(af):
 ## TESTING
 
 if __name__ == '__main__':
-    crossref_member_status('af')
+    crossref_member_status('af',
+                           push_to_gbq=True)

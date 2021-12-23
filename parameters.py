@@ -6,7 +6,8 @@ import datetime
 
 RERUN = True
 VERBOSE = True
-TODAY = datetime.datetime.today().strftime('%Y%M%d')
+TODAY = datetime.datetime.today()
+TODAY_STR = TODAY.strftime('%Y%m%d')
 
 # Files and Directories
 SQL_DIRECTORY = 'report_data_processing/sql'
@@ -61,4 +62,4 @@ INTERMEDIATE_TABLES = {
 
 ## Crossref Member Data Table
 
-CROSSREF_MEMBER_DATA_TABLE = f'{PROJECT_ID}.crossref.member_data${TODAY}'
+CROSSREF_MEMBER_DATA_TABLE = f'{PROJECT_ID}.crossref.member_data${TODAY_STR}'
