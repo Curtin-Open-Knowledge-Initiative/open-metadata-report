@@ -16,6 +16,7 @@
 #
 # Authors: COKI Team
 import json
+import requests
 from pathlib import Path
 import os
 
@@ -25,6 +26,7 @@ import plotly.graph_objects as go
 from typing import Optional, Callable, Union
 
 from google.cloud import bigquery
+from git import Repo
 
 from observatory.reports import report_utils
 from precipy.analytics_function import AnalyticsFunction
@@ -34,7 +36,6 @@ from parameters import *
 
 def source_to_intermediate(af: AnalyticsFunction,
                            source: str,
-                           selector: str,
                            rerun: bool = RERUN,
                            verbose: bool = VERBOSE):
     """
@@ -50,12 +51,11 @@ def source_to_intermediate(af: AnalyticsFunction,
 
     query = load_sql_to_string('source_to_intermediate.sql',
                                parameters=dict(
-                                   tables=TABLES[source],
-                                   selector=SELECTOR[selector][source]
+                                   tables=TABLES[source]
                                ),
                                directory=SQL_DIRECTORY
                                )
-    destination_table = INTERMEDIATE_TABLES[source][selector]
+    destination_table = INTERMEDIATE_TABLES[source]
 
     with bigquery.Client() as client:
         job_config = bigquery.QueryJobConfig(destination=destination_table,
@@ -72,7 +72,6 @@ def source_to_intermediate(af: AnalyticsFunction,
 
 def query_intermediate(af: AnalyticsFunction,
                        source: str,
-                       selector: str,
                        rerun: bool = RERUN,
                        verbose: bool = VERBOSE):
     """
@@ -87,14 +86,69 @@ def query_intermediate(af: AnalyticsFunction,
         return
 
     query = load_sql_to_string('intermediate_category_query.sql',
-                               parameters=dict(table=INTERMEDIATE_TABLES[source][selector]),
+                               parameters=dict(table=INTERMEDIATE_TABLES[source]),
                                directory=SQL_DIRECTORY)
 
     categories = pd.read_gbq(query=query,
                              project_id=PROJECT_ID)
 
     with pd.HDFStore(LOCAL_DATA) as store:
-        store[f'{source}_{selector}_categories'] = categories
+        store[f'{source}_categories'] = categories
+
+
+def crossref_member_status(af: AnalyticsFunction,
+                           push_to_gbq: bool = False,
+                           if_exists: str = 'fail'):
+    """
+    Poll the Crossref Member API for data on the abstracts and citations status of a member
+    """
+
+    cursor = '*'
+
+    total_results = 500
+    results_received = 0
+
+    l = []
+    while results_received <= total_results:
+        r = requests.get('http://api.crossref.org/members/',
+                         params=dict(cursor=cursor,
+                                     rows=200))
+        r.raise_for_status()
+        j = r.json()
+        total_results = j['message']['total-results']
+        results_received = results_received + len(j['message']['items'])
+        cursor = j['message']['next-cursor']
+
+        l.extend([
+            dict(
+                id=item['id'],
+                primary_name=item['primary-name'],
+                prefix=prefix_data['value'],
+                name=prefix_data['name'],
+                public_references=prefix_data['public-references'],
+                collection_date=TODAY
+            )
+            for item in j['message']['items']
+            for prefix_data in item['prefix']
+        ])
+
+    df = pd.DataFrame(columns=['id', 'primary_name', 'prefix', 'name', 'public_references', 'collection_date'],
+                      data=l)
+    df.drop_duplicates()
+
+    if push_to_gbq:
+        client = bigquery.Client(project=PROJECT_ID)
+
+        # Table needs to exist to be able to do this partitioned load
+        job_config = bigquery.LoadJobConfig(
+            write_disposition="WRITE_TRUNCATE",
+        )
+
+        # Include target partition in the table id:
+        job = client.load_table_from_dataframe(df,
+                                               table_id=CROSSREF_MEMBER_DATA_TABLE,
+                                               job_config=job_config)  # Make an API request
+        job.result()  # Wait for job to finish
 
 
 def git_status(af):
@@ -116,3 +170,9 @@ def git_status(af):
             branch=repo.active_branch.name),
             f
         )
+
+
+## TESTING
+
+if __name__ == '__main__':
+    crossref_member_status('af')

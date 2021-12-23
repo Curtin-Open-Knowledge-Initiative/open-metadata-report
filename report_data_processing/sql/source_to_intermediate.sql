@@ -41,7 +41,7 @@ SELECT
   resources.resources,
   urls.urls,
   ARRAY((SELECT GridId FROM authors.authors WHERE GridId IS NOT NULL GROUP BY GridID)) as grids
-FROM `{selector}` as papers
+FROM `{tables.get('Papers')}` as papers
 
 -- Abstract
 LEFT JOIN `{tables.get('PaperAbstractsInvertedIndex')}` as abstracts ON abstracts.PaperId = papers.PaperId
