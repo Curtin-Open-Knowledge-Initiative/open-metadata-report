@@ -35,8 +35,7 @@ from parameters import *
 
 
 def crossref_member_status(af: AnalyticsFunction,
-                           push_to_gbq: bool = True,
-                           #push_to_gbq: bool = False,
+                           push_to_gbq: bool = False,
                            if_exists: str = 'fail'):
     """
     Poll the Crossref Member API for data on the abstracts and citations status of a member
@@ -94,8 +93,8 @@ def crossref_member_status(af: AnalyticsFunction,
         job.result()  # Wait for job to finish
 
 
-## TESTING
+#TESTING
 
-#if __name__ == '__main__':
-#    crossref_member_status('af',
-#                           push_to_gbq=True)
+if __name__ == '__main__':
+    crossref_member_status('af',
+                           push_to_gbq=True)

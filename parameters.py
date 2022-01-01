@@ -6,7 +6,8 @@ import datetime
 
 RERUN = True
 VERBOSE = True
-TODAY = datetime.datetime.today()
+#TODAY = datetime.datetime.today()
+TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
 
 # Files and Directories
