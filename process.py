@@ -70,10 +70,41 @@ def source_to_intermediate(af: AnalyticsFunction,
         print('...completed')
 
 
-def query_intermediate(af: AnalyticsFunction,
-                       source: str,
-                       rerun: bool = RERUN,
-                       verbose: bool = VERBOSE):
+def create_qdoi_table(af: AnalyticsFunction,
+                      rerun: bool = RERUN,
+                      verbose: bool = VERBOSE):
+    """
+    Generate a 'doi-like' table containing the elements from crossref, openalex and mag for analysis
+    """
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose):
+        return
+
+    query = load_sql_to_string('create_q_doi_table.sql',
+                               parameters=dict(
+                                   doi_table=TABLES['crossref'],
+                                   intermediate_tables=INTERMEDIATE_TABLES
+                               ),
+                               directory=SQL_DIRECTORY
+                               )
+
+    with bigquery.Client() as client:
+        job_config = bigquery.QueryJobConfig(destination=Q_DOI_TABLE,
+                                             create_disposition='CREATE_IF_NEEDED',
+                                             write_disposition='WRITE_TRUNCATE')
+
+        # Start the query, passing in the extra configuration.
+        query_job = client.query(query, job_config=job_config)  # Make an API request.
+        query_job.result()  # Wait for the job to complete.
+
+    if verbose:
+        print('...completed')
+
+
+def query_intermediates_categories(af: AnalyticsFunction,
+                                   source: str,
+                                   rerun: bool = RERUN,
+                                   verbose: bool = VERBOSE):
     """
     Query and download category data from the intermediate tables
     """
@@ -85,7 +116,7 @@ def query_intermediate(af: AnalyticsFunction,
             print(f'...not running query, rerun: {rerun}')
         return
 
-    query = load_sql_to_string('intermediate_category_query.sql',
+    query = load_sql_to_string('intermediates_categories_query.sql',
                                parameters=dict(table=INTERMEDIATE_TABLES[source]),
                                directory=SQL_DIRECTORY)
 
@@ -94,6 +125,32 @@ def query_intermediate(af: AnalyticsFunction,
 
     with pd.HDFStore(LOCAL_DATA) as store:
         store[f'{source}_categories'] = categories
+
+
+def query_qdoi_categories(af: AnalyticsFunction,
+                          rerun: bool = RERUN,
+                          verbose: bool = VERBOSE):
+    """
+    Query and download category data from the quasi doi table
+    """
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose):
+        return
+
+    query = load_sql_to_string('doi_categories_query.sql',
+                               parameters=dict(
+                                   crossref_member_table=CROSSREF_MEMBER_DATA_TABLE,
+                                   qdoi_table=Q_DOI_TABLE),
+                               directory=SQL_DIRECTORY)
+
+    categories = pd.read_gbq(query=query,
+                             project_id=PROJECT_ID)
+
+    with pd.HDFStore(LOCAL_DATA) as store:
+        store[f'doi_categories'] = categories
+
+    if verbose:
+        print('...completed')
 
 
 def crossref_member_status(af: AnalyticsFunction,

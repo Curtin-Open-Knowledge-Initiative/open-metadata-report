@@ -20,9 +20,11 @@ SOURCES = ['mag', 'openalex']
 
 MAG_DATE = "20211011"
 OPENALEX_DATE = "20211011"
+CROSSREF_DATE = "20211002"
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
+DOI_TABLE_LOCATION = 'academic-observatory.observatory.doi'
 
 TABLE_NAMES = ['Papers',
                'Affiliations',
@@ -41,8 +43,8 @@ TABLE_NAMES = ['Papers',
                'PaperMeSH'
                ]
 
-TABLE_DATES = dict(mag=MAG_DATE, openalex=OPENALEX_DATE)
-TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION, openalex=OPENALEX_TABLE_LOCATION)
+TABLE_DATES = dict(mag=MAG_DATE, openalex=OPENALEX_DATE, crossref=CROSSREF_DATE)
+TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION, openalex=OPENALEX_TABLE_LOCATION, crossref=DOI_TABLE_LOCATION)
 
 TABLES = {
     source:
@@ -60,6 +62,10 @@ INTERMEDIATE_TABLES = {
     source: f'{PROJECT_ID}.{source}.{source}_intermediate{TABLE_DATES.get(source)}'
     for source in SOURCES
 }
+
+## Quasi DOI Table
+
+Q_DOI_TABLE = f'{PROJECT_ID}.crossref_intermediates{TABLE_DATES.get("crossref")}'
 
 ## Crossref Member Data Table
 
