@@ -5,31 +5,65 @@
   "loglevel": "DEBUG",
   "constants": {
     "PROJECT_ID": "utrecht-university",
-    "YEAR_RANGE": [1980,2026]
+    "YEAR_RANGE": [
+      1980,
+      2026
+    ]
   },
   "ranges": {
+    "source": [
+      "mag",
+      "openalex"
+    ]
   },
   "analytics": [
     [
-      "get_data",
+      "source_to_intermediate",
+      {
+        "source": null
+      }
+    ],
+    [
+      "create_qdoi_table",
+      {
+        "depends": [
+          "source_to_intermediate"
+        ]
+      }
+    ],
+    [
+      "query_intermediate_categories",
+      {
+        "depends": [
+          "source_to_intermediate"
+        ],
+        "source": null
+      }
+    ],
+    [
+      "crossref_member_status",
       {
       }
     ],
     [
-      "make_bq_table",
+      "query_qdoi_categories",
       {
-      }
-    ],
-    [
-      "do_some_processing",
-      {
-        "depends": ["get_data", "make_bq_table"]
+        "depends": [
+          "create_qdoi_table",
+          "crossref_member_status"
+        ]
       }
     ],
     [
       "git_status",
       {
-        "depends": ["get_data", "make_bq_table", "do_some_processing"]
+        "depends": [
+          "source_to_intermediate",
+          "create_qdoi_table",
+          "query_intermediate_categories",
+          "crossref_member_status",
+          "query_qdoi_categories"
+        ]
       }
     ]
   ],
@@ -37,7 +71,13 @@
     "report_template.md"
   ],
   "filters": [
-    ["markdown", "html"],
-    ["xhtml2pdf", "pdf"]
+    [
+      "markdown",
+      "html"
+    ],
+    [
+      "xhtml2pdf",
+      "pdf"
+    ]
   ]
 }
