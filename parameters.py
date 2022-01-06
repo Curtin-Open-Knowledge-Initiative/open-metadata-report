@@ -45,6 +45,11 @@ TABLE_NAMES = ['Papers',
 TABLE_DATES = dict(mag=MAG_DATE, openalex=OPENALEX_DATE, crossref=CROSSREF_DATE)
 TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION, openalex=OPENALEX_TABLE_LOCATION, crossref=DOI_TABLE_LOCATION)
 
+OPEN_ALEX_ADDITIONAL_FIELDS = dict(
+    mag='',
+    openalex='affiliation.RorId, author.Orcid, '
+)
+
 TABLES = {
     source:
         {
@@ -53,6 +58,11 @@ TABLES = {
         }
     for source in SOURCES
 }
+
+for source in SOURCES:
+    TABLES[source].update(dict(
+        openalex_additional_fields=OPEN_ALEX_ADDITIONAL_FIELDS[source]
+    ))
 
 
 ## Intermediate Tables

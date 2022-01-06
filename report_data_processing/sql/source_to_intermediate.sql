@@ -1,11 +1,4 @@
-WITH affiliations_processed as (
-  SELECT
-    affiliation.AffiliationId,
-    affiliation.DisplayName,
-    affiliation.GridId
-  FROM `{tables.get('Affiliations')}` as affiliation
-),
-
+WITH
 fields_of_study as (
     SELECT
         fields.*,
@@ -75,10 +68,11 @@ LEFT JOIN (SELECT
 -- Authors
 LEFT JOIN (SELECT
               papers.PaperId,
-              ARRAY_AGG(STRUCT(paperAuthorAffiliations.AuthorSequenceNumber, paperAuthorAffiliations.AuthorID, paperAuthorAffiliations.OriginalAuthor, paperAuthorAffiliations.AffiliationId, paperAuthorAffiliations.OriginalAffiliation, affiliation.GridId, affiliation.DisplayName) IGNORE NULLS ORDER BY paperAuthorAffiliations.AuthorSequenceNumber ASC) as authors
+              ARRAY_AGG(STRUCT(paperAuthorAffiliations.AuthorSequenceNumber, paperAuthorAffiliations.AuthorID, paperAuthorAffiliations.OriginalAuthor, paperAuthorAffiliations.AffiliationId, paperAuthorAffiliations.OriginalAffiliation, affiliation.GridId, {tables.get(openalex_additional_fields)}affiliation.Iso3166Code, affiliation.DisplayName) IGNORE NULLS ORDER BY paperAuthorAffiliations.AuthorSequenceNumber ASC) as authors
             FROM `{tables.get('Papers')}` as papers
             LEFT JOIN `{tables.get('PaperAuthorAffiliations')}` as paperAuthorAffiliations on paperAuthorAffiliations.PaperId = papers.PaperId
-            LEFT JOIN affiliations_processed as affiliation on affiliation.AffiliationId = paperAuthorAffiliations.AffiliationId
+            LEFT JOIN `{tables.get('Affiliations')}` as affiliation on affiliation.AffiliationId = paperAuthorAffiliations.AffiliationId
+            LEFT JOIN `{tables.get('Authors')}` as author on author.AuthorId = paperAuthorAffiliations.AuthorId
             GROUP BY papers.PaperId) as authors ON authors.PaperId = papers.PaperId
 
 -- Extended Attributes
