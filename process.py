@@ -50,12 +50,12 @@ def source_to_intermediate(af: AnalyticsFunction,
 
     if not report_utils.bigquery_rerun(af, rerun, verbose):
         print(f"""Query String is:
+        
 {query}
+
 """)
         print(f'Destination Tables is:{destination_table}')
         return
-
-
 
     with bigquery.Client() as client:
         job_config = bigquery.QueryJobConfig(destination=destination_table,
@@ -79,16 +79,18 @@ def create_qdoi_table(af: AnalyticsFunction,
 
     query = load_sql_to_string('create_q_doi_table.sql',
                                parameters=dict(
-                                   doi_table=DOI_TABLE_LOCATION,
-                                   mag=INTERMEDIATE_TABLES['mag'],
-                                   openalex=INTERMEDIATE_TABLES['openalex']
+                                   doi_table=TABLES['crossref'],
+                                   mag_intermediate=INTERMEDIATE_TABLES['mag'],
+                                   openalex_intermediate=INTERMEDIATE_TABLES['openalex']
                                ),
                                directory=SQL_DIRECTORY
                                )
 
     if not report_utils.bigquery_rerun(af, rerun, verbose):
         print(f"""Query is:
+        
 {query}
+
 """)
         return
 
@@ -120,7 +122,9 @@ def query_intermediates_categories(af: AnalyticsFunction,
     if not report_utils.bigquery_rerun(af, rerun, verbose):
         print(f'Running {af.function_name} with source: {source}...')
         print(f"""Query is:
+        
 {query}
+
 """)
         return
 
@@ -145,8 +149,10 @@ def query_qdoi_categories(af: AnalyticsFunction,
                                directory=SQL_DIRECTORY)
 
     if not report_utils.bigquery_rerun(af, rerun, verbose):
-        print(f"""Query is
+        print(f"""Query is:
+        
 {query}
+
 """)
         return
 
@@ -248,5 +254,14 @@ def git_status(af):
 ## TESTING
 
 if __name__ == '__main__':
-    crossref_member_status('af',
-                           push_to_gbq=True)
+    # source_to_intermediate(af="test",
+    #                        source="mag",
+    #                        rerun=False,
+    #                        verbose=True)
+    # source_to_intermediate(af="test",
+    #                        source="openalex",
+    #                        rerun=False,
+    #                        verbose=True)
+    create_qdoi_table(af='test',
+                      rerun=False,
+                      verbose=True)

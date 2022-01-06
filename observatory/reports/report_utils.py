@@ -27,15 +27,19 @@ from precipy.analytics_function import AnalyticsFunction
 import observatory.reports.defaults as defaults
 
 
-def bigquery_rerun(af: AnalyticsFunction,
-             rerun: bool,
-             verbose: bool)->bool:
+def bigquery_rerun(af: Union[AnalyticsFunction, str],
+                   rerun: bool,
+                   verbose: bool) -> bool:
     """
     Convenience function for determining whether to rerun a BQ query
     """
 
     if verbose:
-        print(f'Running {af.function_name}...')
+        if type(af) == AnalyticsFunction:
+            fname = af.function_name
+        else:
+            fname = af
+        print(f'Running {fname}...')
     if not rerun:
         if verbose:
             print(f'...not running query, rerun: {rerun}')
@@ -111,6 +115,7 @@ def generate_table_data(title: str,
     return {'title': title,
             'columns': column_list,
             'rows': table_data_list}
+
 
 def close_comparators(df: pd.DataFrame,
                       identifier: str,

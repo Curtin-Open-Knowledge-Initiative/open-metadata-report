@@ -65,6 +65,8 @@ for source in SOURCES:
         openalex_additional_fields=OPEN_ALEX_ADDITIONAL_FIELDS[source]
     ))
 
+TABLES.update(dict(crossref=f'{DOI_TABLE_LOCATION}{CROSSREF_DATE}'))
+
 
 ## Intermediate Tables
 
@@ -75,7 +77,7 @@ INTERMEDIATE_TABLES = {
 
 ## Quasi DOI Table
 
-Q_DOI_TABLE = f'{PROJECT_ID}.crossref_intermediates{TABLE_DATES.get("crossref")}'
+Q_DOI_TABLE = f'{PROJECT_ID}.crossref.crossref_intermediate{TABLE_DATES.get("crossref")}'
 
 ## Crossref Member Data Table
 

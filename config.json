@@ -10,17 +10,17 @@
       2026
     ]
   },
-  "ranges": {
-    "source": [
-      "mag",
-      "openalex"
-    ]
-  },
   "analytics": [
     [
       "source_to_intermediate",
       {
-        "source": null
+        "source": "mag"
+      }
+    ],
+    [
+      "source_to_intermediate",
+      {
+        "source": "openalex"
       }
     ],
     [
@@ -37,7 +37,16 @@
         "depends": [
           "source_to_intermediate"
         ],
-        "source": null
+        "source": "mag"
+      }
+    ],
+    [
+      "query_intermediates_categories",
+      {
+        "depends": [
+          "source_to_intermediate"
+        ],
+        "source": "openalex"
       }
     ],
     [
