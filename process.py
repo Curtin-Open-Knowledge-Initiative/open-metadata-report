@@ -42,13 +42,6 @@ def source_to_intermediate(af: AnalyticsFunction,
     Generate the intermediate table from source data
     """
 
-    if verbose:
-        print(f'Running {af.function_name} with source: {source}...')
-    if not rerun:
-        if verbose:
-            print(f'...not running query, rerun: {rerun}')
-        return
-
     query = load_sql_to_string('source_to_intermediate.sql',
                                parameters=dict(
                                    tables=TABLES[source]
@@ -56,6 +49,15 @@ def source_to_intermediate(af: AnalyticsFunction,
                                directory=SQL_DIRECTORY
                                )
     destination_table = INTERMEDIATE_TABLES[source]
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose):
+        print(f"""Query String is:
+{query}
+""")
+        print(f'Destination Tables is:{destination_table}')
+        return
+
+
 
     with bigquery.Client() as client:
         job_config = bigquery.QueryJobConfig(destination=destination_table,
@@ -77,9 +79,6 @@ def create_qdoi_table(af: AnalyticsFunction,
     Generate a 'doi-like' table containing the elements from crossref, openalex and mag for analysis
     """
 
-    if not report_utils.bigquery_rerun(af, rerun, verbose):
-        return
-
     query = load_sql_to_string('create_q_doi_table.sql',
                                parameters=dict(
                                    doi_table=TABLES['crossref'],
@@ -87,6 +86,12 @@ def create_qdoi_table(af: AnalyticsFunction,
                                ),
                                directory=SQL_DIRECTORY
                                )
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose):
+        print(f"""Query is:
+{query}
+""")
+        return
 
     with bigquery.Client() as client:
         job_config = bigquery.QueryJobConfig(destination=Q_DOI_TABLE,
@@ -109,16 +114,16 @@ def query_intermediates_categories(af: AnalyticsFunction,
     Query and download category data from the intermediate tables
     """
 
-    if verbose:
-        print(f'Running {af.function_name} with source: {source}...')
-    if not rerun:
-        if verbose:
-            print(f'...not running query, rerun: {rerun}')
-        return
-
     query = load_sql_to_string('intermediates_categories_query.sql',
                                parameters=dict(table=INTERMEDIATE_TABLES[source]),
                                directory=SQL_DIRECTORY)
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose):
+        print(f'Running {af.function_name} with source: {source}...')
+        print(f"""Query is:
+{query}
+""")
+        return
 
     categories = pd.read_gbq(query=query,
                              project_id=PROJECT_ID)
@@ -134,14 +139,17 @@ def query_qdoi_categories(af: AnalyticsFunction,
     Query and download category data from the quasi doi table
     """
 
-    if not report_utils.bigquery_rerun(af, rerun, verbose):
-        return
-
     query = load_sql_to_string('doi_categories_query.sql',
                                parameters=dict(
                                    crossref_member_table=CROSSREF_MEMBER_DATA_TABLE,
                                    qdoi_table=Q_DOI_TABLE),
                                directory=SQL_DIRECTORY)
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose):
+        print(f"""Query is
+{query}
+""")
+        return
 
     categories = pd.read_gbq(query=query,
                              project_id=PROJECT_ID)
@@ -155,7 +163,8 @@ def query_qdoi_categories(af: AnalyticsFunction,
 
 def crossref_member_status(af: AnalyticsFunction,
                            push_to_gbq: bool = False,
-                           if_exists: str = 'fail'):
+                           if_exists: str = 'fail',
+                           rerun=RERUN):
     """
     Poll the Crossref Member API for data on the abstracts and citations status of a member
     """
@@ -164,6 +173,10 @@ def crossref_member_status(af: AnalyticsFunction,
 
     total_results = 500
     results_received = 0
+
+    if not rerun:
+        print('Skipping poking the Crossref Member API')
+        return
 
     l = []
     while results_received < total_results:
