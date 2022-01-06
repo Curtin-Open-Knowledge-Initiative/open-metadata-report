@@ -5,15 +5,16 @@ fields_of_study as (
         ARRAY(SELECT AS STRUCT
             extended.AttributeType as AttributeType,
             extended.AttributeValue as AttributeValue
-         FROM `{tables.get('FieldOfStudyExtendedAttributes')}` as extended
+         FROM `{FieldOfStudyExtendedAttributes}` as extended
          WHERE extended.FieldOfStudyId = fields.FieldOfStudyId
         ) as extended
-    FROM `{tables.get('FieldsOfStudy')}` as fields
+    FROM `{FieldsOfStudy}` as fields
 )
 
 SELECT
   papers.* EXCEPT (journalId, ConferenceSeriesId, ConferenceInstanceId, CreatedDate) REPLACE ( UPPER(TRIM(Doi)) AS Doi),
-  REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REGEXP_REPLACE(JSON_EXTRACT(IndexedAbstract, '$.InvertedIndex'), "[0-9]+", ""), ":", ""), ",", " "), '"', ""), "{", ""), "}", ""), "[", ""), "]", "") as abstract,
+  -- Note the curly braces below need to be escapes as {{ and }} due to the use of python string formatting for table names
+  REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REGEXP_REPLACE(JSON_EXTRACT(IndexedAbstract, '$.InvertedIndex'), "[0-9]+", ""), ":", ""), ",", " "), '"', ""), "{{", ""), "}}", ""), "[", ""), "]", "") as abstract,
   fields.fields,
   mesh.mesh,
   authors.authors,
@@ -34,19 +35,19 @@ SELECT
   resources.resources,
   urls.urls,
   ARRAY((SELECT GridId FROM authors.authors WHERE GridId IS NOT NULL GROUP BY GridID)) as grids
-FROM `{tables.get('Papers')}` as papers
+FROM `{Papers}` as papers
 
 -- Abstract
-LEFT JOIN `{tables.get('PaperAbstractsInvertedIndex')}` as abstracts ON abstracts.PaperId = papers.PaperId
+LEFT JOIN `{PaperAbstractsInvertedIndex}` as abstracts ON abstracts.PaperId = papers.PaperId
 
 -- Journal
-LEFT JOIN `{tables.get('Journals')}` as journal ON journal.JournalId = papers.JournalId
+LEFT JOIN `{Journals}` as journal ON journal.JournalId = papers.JournalId
 
 -- ConferenceInstance
-LEFT JOIN `{tables.get('ConferenceInstances')}` as conferenceInstance ON conferenceInstance.ConferenceInstanceId = papers.ConferenceInstanceId
+LEFT JOIN `{ConferenceInstances}` as conferenceInstance ON conferenceInstance.ConferenceInstanceId = papers.ConferenceInstanceId
 
 -- ConferenceSeries
-LEFT JOIN `{tables.get('ConferenceSeries')}` as conferenceSeries ON conferenceSeries.ConferenceSeriesId = papers.ConferenceSeriesId
+LEFT JOIN `{ConferenceSeries}` as conferenceSeries ON conferenceSeries.ConferenceSeriesId = papers.ConferenceSeriesId
 
 -- Fields of Study
 LEFT JOIN (SELECT
@@ -59,8 +60,8 @@ LEFT JOIN (SELECT
               ARRAY_AGG(IF(fields.Level = 3, STRUCT(fields.DisplayName,fields.FieldOfStudyId,fields.Rank,fields.MainType,paperFields.Score,extended), null) IGNORE NULLS ORDER BY paperFields.Score DESC) as level_3,
               ARRAY_AGG(IF(fields.Level = 4, STRUCT(fields.DisplayName,fields.FieldOfStudyId,fields.Rank,fields.MainType,paperFields.Score,extended), null) IGNORE NULLS ORDER BY paperFields.Score DESC) as level_4,
               ARRAY_AGG(IF(fields.Level = 5, STRUCT(fields.DisplayName,fields.FieldOfStudyId,fields.Rank,fields.MainType,paperFields.Score,extended), null) IGNORE NULLS ORDER BY paperFields.Score DESC) as level_5) as fields
-            FROM `{tables.get('Papers')}`  as papers
-            LEFT JOIN `{tables.get('PaperFieldsOfStudy')}` as paperFields on papers.PaperId = paperFields.PaperId
+            FROM `{Papers}`  as papers
+            LEFT JOIN `{PaperFieldsOfStudy}` as paperFields on papers.PaperId = paperFields.PaperId
             LEFT JOIN fields_of_study as fields on fields.FieldOfStudyId = paperFields.FieldOfStudyId
             ---WHERE papers.Doi IS NOT NULL
             GROUP BY papers.PaperId) as fields ON fields.PaperId = papers.PaperId
@@ -68,37 +69,37 @@ LEFT JOIN (SELECT
 -- Authors
 LEFT JOIN (SELECT
               papers.PaperId,
-              ARRAY_AGG(STRUCT(paperAuthorAffiliations.AuthorSequenceNumber, paperAuthorAffiliations.AuthorID, paperAuthorAffiliations.OriginalAuthor, paperAuthorAffiliations.AffiliationId, paperAuthorAffiliations.OriginalAffiliation, affiliation.GridId, {tables.get(openalex_additional_fields)}affiliation.Iso3166Code, affiliation.DisplayName) IGNORE NULLS ORDER BY paperAuthorAffiliations.AuthorSequenceNumber ASC) as authors
-            FROM `{tables.get('Papers')}` as papers
-            LEFT JOIN `{tables.get('PaperAuthorAffiliations')}` as paperAuthorAffiliations on paperAuthorAffiliations.PaperId = papers.PaperId
-            LEFT JOIN `{tables.get('Affiliations')}` as affiliation on affiliation.AffiliationId = paperAuthorAffiliations.AffiliationId
-            LEFT JOIN `{tables.get('Authors')}` as author on author.AuthorId = paperAuthorAffiliations.AuthorId
+              ARRAY_AGG(STRUCT(paperAuthorAffiliations.AuthorSequenceNumber, paperAuthorAffiliations.AuthorID, paperAuthorAffiliations.OriginalAuthor, paperAuthorAffiliations.AffiliationId, paperAuthorAffiliations.OriginalAffiliation, affiliation.GridId, {openalex_additional_fields}affiliation.Iso3166Code, affiliation.DisplayName) IGNORE NULLS ORDER BY paperAuthorAffiliations.AuthorSequenceNumber ASC) as authors
+            FROM `{Papers}` as papers
+            LEFT JOIN `{PaperAuthorAffiliations}` as paperAuthorAffiliations on paperAuthorAffiliations.PaperId = papers.PaperId
+            LEFT JOIN `{Affiliations}` as affiliation on affiliation.AffiliationId = paperAuthorAffiliations.AffiliationId
+            LEFT JOIN `{Authors}` as author on author.AuthorId = paperAuthorAffiliations.AuthorId
             GROUP BY papers.PaperId) as authors ON authors.PaperId = papers.PaperId
 
 -- Extended Attributes
 LEFT JOIN (SELECT
               PaperId,
               ARRAY_AGG(STRUCT( AttributeType, AttributeValue)) as attributes
-            FROM `{tables.get('PaperExtendedAttributes')}`
+            FROM `{PaperExtendedAttributes}`
             GROUP BY PaperId) as extended ON extended.PaperId = papers.PaperId
 
 -- Resources
 LEFT JOIN (SELECT
               PaperId,
               ARRAY_AGG(STRUCT( ResourceType , ResourceUrl )) as resources
-            FROM `{tables.get('PaperResources')}`
+            FROM `{PaperResources}`
             GROUP BY PaperId) as resources ON resources.PaperId = papers.PaperId
 
 -- URLs
 LEFT JOIN (SELECT
               PaperId,
               ARRAY_AGG(STRUCT( SourceType , SourceUrl, LanguageCode )) as urls
-            FROM `{tables.get('PaperUrls')}`
+            FROM `{PaperUrls}`
             GROUP BY PaperId) as urls ON urls.PaperId = papers.PaperId
 
 -- PaperMESH
 LEFT JOIN (SELECT
               PaperId,
               ARRAY_AGG(STRUCT( DescriptorUI,	DescriptorName,	QualifierUI,	QualifierName,	IsMajorTopic )) as mesh
-            FROM `{tables.get('PaperMeSH')}`
+            FROM `{PaperMeSH}`
             GROUP BY PaperId) as mesh ON mesh.PaperId = papers.PaperId

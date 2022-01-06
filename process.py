@@ -43,9 +43,7 @@ def source_to_intermediate(af: AnalyticsFunction,
     """
 
     query = load_sql_to_string('source_to_intermediate.sql',
-                               parameters=dict(
-                                   tables=TABLES[source]
-                               ),
+                               parameters=TABLES[source],
                                directory=SQL_DIRECTORY
                                )
     destination_table = INTERMEDIATE_TABLES[source]
@@ -81,8 +79,9 @@ def create_qdoi_table(af: AnalyticsFunction,
 
     query = load_sql_to_string('create_q_doi_table.sql',
                                parameters=dict(
-                                   doi_table=TABLES['crossref'],
-                                   intermediate_tables=INTERMEDIATE_TABLES
+                                   doi_table=DOI_TABLE_LOCATION,
+                                   mag=INTERMEDIATE_TABLES['mag'],
+                                   openalex=INTERMEDIATE_TABLES['openalex']
                                ),
                                directory=SQL_DIRECTORY
                                )
@@ -233,7 +232,7 @@ def git_status(af):
     repo = Repo(search_parent_directories=True)
     print('This report was run from the git commit hash: ' + repo.head.object.hexsha)
     changedfiles = [item.a_path for item in repo.index.diff(None)]
-    if len(changedfiles > 0):
+    if len(changedfiles) > 0:
         print('WARNING: This report was run with local changes that were not committed to the following files: ')
         print(changedfiles)
 

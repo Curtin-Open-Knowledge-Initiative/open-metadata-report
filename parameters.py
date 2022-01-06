@@ -4,7 +4,7 @@ Main Location for Storing Parameters for Report
 
 import datetime
 
-RERUN = True
+RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
@@ -47,6 +47,7 @@ TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION, openalex=OPENALEX_TABLE_LOCATION,
 
 OPEN_ALEX_ADDITIONAL_FIELDS = dict(
     mag='',
+    crossref=None,
     openalex='affiliation.RorId, author.Orcid, '
 )
 

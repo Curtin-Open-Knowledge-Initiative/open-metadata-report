@@ -32,7 +32,7 @@
       }
     ],
     [
-      "query_intermediate_categories",
+      "query_intermediates_categories",
       {
         "depends": [
           "source_to_intermediate"
@@ -60,7 +60,7 @@
         "depends": [
           "source_to_intermediate",
           "create_qdoi_table",
-          "query_intermediate_categories",
+          "query_intermediates_categories",
           "crossref_member_status",
           "query_qdoi_categories"
         ]
