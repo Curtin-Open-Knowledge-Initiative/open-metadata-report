@@ -75,6 +75,11 @@ INTERMEDIATE_TABLES = {
     for source in SOURCES
 }
 
+SOURCE_TRUTH_TABLES = {
+    source: f'{PROJECT_ID}.{source}.{source}_truthtable{TABLE_DATES.get(source)}'
+    for source in SOURCES
+}
+
 ## Quasi DOI Table
 
 Q_DOI_TABLE = f'{PROJECT_ID}.crossref.crossref_intermediate{TABLE_DATES.get("crossref")}'

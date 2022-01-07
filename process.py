@@ -108,16 +108,51 @@ def create_qdoi_table(af: AnalyticsFunction,
         print('...completed')
 
 
-def query_intermediates_categories(af: AnalyticsFunction,
-                                   source: str,
-                                   rerun: bool = RERUN,
-                                   verbose: bool = VERBOSE):
+def intermediate_to_source_truthtable(af: AnalyticsFunction,
+                                      source: str,
+                                      rerun: bool = RERUN,
+                                      verbose: bool = VERBOSE):
     """
     Query and download category data from the intermediate tables
     """
 
-    query = load_sql_to_string('intermediates_categories_query.sql',
+    query = load_sql_to_string('intermediates_truthtable_query.sql',
                                parameters=dict(table=INTERMEDIATE_TABLES[source]),
+                               directory=SQL_DIRECTORY)
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose):
+        print(f'Running {af.function_name} with source: {source}...')
+        print(f"""Query is:
+        
+{query}
+
+""")
+        print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
+        return
+
+    with bigquery.Client() as client:
+        job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
+                                             create_disposition='CREATE_IF_NEEDED',
+                                             write_disposition='WRITE_TRUNCATE')
+
+        # Start the query, passing in the extra configuration.
+        query_job = client.query(query, job_config=job_config)  # Make an API request.
+        query_job.result()  # Wait for the job to complete.
+
+    if verbose:
+        print('...completed')
+
+
+def source_category_query(af: AnalyticsFunction,
+                                      source: str,
+                                      rerun: bool = RERUN,
+                                      verbose: bool = VERBOSE):
+    """
+    Query and download category data from the intermediate tables
+    """
+
+    query = load_sql_to_string('source_categories_query.sql',
+                               parameters=dict(table=SOURCE_TRUTH_TABLES[source]),
                                directory=SQL_DIRECTORY)
 
     if not report_utils.bigquery_rerun(af, rerun, verbose):
@@ -133,10 +168,12 @@ def query_intermediates_categories(af: AnalyticsFunction,
                              project_id=PROJECT_ID)
 
     with pd.HDFStore(LOCAL_DATA) as store:
-        store[f'{source}_categories'] = categories
+        store[f'{source}_allobjects_categories'] = categories
 
+    if verbose:
+        print('...completed')
 
-def query_qdoi_categories(af: AnalyticsFunction,
+def doi_category_query(af: AnalyticsFunction,
                           rerun: bool = RERUN,
                           verbose: bool = VERBOSE):
     """
