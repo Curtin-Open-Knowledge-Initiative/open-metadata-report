@@ -92,6 +92,7 @@ def create_qdoi_table(af: AnalyticsFunction,
 {query}
 
 """)
+        print(f'Destination Table: {Q_DOI_TABLE}')
         return
 
     with bigquery.Client() as client:
