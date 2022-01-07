@@ -70,44 +70,6 @@ def source_to_intermediate(af: AnalyticsFunction,
         print('...completed')
 
 
-def create_qdoi_table(af: AnalyticsFunction,
-                      rerun: bool = RERUN,
-                      verbose: bool = VERBOSE):
-    """
-    Generate a 'doi-like' table containing the elements from crossref, openalex and mag for analysis
-    """
-
-    query = load_sql_to_string('create_q_doi_table.sql',
-                               parameters=dict(
-                                   doi_table=TABLES['crossref'],
-                                   mag_intermediate=INTERMEDIATE_TABLES['mag'],
-                                   openalex_intermediate=INTERMEDIATE_TABLES['openalex']
-                               ),
-                               directory=SQL_DIRECTORY
-                               )
-
-    if not report_utils.bigquery_rerun(af, rerun, verbose):
-        print(f"""Query is:
-        
-{query}
-
-""")
-        print(f'Destination Table: {Q_DOI_TABLE}')
-        return
-
-    with bigquery.Client() as client:
-        job_config = bigquery.QueryJobConfig(destination=Q_DOI_TABLE,
-                                             create_disposition='CREATE_IF_NEEDED',
-                                             write_disposition='WRITE_TRUNCATE')
-
-        # Start the query, passing in the extra configuration.
-        query_job = client.query(query, job_config=job_config)  # Make an API request.
-        query_job.result()  # Wait for the job to complete.
-
-    if verbose:
-        print('...completed')
-
-
 def intermediate_to_source_truthtable(af: AnalyticsFunction,
                                       source: str,
                                       rerun: bool = RERUN,
@@ -121,7 +83,6 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
                                directory=SQL_DIRECTORY)
 
     if not report_utils.bigquery_rerun(af, rerun, verbose):
-        print(f'Running {af.function_name} with source: {source}...')
         print(f"""Query is:
         
 {query}
@@ -143,10 +104,46 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
         print('...completed')
 
 
+def crossref_to_truthtable(af: AnalyticsFunction,
+                           source: str = 'crossref',
+                           rerun: bool = RERUN,
+                           verbose: bool = VERBOSE):
+    """
+    Query and download category data from the intermediate tables
+    """
+
+    query = load_sql_to_string('crossref_truthtable_query.sql',
+                               parameters=dict(table=TABLES[source],
+                                               crossref_member_table=CROSSREF_MEMBER_DATA_TABLE,
+                                               crossref_member_date=CROSSREF_MEMBER_DATE),
+                               directory=SQL_DIRECTORY)
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose):
+        print(f"""Query is:
+
+{query}
+
+""")
+        print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
+        return
+
+    with bigquery.Client() as client:
+        job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
+                                             create_disposition='CREATE_IF_NEEDED',
+                                             write_disposition='WRITE_TRUNCATE')
+
+        # Start the query, passing in the extra configuration.
+        query_job = client.query(query, job_config=job_config)  # Make an API request.
+        query_job.result()  # Wait for the job to complete.
+
+    if verbose:
+        print('...completed')
+
+
 def source_category_query(af: AnalyticsFunction,
-                                      source: str,
-                                      rerun: bool = RERUN,
-                                      verbose: bool = VERBOSE):
+                          source: str,
+                          rerun: bool = RERUN,
+                          verbose: bool = VERBOSE):
     """
     Query and download category data from the intermediate tables
     """
@@ -173,9 +170,10 @@ def source_category_query(af: AnalyticsFunction,
     if verbose:
         print('...completed')
 
+
 def doi_category_query(af: AnalyticsFunction,
-                          rerun: bool = RERUN,
-                          verbose: bool = VERBOSE):
+                       rerun: bool = RERUN,
+                       verbose: bool = VERBOSE):
     """
     Query and download category data from the quasi doi table
     """
@@ -300,6 +298,15 @@ if __name__ == '__main__':
     #                        source="openalex",
     #                        rerun=False,
     #                        verbose=True)
-    create_qdoi_table(af='test',
-                      rerun=False,
-                      verbose=True)
+    # crossref_to_truthtable(af='test',
+    #                   rerun=False,
+    #                   verbose=True)
+
+    intermediate_to_source_truthtable(af="test",
+                           source="mag",
+                           rerun=False,
+                           verbose=True)
+    intermediate_to_source_truthtable(af="test",
+                           source="openalex",
+                           rerun=False,
+                           verbose=True)

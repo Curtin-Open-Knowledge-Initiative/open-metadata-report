@@ -24,15 +24,7 @@
       }
     ],
     [
-      "create_qdoi_table",
-      {
-        "depends": [
-          "source_to_intermediate"
-        ]
-      }
-    ],
-    [
-      "query_intermediates_categories",
+      "intermediate_to_source_truthtable",
       {
         "depends": [
           "source_to_intermediate"
@@ -41,7 +33,7 @@
       }
     ],
     [
-      "query_intermediates_categories",
+      "intermediate_to_source_truthtable",
       {
         "depends": [
           "source_to_intermediate"
@@ -55,12 +47,12 @@
       }
     ],
     [
-      "query_qdoi_categories",
+      "crossref_to_truthtable",
       {
         "depends": [
-          "create_qdoi_table",
           "crossref_member_status"
-        ]
+        ],
+        "source": "crossref"
       }
     ],
     [
@@ -68,10 +60,8 @@
       {
         "depends": [
           "source_to_intermediate",
-          "create_qdoi_table",
-          "query_intermediates_categories",
-          "crossref_member_status",
-          "query_qdoi_categories"
+          "intermediate_to_source_truthtable",
+          "crossref_member_status"
         ]
       }
     ]

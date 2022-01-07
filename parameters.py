@@ -15,11 +15,12 @@ LOCAL_DATA = 'local_data.hd5'
 
 # BigQuery Tables
 PROJECT_ID = 'utrecht-university'
-SOURCES = ['mag', 'openalex']
+SOURCES = ['mag', 'openalex', 'crossref']
 
 MAG_DATE = "20211011"
 OPENALEX_DATE = "20211011"
 CROSSREF_DATE = "20211002"
+CROSSREF_MEMBER_DATE = '2022-01-01'
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
@@ -39,14 +40,15 @@ TABLE_NAMES = ['Papers',
                'PaperExtendedAttributes',
                'PaperResources',
                'PaperUrls',
-               'PaperMeSH'
+               'PaperMeSH',
+               'doi'
                ]
 
 TABLE_DATES = dict(mag=MAG_DATE, openalex=OPENALEX_DATE, crossref=CROSSREF_DATE)
 TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION, openalex=OPENALEX_TABLE_LOCATION, crossref=DOI_TABLE_LOCATION)
 
 OPEN_ALEX_ADDITIONAL_FIELDS = dict(
-    mag='',
+    mag='null as RorId, null as Orcid, ',
     crossref=None,
     openalex='affiliation.RorId, author.Orcid, '
 )
@@ -86,4 +88,4 @@ Q_DOI_TABLE = f'{PROJECT_ID}.crossref.crossref_intermediate{TABLE_DATES.get("cro
 
 ## Crossref Member Data Table
 
-CROSSREF_MEMBER_DATA_TABLE = f'{PROJECT_ID}.crossref.member_data${TODAY_STR}'
+CROSSREF_MEMBER_DATA_TABLE = f'{PROJECT_ID}.crossref.member_data'
