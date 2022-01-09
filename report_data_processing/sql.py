@@ -33,7 +33,7 @@ def load_sql_to_string(filepath: Union[str, Path],
     if directory:
         filepath = Path(directory) / filepath
 
-    assert filepath.suffix == '.sql'
+    #assert (filepath.suffix == '.sql') or (filepath.suffix == 'jinja2')
 
     with open(filepath, 'r') as f:
         sql = f.readlines()

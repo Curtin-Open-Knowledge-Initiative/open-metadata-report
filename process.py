@@ -19,6 +19,7 @@ import json
 import requests
 from pathlib import Path
 import os
+import jinja2
 
 import pandas as pd
 import numpy as np
@@ -171,18 +172,21 @@ def source_category_query(af: AnalyticsFunction,
         print('...completed')
 
 
-def doi_category_query(af: AnalyticsFunction,
-                       rerun: bool = RERUN,
-                       verbose: bool = VERBOSE):
+def dois_category_query(af: AnalyticsFunction,
+                        rerun: bool = RERUN,
+                        verbose: bool = VERBOSE):
     """
     Query and download category data from the quasi doi table
     """
 
-    query = load_sql_to_string('doi_categories_query.sql',
-                               parameters=dict(
-                                   crossref_member_table=CROSSREF_MEMBER_DATA_TABLE,
-                                   qdoi_table=Q_DOI_TABLE),
-                               directory=SQL_DIRECTORY)
+    query_template = load_sql_to_string('comparison_categories_query.sql.jinja2',
+                                        directory=SQL_DIRECTORY)
+
+    data = dict(
+        sources={ source: SOURCE_TRUTH_TABLES[source] for source in SOURCES},
+        data_items=CATEGORY_DATA_ITEMS
+    )
+    query = jinja2.Template(query_template).render(data)
 
     if not report_utils.bigquery_rerun(af, rerun, verbose):
         print(f"""Query is:
@@ -299,14 +303,17 @@ if __name__ == '__main__':
     #                        rerun=False,
     #                        verbose=True)
     # crossref_to_truthtable(af='test',
-    #                   rerun=False,
-    #                   verbose=True)
+    #                        rerun=False,
+    #                        verbose=True)
 
-    intermediate_to_source_truthtable(af="test",
-                           source="mag",
-                           rerun=False,
-                           verbose=True)
-    intermediate_to_source_truthtable(af="test",
-                           source="openalex",
-                           rerun=False,
-                           verbose=True)
+    # intermediate_to_source_truthtable(af="test",
+    #                        source="mag",
+    #                        rerun=False,
+    #                        verbose=True)
+    # intermediate_to_source_truthtable(af="test",
+    #                        source="openalex",
+    #                        rerun=False,
+    #                        verbose=True)
+    dois_category_query(af='test',
+                        rerun=False,
+                        verbose=True)

@@ -89,3 +89,18 @@ Q_DOI_TABLE = f'{PROJECT_ID}.crossref.crossref_intermediate{TABLE_DATES.get("cro
 ## Crossref Member Data Table
 
 CROSSREF_MEMBER_DATA_TABLE = f'{PROJECT_ID}.crossref.member_data'
+
+## Category Queries Metadata
+
+CATEGORY_DATA_ITEMS = [
+    'authors',
+    'affiliation_id',
+    'gridid',
+    'rorid',
+    'orcid',
+    'affiliation_string',
+    'abstract',
+    'citations',
+    'references',
+    'fields'
+]

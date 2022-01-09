@@ -1,0 +1,50 @@
+WITH
+-- Clean sources to dois only
+{% for source_name, truthtable in sources.items() -%}
+{% if source_name != 'crossref' -%}
+{{ source_name }}_cleaned AS (
+    SELECT
+        papers.*
+
+    FROM (SELECT doi, ARRAY_AGG(source_id ORDER BY count_citations DESC)[offset(0)] as source_id
+    FROM `{{ truthtable }}` as papers
+    WHERE papers.Doi IS NOT NULL
+    GROUP BY Doi) as dois
+
+    LEFT JOIN `{{ truthtable }}` as papers ON papers.source_id = dois.source_id
+),
+{% endif -%}
+{% endfor -%}
+
+-- Construct a 'doi-table style' truth table
+qdoi_table AS (
+SELECT
+    crossref.source_id
+    {% for source_name, truthtable in sources.items() -%}
+    , {{ source_name }}
+    {% endfor -%}
+FROM
+    `{{ sources.crossref }}` as crossref
+    {% for source_name, truthtable in sources.items() -%}
+    {% if source_name != 'crossref' -%}
+    LEFT JOIN {{ source_name }}_cleaned as {{ source_name }} on crossref.doi = {{ source_name }}.doi
+    {% endif -%}
+    {% endfor %}
+)
+
+SELECT
+    COUNT(DISTINCT doi) as crossref_dois
+    {% for source_name, truthtable in sources.items() %}
+    , COUNT(DISTINCT {{ source_name }}.source_id) as {{ source_name }}_ids
+    {% for item in data_items -%}
+    , COUNT(DISTINCT IF({{ source_name }}.has_{{ item }}, doi, null)) as {{ source_name }}_has_{{ item }}
+    {% endfor -%}
+    {% if source_name != 'crossref' -%}
+    {% for item in data_items -%}
+    , COUNT(DISTINCT IF((NOT crossref.has_{{item}} AND {{ source_name }}.has_{{ item }}), doi, null)) as {{ source_name }}_{{ item }}_adds_presence
+    , COUNT(DISTINCT IF((crossref.count_{{item}} < {{ source_name }}.count_{{ item }}), doi, null)) as {{ source_name }}_{{ item }}_adds_counts
+    {% endfor -%}
+    {% endif -%}
+    {% endfor -%}
+
+FROM qdoi_table
