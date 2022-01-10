@@ -62,13 +62,13 @@ SELECT
         ELSE FALSE
         END
     as has_fields,
---    CASE
---        WHEN ARRAY_LENGTH(fields.level_0) > 0
---        THEN ARRAY_TO_STRING((SELECT DisplayName FROM fields.level_0))
---        ELSE null
---        END
---    as fields,
     ARRAY_LENGTH(fields.level_0) as count_fields,
+    CASE
+        WHEN ARRAY_LENGTH(fields.level_0) > 0
+        THEN (SELECT DisplayName FROM fields.level_0)[OFFSET(0)]
+        ELSE null
+        END
+    as field,
 
     CASE
         WHEN ((Doi is not null) AND (PaperId != FamilyId) AND (FamilyId is not null)) THEN TRUE

@@ -149,12 +149,16 @@ def source_category_query(af: AnalyticsFunction,
     Query and download category data from the intermediate tables
     """
 
-    query = load_sql_to_string('source_categories_query.sql',
-                               parameters=dict(table=SOURCE_TRUTH_TABLES[source]),
-                               directory=SQL_DIRECTORY)
+    query_template = load_sql_to_string('source_categories_query.sql',
+                                        directory=SQL_DIRECTORY)
+
+    data = dict(
+        table=SOURCE_TRUTH_TABLES[source],
+        data_items=CATEGORY_DATA_ITEMS
+    )
+    query = jinja2.Template(query_template).render(data)
 
     if not report_utils.bigquery_rerun(af, rerun, verbose):
-        print(f'Running {af.function_name} with source: {source}...')
         print(f"""Query is:
         
 {query}
@@ -317,3 +321,7 @@ if __name__ == '__main__':
     dois_category_query(af='test',
                         rerun=False,
                         verbose=True)
+    source_category_query(af='test',
+                          source='mag',
+                          rerun=False,
+                          verbose=True)

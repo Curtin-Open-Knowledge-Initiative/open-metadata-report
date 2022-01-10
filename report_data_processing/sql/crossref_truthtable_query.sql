@@ -8,21 +8,29 @@ combined AS (
 )
 
 SELECT
+    doi as source_id,
     doi,
     crossref.type,
     crossref.published_year,
+    IF(crossref.author is not null, TRUE, FALSE) as has_authors,
     ARRAY_LENGTH(crossref.author) as count_authors,
     CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_affiliation_string,
-    -- TODO - check when ROR IDs start appearing in Crossref metadata and allow for that to be included
     (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) as count_affiliation_string,
     CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors WHERE authors.ORCID is not null) > 0 THEN TRUE
         ELSE FALSE
     END
+    -- TODO - check when ROR IDs start appearing in Crossref metadata and allow for that to be included
+    FALSE as has_affiliation_id,
+    0 as count_affiliation_id,
+    FALSE as has_gridid,
+    0 as count_gridid,
+    FALSE as has_rorid,
+    0 as count_rorid,
     as has_orcid,
     (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors WHERE authors.ORCID is not null) as count_orcid,
     CASE
@@ -45,9 +53,9 @@ SELECT
         ELSE null
     END as top_field,
     CASE
-        WHEN ARRAY_LENGTH(crossref.subject) > 0 THEN ARRAY_TO_STRING(crossref.subject, ";")
-        ELSE null
-    END as fields,
+        WHEN ARRAY_LENGTH(crossref.subject) > 0 THEN TRUE
+        ELSE FALSE
+    END as has_fields,
 
     CASE
         WHEN ARRAY_LENGTH(crossref.subject) > 0 THEN ARRAY_LENGTH(crossref.subject)

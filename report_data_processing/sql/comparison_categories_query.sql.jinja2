@@ -19,7 +19,9 @@ WITH
 -- Construct a 'doi-table style' truth table
 qdoi_table AS (
 SELECT
-    crossref.source_id
+    crossref.source_id,
+    crossref.published_year,
+    crossref.type,
     {% for source_name, truthtable in sources.items() -%}
     , {{ source_name }}
     {% endfor -%}
@@ -48,3 +50,5 @@ SELECT
     {% endfor -%}
 
 FROM qdoi_table
+GROUP BY crossref.published_year, crossref.type
+ORDER BY published_year DESC, type ASC
