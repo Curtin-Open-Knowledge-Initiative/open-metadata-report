@@ -1,8 +1,8 @@
-pandas
-precipy
+pandas~=1.3.5
+precipy~=0.3.8
 pandas-gbq
 plotly==5.1.0
-num2words
+num2words~=0.5.10
 xhtml2pdf
 tables
 statsmodels
@@ -10,3 +10,6 @@ notebook
 kaleido
 openpyxl
 gitpython
+
+requests~=2.26.0
+Jinja2~=3.0.3

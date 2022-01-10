@@ -14,18 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Authors: COKI Team
+# Authors: COKI Team, Cameron Neylon and Bianca Kramer
+
 import json
 import requests
-from pathlib import Path
-import os
 import jinja2
 
 import pandas as pd
-import numpy as np
-import plotly.graph_objects as go
-from typing import Optional, Callable, Union
-
 from google.cloud import bigquery
 from git import Repo
 
@@ -149,7 +144,7 @@ def source_category_query(af: AnalyticsFunction,
     Query and download category data from the intermediate tables
     """
 
-    query_template = load_sql_to_string('source_categories_query.sql',
+    query_template = load_sql_to_string('source_categories_query.sql.jinja2',
                                         directory=SQL_DIRECTORY)
 
     data = dict(
@@ -187,7 +182,7 @@ def dois_category_query(af: AnalyticsFunction,
                                         directory=SQL_DIRECTORY)
 
     data = dict(
-        sources={ source: SOURCE_TRUTH_TABLES[source] for source in SOURCES},
+        sources={source: SOURCE_TRUTH_TABLES[source] for source in SOURCES},
         data_items=CATEGORY_DATA_ITEMS
     )
     query = jinja2.Template(query_template).render(data)
@@ -318,10 +313,11 @@ if __name__ == '__main__':
     #                        source="openalex",
     #                        rerun=False,
     #                        verbose=True)
-    dois_category_query(af='test',
-                        rerun=False,
-                        verbose=True)
-    source_category_query(af='test',
-                          source='mag',
-                          rerun=False,
-                          verbose=True)
+    # dois_category_query(af='test',
+    #                     rerun=False,
+    #                     verbose=True)
+    # source_category_query(af='test',
+    #                       source='mag',
+    #                       rerun=False,
+    #                       verbose=True)
+    pass
