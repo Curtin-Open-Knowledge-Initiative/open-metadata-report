@@ -19,9 +19,9 @@ WITH
 -- Construct a 'doi-table style' truth table
 qdoi_table AS (
 SELECT
-    crossref.source_id,
+    crossref.source_id as doi,
     crossref.published_year,
-    crossref.type,
+    crossref.type
     {% for source_name, truthtable in sources.items() -%}
     , {{ source_name }}
     {% endfor -%}
@@ -35,7 +35,9 @@ FROM
 )
 
 SELECT
-    COUNT(DISTINCT doi) as crossref_dois
+    published_year
+    , type
+    , COUNT(DISTINCT doi) as crossref_dois
     {% for source_name, truthtable in sources.items() %}
     , COUNT(DISTINCT {{ source_name }}.source_id) as {{ source_name }}_ids
     {% for item in data_items -%}
@@ -50,5 +52,5 @@ SELECT
     {% endfor -%}
 
 FROM qdoi_table
-GROUP BY crossref.published_year, crossref.type
+GROUP BY published_year, type
 ORDER BY published_year DESC, type ASC

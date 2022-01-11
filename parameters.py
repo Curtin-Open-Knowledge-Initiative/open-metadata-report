@@ -4,7 +4,7 @@ Main Location for Storing Parameters for Report
 
 import datetime
 
-RERUN = False
+RERUN = True
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')

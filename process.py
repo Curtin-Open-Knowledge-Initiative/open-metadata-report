@@ -167,6 +167,8 @@ def source_category_query(af: AnalyticsFunction,
     with pd.HDFStore(LOCAL_DATA) as store:
         store[f'{source}_allobjects_categories'] = categories
 
+    categories.to_csv(f'{source}_categories.csv')
+
     if verbose:
         print('...completed')
 
@@ -201,6 +203,7 @@ def dois_category_query(af: AnalyticsFunction,
     with pd.HDFStore(LOCAL_DATA) as store:
         store[f'doi_categories'] = categories
 
+    categories.to_csv('doi_categories.csv')
     if verbose:
         print('...completed')
 

@@ -3,7 +3,12 @@ SELECT
     PaperId as source_id,
     DocType as type,
     Year as published_year,
-    IF(authors is not null, TRUE, FALSE) as has_authors,
+    CASE
+        WHEN
+            (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAuthor is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_authors,
     ARRAY_LENGTH(authors) as count_authors,
     CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AffiliationId is not null) > 0 THEN TRUE
@@ -65,7 +70,7 @@ SELECT
     ARRAY_LENGTH(fields.level_0) as count_fields,
     CASE
         WHEN ARRAY_LENGTH(fields.level_0) > 0
-        THEN (SELECT DisplayName FROM fields.level_0)[OFFSET(0)]
+        THEN fields.level_0[OFFSET(0)].DisplayName
         ELSE null
         END
     as field,

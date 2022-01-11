@@ -1,8 +1,8 @@
 SELECT
-    published_year,
-    type,
-    field,
-    COUNT(DISTINCT doi) as num_dois,
+    published_year
+    , type
+    , field
+    , COUNT(DISTINCT doi) as num_dois
 
     {% for item in data_items -%}
     , COUNT(DISTINCT IF(has_{{ item }}, doi, null)) as dois_with_{{ item }}

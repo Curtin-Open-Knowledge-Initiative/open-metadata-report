@@ -52,7 +52,34 @@
         "depends": [
           "crossref_member_status"
         ],
-        "source": "crossref"
+        "source": "crossref",
+        "rerun": true
+      }
+    ],
+    [
+      "source_category_query",
+      {
+        "depends": [
+          "intermediate_to_source_truthtable"
+        ],
+        "source": "mag"
+      }
+    ],
+    [
+      "source_category_query",
+      {
+        "depends": [
+          "intermediate_to_source_truthtable"
+        ],
+        "source": "openalex"
+      }
+    ],
+    [
+      "dois_category_query",
+      {
+        "depends": [
+          "crossref_to_truthtable"
+        ]
       }
     ],
     [
@@ -61,7 +88,10 @@
         "depends": [
           "source_to_intermediate",
           "intermediate_to_source_truthtable",
-          "crossref_member_status"
+          "crossref_member_status",
+          "crossref_to_truthtable",
+          "source_category_query",
+          "dois_category_query"
         ]
       }
     ]
