@@ -147,9 +147,11 @@ def source_category_query(af: AnalyticsFunction,
     query_template = load_sql_to_string('source_categories_query.sql.jinja2',
                                         directory=SQL_DIRECTORY)
 
+    data_items = list(set(CATEGORY_DATA_ITEMS + SOURCE_DATA_ELEMENTS[source]))
+    data_items.sort()
     data = dict(
         table=SOURCE_TRUTH_TABLES[source],
-        data_items=CATEGORY_DATA_ITEMS
+        data_items=data_items
     )
     query = jinja2.Template(query_template).render(data)
 
@@ -185,7 +187,7 @@ def dois_category_query(af: AnalyticsFunction,
 
     data = dict(
         sources={source: SOURCE_TRUTH_TABLES[source] for source in SOURCES},
-        data_items=CATEGORY_DATA_ITEMS
+        data_items=SOURCE_DATA_ELEMENTS
     )
     query = jinja2.Template(query_template).render(data)
 
@@ -316,9 +318,9 @@ if __name__ == '__main__':
     #                        source="openalex",
     #                        rerun=False,
     #                        verbose=True)
-    # dois_category_query(af='test',
-    #                     rerun=False,
-    #                     verbose=True)
+    dois_category_query(af='test',
+                        rerun=False,
+                        verbose=True)
     # source_category_query(af='test',
     #                       source='mag',
     #                       rerun=False,

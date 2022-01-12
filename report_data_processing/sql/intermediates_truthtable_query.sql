@@ -3,49 +3,69 @@ SELECT
     PaperId as source_id,
     DocType as type,
     Year as published_year,
+
     CASE
         WHEN
-            (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAuthor is not null) > 0 THEN TRUE
+            ARRAY_LENGTH(authors) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_authors,
     ARRAY_LENGTH(authors) as count_authors,
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AffiliationId is not null) > 0 THEN TRUE
-        ELSE FALSE
-    END
-    as has_affiliation_id,
-    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AffiliationId is not null) as count_affiliation_id,
-    CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.GridId is not null) > 0 THEN TRUE
-        ELSE FALSE
-    END
-    as has_gridid,
-    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.GridId is not null) as count_gridid,
-    CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.RorId is not null) > 0 THEN TRUE
-        ELSE FALSE
-    END
-    as has_rorid,
-    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.RorId is not null) as count_rorid,
-    CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_orcid,
-    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) as count_orcid,
+    as has_authors_orcid,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) as count_authors_orcid,
+    CASE
+        WHEN
+            (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAuthor is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_authors_string,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAuthor is not null) as count_authors_string,
+    CASE
+        WHEN
+            (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AuthorId is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_authors_sourceid,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AuthorId is not null) as count_authors_sourceid,
+    CASE
+        WHEN
+            (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AuthorSequenceNumber is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_authors_sequence,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AuthorSequenceNumber is not null) as count_authors_sequence,
+
     CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAffiliation is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_affiliation_string,
-    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAffiliation is not null) as count_affiliation_string,
+    as has_affiliations,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAffiliation is not null) as count_affiliations,
+    CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AffiliationId is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_affiliations_sourceid,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AffiliationId is not null) as count_affiliations_source_id,
+
+    CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.GridId is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_affiliations_gridid,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.GridId is not null) as count_affiliations_gridid,
+
     CASE
         WHEN abstract is not null THEN TRUE
         ELSE FALSE
     END
     as has_abstract,
     LENGTH(abstract) as count_abstract,
+
     CASE
         WHEN CitationCount > 0 THEN TRUE
         ELSE FALSE
@@ -54,6 +74,7 @@ SELECT
     CitationCount as count_citations,
     -- There is no equivalent of the public_references status in Crossref so we check the count
     -- This is therefore different to the equivalent term in the Crossref Truth Table
+
     CASE
         WHEN ReferenceCount > 0 THEN TRUE
         ELSE FALSE
@@ -68,6 +89,13 @@ SELECT
         END
     as has_fields,
     ARRAY_LENGTH(fields.level_0) as count_fields,
+    CASE
+        WHEN ARRAY_LENGTH(fields.level_0) > 0
+        THEN TRUE
+        ELSE FALSE
+        END
+    as has_fields_mag,
+    ARRAY_LENGTH(fields.level_0) as count_fields_mag,
     CASE
         WHEN ARRAY_LENGTH(fields.level_0) > 0
         THEN fields.level_0[OFFSET(0)].DisplayName

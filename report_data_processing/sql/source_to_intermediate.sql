@@ -69,7 +69,7 @@ LEFT JOIN (SELECT
 -- Authors
 LEFT JOIN (SELECT
               papers.PaperId,
-              ARRAY_AGG(STRUCT(paperAuthorAffiliations.AuthorSequenceNumber, paperAuthorAffiliations.AuthorID, paperAuthorAffiliations.OriginalAuthor, paperAuthorAffiliations.AffiliationId, paperAuthorAffiliations.OriginalAffiliation, affiliation.GridId, {openalex_additional_fields}affiliation.Iso3166Code, affiliation.DisplayName) IGNORE NULLS ORDER BY paperAuthorAffiliations.AuthorSequenceNumber ASC) as authors
+              ARRAY_AGG(STRUCT(paperAuthorAffiliations.AuthorSequenceNumber, paperAuthorAffiliations.AuthorID, paperAuthorAffiliations.OriginalAuthor, paperAuthorAffiliations.AffiliationId, paperAuthorAffiliations.OriginalAffiliation, affiliation.GridId, affiliation.Iso3166Code, affiliation.DisplayName{ openalex_additional_fields }) IGNORE NULLS ORDER BY paperAuthorAffiliations.AuthorSequenceNumber ASC) as authors
             FROM `{Papers}` as papers
             LEFT JOIN `{PaperAuthorAffiliations}` as paperAuthorAffiliations on paperAuthorAffiliations.PaperId = papers.PaperId
             LEFT JOIN `{Affiliations}` as affiliation on affiliation.AffiliationId = paperAuthorAffiliations.AffiliationId

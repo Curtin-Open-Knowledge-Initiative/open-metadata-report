@@ -4,7 +4,7 @@ Main Location for Storing Parameters for Report
 
 import datetime
 
-RERUN = True
+RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
@@ -48,9 +48,9 @@ TABLE_DATES = dict(mag=MAG_DATE, openalex=OPENALEX_DATE, crossref=CROSSREF_DATE)
 TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION, openalex=OPENALEX_TABLE_LOCATION, crossref=DOI_TABLE_LOCATION)
 
 OPEN_ALEX_ADDITIONAL_FIELDS = dict(
-    mag='null as RorId, null as Orcid, ',
+    mag=None,
     crossref=None,
-    openalex='affiliation.RorId, author.Orcid, '
+    openalex=', affiliation.RorId, author.Orcid'
 )
 
 TABLES = {
@@ -69,7 +69,8 @@ for source in SOURCES:
 
 TABLES.update(dict(crossref=f'{DOI_TABLE_LOCATION}{CROSSREF_DATE}'))
 
-
+# TODO These should probably go into the TABLES data structure
+# TODO Replace all calls to INTERMEDIATE_TABLES, SOURCE_TABLES with calls to TABLES[source]['xx_table']
 ## Intermediate Tables
 
 INTERMEDIATE_TABLES = {
@@ -92,15 +93,88 @@ CROSSREF_MEMBER_DATA_TABLE = f'{PROJECT_ID}.crossref.member_data'
 
 ## Category Queries Metadata
 
+# CATEGORY_DATA_ITEMS are required to be present as both has_ and count_ items in all truth tables
+# If necessary a dummy column of FALSE or 0 should be created to ensure this, but ideally this will
+# provide a meaningful comparison to use as a default. count_abstract can be either an array length (eg
+# for different languages or a string length)
+
 CATEGORY_DATA_ITEMS = [
     'authors',
-    'affiliation_id',
-    'gridid',
-    'rorid',
-    'orcid',
-    'affiliation_string',
+    'affiliations',
     'abstract',
     'citations',
     'references',
     'fields'
 ]
+
+# SOURCE_DATA_ITEMS provide special classes of the standard items. These must be a subclass of a CATEGORY_DATA_ITEM
+# specified in the format `categorydataitem_specialform`
+
+CROSSREF_DATA_ITEMS = [
+    'authors_orcid',
+    'authors_string',
+    'authors_sequence',
+    'affiliations_string',
+    'references_open'
+]
+
+MAG_DATA_ITEMS = [
+    'authors_orcid',
+    'authors_sourceid'
+    'authors_string',
+    'authors_sequence',
+    'authors_countrycode',
+    'affiliations_sourceid',
+    'affiliations_string',
+    'affiliations_grid',
+    'fields_mag'
+]
+
+OPENALEX_DATA_ITEMS = [
+    'authors_orcid', # TODO Get this into intermediate
+    'authors_sourceid'
+    'authors_string',
+    'authors_sequence',
+    'authors_countrycode',
+    'affiliations_sourceid',
+    'affiliations_string',
+    'affiliations_grid',
+    'affiliations_ror',
+    'fields_mag'
+]
+
+SOURCE_DATA_ITEMS = dict(
+    crossref=CROSSREF_DATA_ITEMS,
+    mag=MAG_DATA_ITEMS,
+    openalex=OPENALEX_DATA_ITEMS
+)
+
+SOURCE_DATA_ELEMENTS = {
+}
+
+for source in SOURCES:
+    data_elements = {(elem, elem, elem) for elem in CATEGORY_DATA_ITEMS}
+    data_elements = data_elements | {
+        (
+            elem if elem in SOURCE_DATA_ITEMS['crossref'] else CATEGORY_DATA_ITEMS[
+                CATEGORY_DATA_ITEMS.index(elem.split('_')[0])],
+            elem,
+            elem
+        )
+        for elem in SOURCE_DATA_ITEMS[source]
+    }
+
+    data_elements = data_elements | {
+        (
+            elem,
+            elem if elem in SOURCE_DATA_ITEMS[source] else CATEGORY_DATA_ITEMS[
+                CATEGORY_DATA_ITEMS.index(elem.split('_')[0])],
+            elem
+        )
+        for elem in CROSSREF_DATA_ITEMS
+    }
+    data_elements = list(data_elements)
+    data_elements.sort()
+    SOURCE_DATA_ELEMENTS[source] = data_elements
+
+print(SOURCE_DATA_ELEMENTS)

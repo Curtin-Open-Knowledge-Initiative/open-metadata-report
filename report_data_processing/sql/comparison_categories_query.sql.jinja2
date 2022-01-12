@@ -40,13 +40,13 @@ SELECT
     , COUNT(DISTINCT doi) as crossref_dois
     {% for source_name, truthtable in sources.items() %}
     , COUNT(DISTINCT {{ source_name }}.source_id) as {{ source_name }}_ids
-    {% for item in data_items -%}
-    , COUNT(DISTINCT IF({{ source_name }}.has_{{ item }}, doi, null)) as {{ source_name }}_has_{{ item }}
+    {% for item in data_items[source_name] -%}
+    , COUNT(DISTINCT IF({{ source_name }}.has_{{ item[1] }}, doi, null)) as {{ source_name }}_has_{{ item[1] }}
     {% endfor -%}
     {% if source_name != 'crossref' -%}
-    {% for item in data_items -%}
-    , COUNT(DISTINCT IF((NOT crossref.has_{{item}} AND {{ source_name }}.has_{{ item }}), doi, null)) as {{ source_name }}_{{ item }}_adds_presence
-    , COUNT(DISTINCT IF((crossref.count_{{item}} < {{ source_name }}.count_{{ item }}), doi, null)) as {{ source_name }}_{{ item }}_adds_counts
+    {% for item in data_items[source_name] -%}
+    , COUNT(DISTINCT IF((NOT crossref.has_{{ item[0] }} AND {{ source_name }}.has_{{ item[1] }}), doi, null)) as {{ source_name }}_{{ item[2] }}_adds_presence
+    , COUNT(DISTINCT IF((crossref.count_{{ item[0] }} < {{ source_name }}.count_{{ item[1] }}), doi, null)) as {{ source_name }}_{{ item[2] }}_adds_counts
     {% endfor -%}
     {% endif -%}
     {% endfor -%}
