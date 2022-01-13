@@ -56,7 +56,7 @@ def source_to_intermediate(af: AnalyticsFunction,
     with bigquery.Client() as client:
         job_config = bigquery.QueryJobConfig(destination=destination_table,
                                              create_disposition='CREATE_IF_NEEDED',
-                                             write_disposition='WRITE_TRUNCATE')
+                                             write_disposition=WRITE_DISPOSITION)
 
         # Start the query, passing in the extra configuration.
         query_job = client.query(query, job_config=job_config)  # Make an API request.
@@ -90,7 +90,7 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
     with bigquery.Client() as client:
         job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
                                              create_disposition='CREATE_IF_NEEDED',
-                                             write_disposition='WRITE_TRUNCATE')
+                                             write_disposition=WRITE_DISPOSITION)
 
         # Start the query, passing in the extra configuration.
         query_job = client.query(query, job_config=job_config)  # Make an API request.
@@ -126,7 +126,7 @@ def crossref_to_truthtable(af: AnalyticsFunction,
     with bigquery.Client() as client:
         job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
                                              create_disposition='CREATE_IF_NEEDED',
-                                             write_disposition='WRITE_TRUNCATE')
+                                             write_disposition=WRITE_DISPOSITION)
 
         # Start the query, passing in the extra configuration.
         query_job = client.query(query, job_config=job_config)  # Make an API request.

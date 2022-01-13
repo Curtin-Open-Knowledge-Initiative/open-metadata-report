@@ -4,7 +4,7 @@ Main Location for Storing Parameters for Report
 
 import datetime
 
-RERUN = False
+RERUN = True
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
@@ -15,6 +15,7 @@ LOCAL_DATA = 'local_data.hd5'
 
 # BigQuery Tables
 PROJECT_ID = 'utrecht-university'
+WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 SOURCES = ['mag', 'openalex', 'crossref']
 
 MAG_DATE = "20211011"
