@@ -6,7 +6,7 @@ WITH
     SELECT
         papers.*
 
-    FROM (SELECT doi, ARRAY_AGG(source_id ORDER BY count_citations DESC)[offset(0)] as source_id
+    FROM (SELECT doi, ARRAY_AGG(source_id ORDER BY count_citations DESC, source_id DESC)[offset(0)] as source_id
     FROM `{{ truthtable }}` as papers
     WHERE papers.Doi IS NOT NULL
     GROUP BY Doi) as dois
