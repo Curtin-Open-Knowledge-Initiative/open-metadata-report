@@ -20,6 +20,12 @@ SELECT
     as has_authors,
     ARRAY_LENGTH(crossref.author) as count_authors,
     CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors WHERE authors.family is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_authors_string,
+    ARRAY_LENGTH(crossref.author) as count_authors_string,
+    CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors WHERE authors.ORCID is not null) > 0 THEN TRUE
         ELSE FALSE
     END as has_authors_orcid,
@@ -67,7 +73,7 @@ SELECT
     END
     as has_references_open,
     CASE
-        WHEN public_references THEN crossref.references.count
+        WHEN public_references THEN crossref.references_count
         ELSE 0
     END
     as count_references_open,

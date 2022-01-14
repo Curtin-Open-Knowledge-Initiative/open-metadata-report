@@ -75,10 +75,13 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
     """
 
     query = load_sql_to_string('intermediates_truthtable_query.sql',
-                               parameters=dict(table=INTERMEDIATE_TABLES[source]),
+                               parameters=dict(
+                                   table=INTERMEDIATE_TABLES[source],
+                                   openalex_additional_fields=TABLES[source]['openalex_additional_truthtable_fields']
+                               ),
                                directory=SQL_DIRECTORY)
 
-    if not report_utils.bigquery_rerun(af, rerun, verbose):
+    if not report_utils.bigquery_rerun(af, rerun, verbose, source=source):
         print(f"""Query is:
         
 {query}
@@ -92,7 +95,6 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
                                              create_disposition='CREATE_IF_NEEDED',
                                              write_disposition=WRITE_DISPOSITION)
 
-        # Start the query, passing in the extra configuration.
         query_job = client.query(query, job_config=job_config)  # Make an API request.
         query_job.result()  # Wait for the job to complete.
 
@@ -128,7 +130,6 @@ def crossref_to_truthtable(af: AnalyticsFunction,
                                              create_disposition='CREATE_IF_NEEDED',
                                              write_disposition=WRITE_DISPOSITION)
 
-        # Start the query, passing in the extra configuration.
         query_job = client.query(query, job_config=job_config)  # Make an API request.
         query_job.result()  # Wait for the job to complete.
 
@@ -147,7 +148,7 @@ def source_category_query(af: AnalyticsFunction,
     query_template = load_sql_to_string('source_categories_query.sql.jinja2',
                                         directory=SQL_DIRECTORY)
 
-    data_items = list(set(CATEGORY_DATA_ITEMS + SOURCE_DATA_ELEMENTS[source]))
+    data_items = list(set(CATEGORY_DATA_ITEMS + SOURCE_DATA_ITEMS[source]))
     data_items.sort()
     data = dict(
         table=SOURCE_TRUTH_TABLES[source],
@@ -306,9 +307,9 @@ if __name__ == '__main__':
     #                        source="openalex",
     #                        rerun=False,
     #                        verbose=True)
-    # crossref_to_truthtable(af='test',
-    #                        rerun=False,
-    #                        verbose=True)
+    crossref_to_truthtable(af='test',
+                           rerun=False,
+                           verbose=True)
 
     # intermediate_to_source_truthtable(af="test",
     #                        source="mag",

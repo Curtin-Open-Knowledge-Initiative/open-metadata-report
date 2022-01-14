@@ -29,7 +29,8 @@ import observatory.reports.defaults as defaults
 
 def bigquery_rerun(af: Union[AnalyticsFunction, str],
                    rerun: bool,
-                   verbose: bool) -> bool:
+                   verbose: bool,
+                   source: str=None) -> bool:
     """
     Convenience function for determining whether to rerun a BQ query
     """
@@ -39,7 +40,7 @@ def bigquery_rerun(af: Union[AnalyticsFunction, str],
             fname = af.function_name
         else:
             fname = af
-        print(f'Running {fname}...')
+        print(f'Running {fname}' + (f' for source:{source}' if source else '') + '...')
     if not rerun:
         if verbose:
             print(f'...not running query, rerun: {rerun}')

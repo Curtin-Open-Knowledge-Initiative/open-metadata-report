@@ -12,12 +12,6 @@ SELECT
     as has_authors,
     ARRAY_LENGTH(authors) as count_authors,
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) > 0 THEN TRUE
-        ELSE FALSE
-    END
-    as has_authors_orcid,
-    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) as count_authors_orcid,
-    CASE
         WHEN
             (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAuthor is not null) > 0 THEN TRUE
         ELSE FALSE
@@ -46,18 +40,29 @@ SELECT
     as has_affiliations,
     (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAffiliation is not null) as count_affiliations,
     CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAffiliation is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_affiliations_string,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAffiliation is not null) as count_affiliations_string,
+    CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AffiliationId is not null) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_affiliations_sourceid,
-    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AffiliationId is not null) as count_affiliations_source_id,
-
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AffiliationId is not null) as count_affiliations_sourceid,
+    CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Iso3166Code is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_affiliations_countrycode,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.AffiliationId is not null) as count_affiliations_countrycode,
     CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.GridId is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_affiliations_gridid,
-    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.GridId is not null) as count_affiliations_gridid,
+    as has_affiliations_grid,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.GridId is not null) as count_affiliations_grid,
 
     CASE
         WHEN abstract is not null THEN TRUE
@@ -108,5 +113,7 @@ SELECT
         ELSE FALSE
     END
     as doi_not_canonical_family
+
+{openalex_additional_fields}
 
 FROM `{table}`

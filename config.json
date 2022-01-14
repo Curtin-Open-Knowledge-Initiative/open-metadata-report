@@ -79,7 +79,8 @@
       {
         "depends": [
           "crossref_to_truthtable"
-        ]
+        ],
+        "rerun": true
       }
     ],
     [

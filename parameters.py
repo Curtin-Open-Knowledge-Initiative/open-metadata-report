@@ -48,10 +48,29 @@ TABLE_NAMES = ['Papers',
 TABLE_DATES = dict(mag=MAG_DATE, openalex=OPENALEX_DATE, crossref=CROSSREF_DATE)
 TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION, openalex=OPENALEX_TABLE_LOCATION, crossref=DOI_TABLE_LOCATION)
 
-OPEN_ALEX_ADDITIONAL_FIELDS = dict(
-    mag=None,
+OPENALEX_ADDITIONAL_SOURCE_FIELDS = dict(
+    mag='',
     crossref=None,
     openalex=', affiliation.RorId, author.Orcid'
+)
+
+OPENALEX_ADDITIONAL_TRUTHTABLE_FIELDS = dict(
+    mag='',
+    crossref=None,
+    openalex="""
+    , CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_authors_orcid,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) as count_authors_orcid,
+    CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.RorId is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_affiliations_ror,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.RorId is not null) as count_affiliations_ror
+"""
 )
 
 TABLES = {
@@ -65,8 +84,10 @@ TABLES = {
 
 for source in SOURCES:
     TABLES[source].update(dict(
-        openalex_additional_fields=OPEN_ALEX_ADDITIONAL_FIELDS[source]
-    ))
+        openalex_additional_source_fields=OPENALEX_ADDITIONAL_SOURCE_FIELDS[source],
+        openalex_additional_truthtable_fields=OPENALEX_ADDITIONAL_TRUTHTABLE_FIELDS[source]
+    )
+    )
 
 TABLES.update(dict(crossref=f'{DOI_TABLE_LOCATION}{CROSSREF_DATE}'))
 
@@ -120,11 +141,10 @@ CROSSREF_DATA_ITEMS = [
 ]
 
 MAG_DATA_ITEMS = [
-    'authors_orcid',
-    'authors_sourceid'
+    'authors_sourceid',
     'authors_string',
     'authors_sequence',
-    'authors_countrycode',
+    'affiliations_countrycode',
     'affiliations_sourceid',
     'affiliations_string',
     'affiliations_grid',
@@ -133,10 +153,10 @@ MAG_DATA_ITEMS = [
 
 OPENALEX_DATA_ITEMS = [
     'authors_orcid', # TODO Get this into intermediate
-    'authors_sourceid'
+    'authors_sourceid',
     'authors_string',
     'authors_sequence',
-    'authors_countrycode',
+    'affiliations_countrycode',
     'affiliations_sourceid',
     'affiliations_string',
     'affiliations_grid',
@@ -178,4 +198,3 @@ for source in SOURCES:
     data_elements.sort()
     SOURCE_DATA_ELEMENTS[source] = data_elements
 
-print(SOURCE_DATA_ELEMENTS)
