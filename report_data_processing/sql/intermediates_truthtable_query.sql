@@ -108,12 +108,6 @@ SELECT
         END
     as field,
 
-    CASE
-        WHEN ((Doi is not null) AND (PaperId != FamilyId) AND (FamilyId is not null)) THEN TRUE
-        ELSE FALSE
-    END
-    as doi_not_canonical_family
-
 {openalex_additional_fields}
 
 FROM `{table}`
