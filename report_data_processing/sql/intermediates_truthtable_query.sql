@@ -4,13 +4,15 @@ SELECT
     DocType as type,
     Year as published_year,
 
+    -- We can't use ARRAY_LENGTH here because both mag and openalex appear to contain an empty row
+    -- with nulls when there are no authors present
     CASE
         WHEN
-            ARRAY_LENGTH(authors) > 0 THEN TRUE
+            (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAuthor is not null) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_authors,
-    ARRAY_LENGTH(authors) as count_authors,
+    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAuthor is not null) as count_authors,
     CASE
         WHEN
             (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.OriginalAuthor is not null) > 0 THEN TRUE

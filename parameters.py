@@ -3,20 +3,27 @@ Main Location for Storing Parameters for Report
 """
 
 import datetime
+from pathlib import Path
 
 RERUN = True
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
+SOURCES = ['mag', 'openalex', 'crossref']
+CURRENT = [2019, 2020, 2021]
 
 # Files and Directories
-SQL_DIRECTORY = 'report_data_processing/sql'
-LOCAL_DATA = 'local_data.hd5'
+SQL_DIRECTORY = Path('report_data_processing/sql')
+DATA_DIR = Path('data')
+GRAPH_DIR = Path('graphs')
+LOCAL_DATA_FILE = 'local_data.hd5'
+LOCAL_DATA_PATH = DATA_DIR / LOCAL_DATA_FILE
+STORE_ELEMENT = {source: f'{source}_categories' for source in SOURCES}
+CSV_FILE = {source: DATA_DIR / f'{source}_categories.csv' for source in SOURCES}
 
 # BigQuery Tables
 PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
-SOURCES = ['mag', 'openalex', 'crossref']
 
 MAG_DATE = "20211011"
 OPENALEX_DATE = "20211011"
@@ -152,7 +159,7 @@ MAG_DATA_ITEMS = [
 ]
 
 OPENALEX_DATA_ITEMS = [
-    'authors_orcid', # TODO Get this into intermediate
+    'authors_orcid',
     'authors_sourceid',
     'authors_string',
     'authors_sequence',

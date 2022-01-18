@@ -167,10 +167,10 @@ def source_category_query(af: AnalyticsFunction,
     categories = pd.read_gbq(query=query,
                              project_id=PROJECT_ID)
 
-    with pd.HDFStore(LOCAL_DATA) as store:
-        store[f'{source}_allobjects_categories'] = categories
+    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        store[STORE_ELEMENT[source]] = categories
 
-    categories.to_csv(f'{source}_categories.csv')
+    categories.to_csv(CSV_FILE[source])
 
     if verbose:
         print('...completed')
@@ -203,10 +203,10 @@ def dois_category_query(af: AnalyticsFunction,
     categories = pd.read_gbq(query=query,
                              project_id=PROJECT_ID)
 
-    with pd.HDFStore(LOCAL_DATA) as store:
-        store[f'doi_categories'] = categories
+    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        store[STORE_ELEMENT['crossref']] = categories
 
-    categories.to_csv('doi_categories.csv')
+    categories.to_csv(CSV_FILE['crossref'])
     if verbose:
         print('...completed')
 
@@ -258,7 +258,7 @@ def crossref_member_status(af: AnalyticsFunction,
                       data=l)
     df.drop_duplicates(inplace=True)
 
-    df.to_csv(f'crossref_member_data{TODAY_STR}.csv', index=False)
+    df.to_csv(LOCAL_DATA_PATH / 'crossref_member_data{TODAY_STR}.csv', index=False)
 
     if push_to_gbq:
         client = bigquery.Client(project=PROJECT_ID)
@@ -307,10 +307,10 @@ if __name__ == '__main__':
     #                        source="openalex",
     #                        rerun=False,
     #                        verbose=True)
-    crossref_to_truthtable(af='test',
-                           rerun=False,
-                           verbose=True)
-
+    # crossref_to_truthtable(af='test',
+    #                        rerun=False,
+    #                        verbose=True)
+    #
     # intermediate_to_source_truthtable(af="test",
     #                        source="mag",
     #                        rerun=False,
