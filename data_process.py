@@ -27,7 +27,7 @@ from git import Repo
 from observatory.reports import report_utils
 from precipy.analytics_function import AnalyticsFunction
 from report_data_processing.sql import load_sql_to_string
-from parameters import *
+from data_parameters import *
 
 
 def source_to_intermediate(af: AnalyticsFunction,

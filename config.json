@@ -52,8 +52,7 @@
         "depends": [
           "crossref_member_status"
         ],
-        "source": "crossref",
-        "rerun": true
+        "source": "crossref"
       }
     ],
     [
@@ -79,8 +78,65 @@
       {
         "depends": [
           "crossref_to_truthtable"
+        ]
+      }
+    ],
+    [
+      "graphs.value_add_graphs",
+      {
+        "depends": [
+          "dois_category_query"
         ],
-        "rerun": true
+        "source": "mag"
+      }
+    ],
+    [
+      "graphs.value_add_graphs",
+      {
+        "depends": [
+          "dois_category_query"
+        ],
+        "source": "openalex"
+      }
+    ],
+    [
+      "graphs.overall_comparison",
+      {
+        "depends": [
+          "dois_category_query",
+          "source_category_query"
+        ],
+        "source": "mag"
+      }
+    ],
+    [
+      "graphs.overall_comparison",
+      {
+        "depends": [
+          "dois_category_query",
+          "source_category_query"
+        ],
+        "source": "openalex"
+      }
+    ],
+    [
+      "graphs.source_in_base_by_pubdate",
+      {
+        "depends": [
+          "dois_category_query",
+          "source_category_query"
+        ],
+        "source": "mag"
+      }
+    ],
+    [
+      "graphs.source_in_base_by_pubdate",
+      {
+        "depends": [
+          "dois_category_query",
+          "source_category_query"
+        ],
+        "source": "openalex"
       }
     ],
     [
@@ -92,7 +148,8 @@
           "crossref_member_status",
           "crossref_to_truthtable",
           "source_category_query",
-          "dois_category_query"
+          "dois_category_query",
+          "graphs.value_add_graphs"
         ]
       }
     ]

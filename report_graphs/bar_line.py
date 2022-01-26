@@ -11,11 +11,14 @@ class BarLine(AbstractObservatoryChart):
     def __init__(self,
                  xdata,
                  bardata,
-                 linedata):
-
+                 barname,
+                 linedata,
+                 linename):
         self.xdata = xdata
         self.bardata = bardata
+        self.barname = barname
         self.linedata = linedata
+        self.linename = linename
         self.processed_data = False
 
     def process_data(self):
@@ -35,20 +38,20 @@ class BarLine(AbstractObservatoryChart):
         fig.add_trace(go.Bar(
             x=self.xdata,
             y=self.bardata,
-            name='Crossref DOIs'
+            name=self.barname
         ), secondary_y=True)
 
         fig.add_trace(go.Scatter(
             x=self.xdata,
             y=self.linedata,
             mode='lines',
-            name='DOIs in MAG (%)'
+            name=self.linename
         ), secondary_y=False)
 
-        fig.update_yaxes(title_text="Registered Crossref DOIs", secondary_y=True)
-        fig.update_yaxes(title_text="DOIs in MAG (%)",
+        fig.update_yaxes(title_text=self.barname, secondary_y=True)
+        fig.update_yaxes(title_text=self.linename,
                          secondary_y=False,
-                         range=[0,100])
+                         range=[0, 100])
         # Update template
         fig.update_layout(template='simple_white')
 
