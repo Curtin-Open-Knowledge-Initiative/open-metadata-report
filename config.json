@@ -86,17 +86,7 @@
       {
         "depends": [
           "dois_category_query"
-        ],
-        "source": "mag"
-      }
-    ],
-    [
-      "graphs.value_add_graphs",
-      {
-        "depends": [
-          "dois_category_query"
-        ],
-        "source": "openalex"
+        ]
       }
     ],
     [
@@ -105,18 +95,7 @@
         "depends": [
           "dois_category_query",
           "source_category_query"
-        ],
-        "source": "mag"
-      }
-    ],
-    [
-      "graphs.overall_comparison",
-      {
-        "depends": [
-          "dois_category_query",
-          "source_category_query"
-        ],
-        "source": "openalex"
+        ]
       }
     ],
     [
@@ -125,18 +104,7 @@
         "depends": [
           "dois_category_query",
           "source_category_query"
-        ],
-        "source": "mag"
-      }
-    ],
-    [
-      "graphs.source_in_base_by_pubdate",
-      {
-        "depends": [
-          "dois_category_query",
-          "source_category_query"
-        ],
-        "source": "openalex"
+        ]
       }
     ],
     [

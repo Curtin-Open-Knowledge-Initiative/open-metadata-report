@@ -45,21 +45,25 @@ def value_add_graphs(af: AnalyticsFunction,
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    for timeframe in TIME_FRAMES.keys():
-        filtered_sum = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])].sum(axis=0)
-        figdata = collate_value_add_values(filtered_sum, ALL_COLLATED_COLUMNS)
+    for source in SOURCES:
+        if source == base_comparison:
+            continue
 
-        chart = ValueAddBar(df=figdata,
-                            categories=[FORMATTED_SOURCE_NAMES[base_comparison],
-                                        f'{FORMATTED_SOURCE_NAMES[source]} Added Value'],
-                            xs=VALUE_ADD_META[base_comparison][source]['xs'],
-                            ys=VALUE_ADD_META[base_comparison][source]['ys'])
+        for timeframe in TIME_FRAMES.keys():
+            filtered_sum = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])].sum(axis=0)
+            figdata = collate_value_add_values(filtered_sum, ALL_COLLATED_COLUMNS)
 
-        fig = chart.plotly()
-        filename = f'value_add_{source}_{timeframe.lower().replace(" ", "_")}'
-        filepath = GRAPH_DIR / filename
-        fig.write_image(filepath.with_suffix('.png'))
-        af.add_existing_file(filepath.with_suffix('.png'))
+            chart = ValueAddBar(df=figdata,
+                                categories=[FORMATTED_SOURCE_NAMES[base_comparison],
+                                            f'{FORMATTED_SOURCE_NAMES[source]} Added Value'],
+                                xs=VALUE_ADD_META[base_comparison][source]['xs'],
+                                ys=VALUE_ADD_META[base_comparison][source]['ys'])
+
+            fig = chart.plotly()
+            filename = f'value_add_{source}_{timeframe.lower().replace(" ", "_")}'
+            filepath = GRAPH_DIR / filename
+            fig.write_image(filepath.with_suffix('.png'))
+            af.add_existing_file(filepath.with_suffix('.png'))
 
         # write_plotly_div(af, fig, filename + 'html')
 
@@ -186,57 +190,70 @@ def calculate_overall_coverage(base_df: pd.DataFrame,
 def overall_comparison(af: AnalyticsFunction,
                        source: str,
                        base_comparison: str = 'crossref'):
+
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
         source_data = store[STORE_ELEMENT[source]]
 
-    for timeframe in TIME_FRAMES.keys():
-        filtered_base = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
-        filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
+    for source in SOURCES:
+        if source == base_comparison:
+            continue
 
-        figdata = calculate_overall_coverage(filtered_base, filtered_source,
-                                             source, base_comparison)
-        chart = OverallCoverage(source=FORMATTED_SOURCE_NAMES[source],
-                                data_dict=figdata,
-                                line_offset=0.06)
+        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+            source_data = store[STORE_ELEMENT[source]]
 
-        fig = chart.plotly()
-        filename = f'{source}_{base_comparison}_coverage_{timeframe.lower().replace(" ", "_")}'
-        filepath = GRAPH_DIR / filename
-        fig.write_image(filepath.with_suffix('.png'))
-        af.add_existing_file(filepath.with_suffix('.png'))
-        # write_plotly_div(af, fig, 'overall_coverage.html')
+        for timeframe in TIME_FRAMES.keys():
+            filtered_base = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
+
+            figdata = calculate_overall_coverage(filtered_base, filtered_source,
+                                                 source, base_comparison)
+            chart = OverallCoverage(source=FORMATTED_SOURCE_NAMES[source],
+                                    data_dict=figdata,
+                                    line_offset=0.06)
+
+            fig = chart.plotly()
+            filename = f'{source}_{base_comparison}_coverage_{timeframe.lower().replace(" ", "_")}'
+            filepath = GRAPH_DIR / filename
+            fig.write_image(filepath.with_suffix('.png'))
+            af.add_existing_file(filepath.with_suffix('.png'))
+            # write_plotly_div(af, fig, 'overall_coverage.html')
 
 
 def source_in_base_by_pubdate(af,
-                              source: str,
                               base_comparison: str = 'crossref'):
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        keys = store.keys()
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
-        source_data = store[STORE_ELEMENT[source]]
 
-    year_range = SOURCE_IN_BASE_YEAR_RANGE
+    for source in SOURCES:
+        if source == base_comparison:
+            continue
 
-    figdata = pd.DataFrame(index=year_range,
-                           data=[calculate_overall_coverage(
-                               base_df=base_comparison_data[base_comparison_data.published_year == year],
-                               source_df=source_data[source_data.published_year == year],
-                               source=source
-                           )
-                               for year in year_range])
+        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+            source_data = store[STORE_ELEMENT[source]]
 
-    figdata['pc_source_in_base'] = figdata.cr_in_source / figdata.cr_total * 100
+        year_range = SOURCE_IN_BASE_YEAR_RANGE
 
-    chart = BarLine(xdata=figdata.index,
-                    bardata=figdata.cr_total,
-                    barname=f'Registered {FORMATTED_SOURCE_NAMES[base_comparison]} DOIs',
-                    linedata=figdata.pc_source_in_base,
-                    linename=f'Crossref DOIs in {FORMATTED_SOURCE_NAMES[source]} (%)')
+        figdata = pd.DataFrame(index=year_range,
+                               data=[calculate_overall_coverage(
+                                   base_df=base_comparison_data[base_comparison_data.published_year == year],
+                                   source_df=source_data[source_data.published_year == year],
+                                   source=source
+                               )
+                                   for year in year_range])
 
-    fig = chart.plotly()
-    filename = f'{base_comparison}_in_{source}_by_pubdate'
-    filepath = GRAPH_DIR / filename
-    fig.write_image(filepath.with_suffix('.png'))
-    af.add_existing_file(filepath.with_suffix('.png'))
-    # write_plotly_div(af, fig, 'cr_in_mag_barline.html')
+        figdata['pc_source_in_base'] = figdata.cr_in_source / figdata.cr_total * 100
+
+        chart = BarLine(xdata=figdata.index,
+                        bardata=figdata.cr_total,
+                        barname=f'Registered {FORMATTED_SOURCE_NAMES[base_comparison]} DOIs',
+                        linedata=figdata.pc_source_in_base,
+                        linename=f'Crossref DOIs in {FORMATTED_SOURCE_NAMES[source]} (%)')
+
+        fig = chart.plotly()
+        filename = f'{base_comparison}_in_{source}_by_pubdate'
+        filepath = GRAPH_DIR / filename
+        fig.write_image(filepath.with_suffix('.png'))
+        af.add_existing_file(filepath.with_suffix('.png'))
+        # write_plotly_div(af, fig, 'cr_in_mag_barline.html')
+
