@@ -40,6 +40,7 @@ SELECT
     , COUNT(DISTINCT doi) as crossref_dois
     {% for source_name, truthtable in sources.items() %}
     , COUNT(DISTINCT {{ source_name }}.source_id) as {{ source_name }}_ids
+    , COUNT(DISTINCT IF({{ source_name }}.type is not null, doi, null)) as {{ source_name }}_has_{{ source_name }}_type
     {% for item in data_items[source_name] -%}
     , COUNT(DISTINCT IF({{ source_name }}.has_{{ item[1] }}, doi, null)) as {{ source_name }}_has_{{ item[1] }}
     {% endfor -%}

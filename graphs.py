@@ -28,7 +28,14 @@ from precipy.analytics_function import AnalyticsFunction
 from observatory.reports import report_utils
 from data_parameters import *
 from graph_parameters import *
-from report_graphs import ValueAddBar, ValueAddByCrossrefType, OverallCoverage, BarLine, Alluvial
+from report_graphs import (
+    ValueAddBar,
+    ValueAddByCrossrefType,
+    ValueAddByCrossrefTypeHorizontal,
+    OverallCoverage,
+    BarLine,
+    Alluvial
+)
 
 
 def value_add_graphs(af: AnalyticsFunction,
@@ -49,7 +56,8 @@ def value_add_graphs(af: AnalyticsFunction,
             continue
 
         for timeframe in TIME_FRAMES.keys():
-            filtered_sum = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])].sum(axis=0)
+            filtered_sum = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])].sum(
+                axis=0)
             figdata = collate_value_add_values(filtered_sum, ALL_COLLATED_COLUMNS)
 
             chart = ValueAddBar(df=figdata,
@@ -64,6 +72,24 @@ def value_add_graphs(af: AnalyticsFunction,
             fig.write_image(filepath.with_suffix('.png'))
             af.add_existing_file(filepath.with_suffix('.png'))
 
+            for metadata_element in VALUE_ADD_META[source]['xs']:
+                sum_by_type = filtered_sum.groupby('type').sum().reset_index()
+
+                chart = ValueAddByCrossrefType(df=sum_by_type,
+                                               metadata_element=metadata_element,
+                                               ys=VALUE_ADD_META[source]['ys'],
+                                               categories=[
+                                                   FORMATTED_SOURCE_NAMES[base_comparison],
+                                                   f'{FORMATTED_SOURCE_NAMES[source]} Added Value'],
+                                               stackedbar=True
+                                               )
+                fig = chart.plotly()
+                filename = f'value_add_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type.'
+                filepath = GRAPH_DIR / filename
+                fig.write_image(filepath.with_suffix('.png'))
+                af.add_existing_file(filepath.with_suffix('.png'))
+                # write_plotly_div(af, fig, filename + 'html')
+
         # write_plotly_div(af, fig, filename + 'html')
 
         # chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
@@ -75,6 +101,55 @@ def value_add_graphs(af: AnalyticsFunction,
         # fig.write_image(GRAPH_DIR / filename + 'png')
         # af.add_existing_file(GRAPH_DIR / filename + 'png')
         # write_plotly_div(af, fig, filename + 'html')
+
+
+def source_coverage_by_crossref_type(af: AnalyticsFunction,
+                                     base_comparison: str = 'crossref'):
+    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    for source in SOURCES:
+        if source == base_comparison:
+            continue
+
+        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+            source_data = store[STORE_ELEMENT[source]]
+
+        figdata = base_comparison_data.groupby('type').agg(
+            num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum'),
+            in_source=pd.NamedAgg(column=f'{source}_ids', aggfunc='sum'),
+            source_has_type=pd.NamedAgg(columns=f'{source}_has_{source}_type', aggfunc='sum')
+        )
+
+        figdata['source_type_is_na'] = figdata.in_source - figdata.souce_has_type
+        figdata['not_in_source'] = figdata.num_dois - figdata.in_source
+        # Need to check whether source counts for null type will include where not in source at all
+        figdata['source_without_type'] = figdata.source_type_is_na - figdata.not_in_source
+        figdata = collate_value_add_values(figdata, ['source_with_type',
+                                                     'source_without_type',
+                                                     'not_in_source'])
+        figdata.reset_index(inplace=True)
+
+        chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
+                                                 categories=[f'in {FORMATTED_SOURCE_NAMES[source]} with Document Type',
+                                                             f'in {FORMATTED_SOURCE_NAMES[source]} without Document Type',
+                                                             f'Not in {FORMATTED_SOURCE_NAMES[source]}'],
+                                                 metadata_element='dummy',
+                                                 ys={
+                                                     f'in {FORMATTED_SOURCE_NAMES[source]} with Document Type': {
+                                                         'dummy': 'pc_source_with_type'},
+                                                     f'in {FORMATTED_SOURCE_NAMES[source]} without Document Type': {
+                                                         'dummy': 'pc_source_without_type'},
+                                                     f'Not in {FORMATTED_SOURCE_NAMES[source]}': {
+                                                         'dummy': 'pc_not_in_source'}
+                                                 }
+                                                 )
+
+        # Modify the bar colors here
+        fig = chart.plotly(palette=['#F6671E', '#FAA77C', '#CCCCCC'])
+        fig.write_image('mag_coverage_by_crossref_type.png')
+        af.add_existing_file('mag_coverage_by_crossref_type.png')
+        # write_plotly_div(af, fig, 'mag_coverage_by_crossref_type.html')
 
 
 def collate_value_add_values(df: pd.DataFrame,
@@ -96,70 +171,6 @@ def collate_value_add_values(df: pd.DataFrame,
 
     return df
 
-
-# def alluvial_graph(af: AnalyticsFunction):
-#     cr_data = load_cache_data(af,
-#                               function_name=get_doi_table_data,
-#                               element='doi_categories',
-#                               filename=CR_DATA_FILENAME)
-#     cr_data_with_nulls = cr_data.replace(to_replace={'cr_type': {
-#         None: 'no assigned Crossref Type'
-#     },
-#         'mag_type': {
-#             None: 'no assigned MAG Type'
-#         }
-#     }
-#     )
-#
-#     figdata = cr_data_with_nulls.groupby(['cr_type', 'mag_type']).agg(
-#         num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum')
-#     )
-#
-#     cr_order = ['journal-article', 'book-chapter', 'proceedings-article', 'dataset',
-#                 'book', 'journal-issue', 'reference-entry', 'posted-content', 'report',
-#                 'monograph', 'component', 'proceedings', 'report-series', 'book-section',
-#                 'book-part', 'standard', 'book-track', 'other', 'no assigned Crossref Type']
-#     mag_order = ['Journal', 'BookChapter', 'Conference', 'Repository', 'Book', 'Patent',
-#                  'Thesis', 'Dataset', 'no assigned MAG Type']
-#
-#     figdata.reset_index(inplace=True)
-#     figdata['cr_type'] = pd.Categorical(figdata.cr_type, categories=cr_order)
-#     figdata['mag_type'] = pd.Categorical(figdata.mag_type, categories=mag_order)
-#     figdata.sort_values(['cr_type', 'mag_type'], inplace=True)
-#
-#     plot = Alluvial(df=figdata,
-#                     from_col_name='cr_type',
-#                     to_col_name='mag_type',
-#                     flow_values_col='num_dois')
-#
-#     plot.process_data()
-#     fig = plot.plotly()
-#     fig.write_image('alluvial_all_time.png')
-#     af.add_existing_file('alluvial_all_time.png')
-#     write_plotly_div(af, fig, 'alluvial_all_time.html')
-#
-#     figdata = cr_data_with_nulls[cr_data.published_year.isin(CURRENT)].groupby(['cr_type', 'mag_type']).agg(
-#         num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum')
-#     )
-#
-#     figdata.reset_index(inplace=True)
-#     figdata['cr_type'] = pd.Categorical(figdata.cr_type, categories=cr_order)
-#     figdata['mag_type'] = pd.Categorical(figdata.mag_type, categories=mag_order)
-#     figdata.sort_values(['cr_type', 'mag_type'], inplace=True)
-#
-#     plot = Alluvial(df=figdata,
-#                     from_col_name='cr_type',
-#                     to_col_name='mag_type',
-#                     flow_values_col='num_dois')
-#
-#     plot.process_data()
-#     fig = plot.plotly()
-#
-#     fig.write_image('alluvial_current.png')
-#     af.add_existing_file('alluvial_current.png')
-#     write_plotly_div(af, fig, 'alluvial_current.html')
-#
-#
 
 def calculate_overall_coverage(base_df: pd.DataFrame,
                                source_df: pd.DataFrame,
@@ -188,7 +199,6 @@ def calculate_overall_coverage(base_df: pd.DataFrame,
 
 def overall_comparison(af: AnalyticsFunction,
                        base_comparison: str = 'crossref'):
-
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
@@ -253,4 +263,3 @@ def source_in_base_by_pubdate(af,
         fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))
         # write_plotly_div(af, fig, 'cr_in_mag_barline.html')
-
