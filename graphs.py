@@ -32,7 +32,6 @@ from report_graphs import ValueAddBar, ValueAddByCrossrefType, OverallCoverage, 
 
 
 def value_add_graphs(af: AnalyticsFunction,
-                     source: str,
                      base_comparison: str = 'crossref'):
     """
     Generate graphs that provide information on the value add of a source compared to base_comparison
@@ -188,12 +187,10 @@ def calculate_overall_coverage(base_df: pd.DataFrame,
 
 
 def overall_comparison(af: AnalyticsFunction,
-                       source: str,
                        base_comparison: str = 'crossref'):
 
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
-        source_data = store[STORE_ELEMENT[source]]
 
     for source in SOURCES:
         if source == base_comparison:
