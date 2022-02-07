@@ -5,7 +5,7 @@ Main Location for Storing Parameters for Report
 import datetime
 from pathlib import Path
 
-RERUN = False
+RERUN = True
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
@@ -170,7 +170,7 @@ OPENALEX_DATA_ITEMS = [
     'fields_mag'
 ]
 
-ALL_DATA_ITEMS = set(CATEGORY_DATA_ITEMS + CROSSREF_DATA_ITEMS + MAG_DATA_ITEMS + OPENALEX_DATA_ITEMS)
+ALL_DATA_ITEMS = list(set(CATEGORY_DATA_ITEMS + CROSSREF_DATA_ITEMS + MAG_DATA_ITEMS + OPENALEX_DATA_ITEMS))
 
 SOURCE_DATA_ITEMS = dict(
     crossref=CROSSREF_DATA_ITEMS,
