@@ -9,7 +9,7 @@ RERUN = True
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
-SOURCES = ['mag', 'openalex', 'crossref']
+SOURCES = ['mag', 'openalex', 'crossref', 'openalex_native']
 CURRENT = [2019, 2020, 2021]
 
 # Files and Directories
@@ -26,11 +26,13 @@ WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 MAG_DATE = "20211206"
 OPENALEX_DATE = "20220130"
+OPENALEX_NATIVE_DATE = ""
 CROSSREF_DATE = "20220129"
 CROSSREF_MEMBER_DATE = '2022-02-07'
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
+OPENALEX_NATIVE_TABLE_LOCATION = 'utrecht-university.OpenAlex_native'
 DOI_TABLE_LOCATION = 'academic-observatory.observatory.doi'
 
 TABLE_NAMES = ['Papers',
@@ -48,7 +50,12 @@ TABLE_NAMES = ['Papers',
                'PaperResources',
                'PaperUrls',
                'PaperMeSH',
-               'doi'
+               'doi',
+               'Author',
+               'Concept',
+               'Institution'','
+               'Venue',
+               'Work'
                ]
 
 TABLE_DATES = dict(mag=MAG_DATE, openalex=OPENALEX_DATE, crossref=CROSSREF_DATE)
