@@ -68,14 +68,14 @@ OPENALEX_ADDITIONAL_TRUTHTABLE_FIELDS = dict(
         WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_authors_orcid,
-    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) as count_authors_orcid,
-    CASE
+    as has_authors_orcid
+    , (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) as count_authors_orcid
+    , CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.RorId is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_affiliations_ror,
-    (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.RorId is not null) as count_affiliations_ror
+    as has_affiliations_ror
+    , (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.RorId is not null) as count_affiliations_ror
 """
 )
 

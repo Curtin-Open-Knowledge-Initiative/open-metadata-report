@@ -114,7 +114,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
         self.figdata = [
             go.Bar(name=category,
                    x=cr_types,
-                   y=[self.df[self.df.cr_type == t][
+                   y=[self.df[self.df.type == t][
                           self.ys.get(category).get(self.metadata_element)].values[0]
                       for t in cr_types])
             for category in self.categories

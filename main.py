@@ -12,7 +12,7 @@ import graph_parameters
 render_file('config.json', [data_process, graphs], storages=[])
 
 # Make a dated archive of the output files
-output_store_path = Path('reports' / f'run_{data_parameters.TODAY_STR}')
+output_store_path = Path('reports') / f'run_{data_parameters.TODAY_STR}'
 precipy_output_path = Path('output_files')
 shutil.copytree(precipy_output_path, output_store_path, shutil.copy2)
 

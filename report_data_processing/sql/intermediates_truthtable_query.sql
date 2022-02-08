@@ -108,7 +108,7 @@ SELECT
         THEN fields.level_0[OFFSET(0)].DisplayName
         ELSE null
         END
-    as field,
+    as field
 
 {openalex_additional_fields}
 

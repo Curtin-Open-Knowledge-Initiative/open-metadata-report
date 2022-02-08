@@ -258,7 +258,7 @@ def crossref_member_status(af: AnalyticsFunction,
                       data=l)
     df.drop_duplicates(inplace=True)
 
-    df.to_csv(LOCAL_DATA_PATH / 'crossref_member_data{TODAY_STR}.csv', index=False)
+    df.to_csv(DATA_DIR / 'crossref_member_data{TODAY_STR}.csv', index=False)
 
     if push_to_gbq:
         client = bigquery.Client(project=PROJECT_ID)

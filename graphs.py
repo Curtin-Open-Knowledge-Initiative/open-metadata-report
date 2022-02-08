@@ -56,8 +56,8 @@ def value_add_graphs(af: AnalyticsFunction,
             continue
 
         for timeframe in TIME_FRAMES.keys():
-            filtered_sum = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])].sum(
-                axis=0)
+            filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered_sum = filtered.sum(axis=0)
             figdata = collate_value_add_values(filtered_sum, ALL_COLLATED_COLUMNS)
 
             chart = ValueAddBar(df=figdata,
@@ -72,12 +72,13 @@ def value_add_graphs(af: AnalyticsFunction,
             fig.write_image(filepath.with_suffix('.png'))
             af.add_existing_file(filepath.with_suffix('.png'))
 
-            for metadata_element in VALUE_ADD_META[source]['xs']:
-                sum_by_type = filtered_sum.groupby('type').sum().reset_index()
+            for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
+                sum_by_type = filtered.groupby('type').sum().reset_index()
+                collated_sum_by_type = collate_value_add_values(sum_by_type, ALL_COLLATED_COLUMNS)
 
-                chart = ValueAddByCrossrefType(df=sum_by_type,
+                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
                                                metadata_element=metadata_element,
-                                               ys=VALUE_ADD_META[source]['ys'],
+                                               ys=VALUE_ADD_META[base_comparison][source]['ys'],
                                                categories=[
                                                    FORMATTED_SOURCE_NAMES[base_comparison],
                                                    f'{FORMATTED_SOURCE_NAMES[source]} Added Value'],
