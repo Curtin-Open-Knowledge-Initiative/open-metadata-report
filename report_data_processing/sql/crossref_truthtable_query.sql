@@ -1,92 +1,92 @@
 WITH
 combined AS (
     SELECT *
-    FROM `{table}`
-    LEFT JOIN (SELECT * FROM `{crossref_member_table}` WHERE collection_date="{crossref_member_date}")
-    ON crossref.member = id
-    AND crossref.prefix = prefix
+    FROM `{table}` as crossref
+    LEFT JOIN (SELECT * FROM `{crossref_member_table}` WHERE collection_date="{crossref_member_date}") as member
+    ON crossref.member = member.id
+    AND crossref.prefix = member.prefix
 )
 
 SELECT
     doi as source_id,
     doi,
-    crossref.type,
-    crossref.published_year,
+    type,
+    IF(ARRAY_LENGTH(issued.date_parts) > 0, issued.date_parts[offset(0)], null) as published_year,
 
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors WHERE authors.family is not null) > 0 THEN TRUE
+        WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.family is not null) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_authors,
-    ARRAY_LENGTH(crossref.author) as count_authors,
+    ARRAY_LENGTH(author) as count_authors,
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors WHERE authors.family is not null) > 0 THEN TRUE
+        WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.family is not null) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_authors_string,
-    ARRAY_LENGTH(crossref.author) as count_authors_string,
+    ARRAY_LENGTH(author) as count_authors_string,
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors WHERE authors.ORCID is not null) > 0 THEN TRUE
+        WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.ORCID is not null) > 0 THEN TRUE
         ELSE FALSE
     END as has_authors_orcid,
-    (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors WHERE authors.ORCID is not null) as count_authors_orcid,
+    (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.ORCID is not null) as count_authors_orcid,
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors WHERE authors.sequence is not null) > 0 THEN TRUE
+        WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.sequence is not null) > 0 THEN TRUE
         ELSE FALSE
     END as has_authors_sequence,
-    (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors WHERE authors.sequence is not null) as count_authors_sequence,
+    (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.sequence is not null) as count_authors_sequence,
 
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) > 0 THEN TRUE
+        WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_affiliations,
-    (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) as count_affiliations,
+    (SELECT COUNT(1) FROM UNNEST(author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) as count_affiliations,
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) > 0 THEN TRUE
+        WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_affiliations_string,
-    (SELECT COUNT(1) FROM UNNEST(crossref.author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) as count_affiliations_string,
+    (SELECT COUNT(1) FROM UNNEST(author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) as count_affiliations_string,
 
     CASE
-        WHEN (crossref.abstract is not null) THEN TRUE
+        WHEN (abstract is not null) THEN TRUE
         ELSE FALSE
     END
     as has_abstract,
-    LENGTH(crossref.abstract) as count_abstract,
+    LENGTH(abstract) as count_abstract,
     CASE
-        WHEN crossref.is_referenced_by_count > 0 THEN TRUE
+        WHEN is_referenced_by_count > 0 THEN TRUE
         ELSE FALSE
     END
     as has_citations,
-    crossref.is_referenced_by_count as count_citations,
+    is_referenced_by_count as count_citations,
     CASE
-        WHEN crossref.references_count > 0 THEN TRUE
+        WHEN references_count > 0 THEN TRUE
         ELSE FALSE
     END
     as has_references,
-    crossref.references_count as count_references,
+    references_count as count_references,
     CASE
-        WHEN (crossref.references_count > 0) AND public_references THEN TRUE
+        WHEN (references_count > 0) AND public_references THEN TRUE
         ELSE FALSE
     END
     as has_references_open,
     CASE
-        WHEN public_references THEN crossref.references_count
+        WHEN public_references THEN references_count
         ELSE 0
     END
     as count_references_open,
     CASE
-        WHEN ARRAY_LENGTH(crossref.subject) > 0 THEN crossref.subject[OFFSET(0)]
+        WHEN ARRAY_LENGTH(subject) > 0 THEN subject[OFFSET(0)]
         ELSE null
     END as top_field,
     CASE
-        WHEN ARRAY_LENGTH(crossref.subject) > 0 THEN TRUE
+        WHEN ARRAY_LENGTH(subject) > 0 THEN TRUE
         ELSE FALSE
     END as has_fields,
     CASE
-        WHEN ARRAY_LENGTH(crossref.subject) > 0 THEN ARRAY_LENGTH(crossref.subject)
+        WHEN ARRAY_LENGTH(subject) > 0 THEN ARRAY_LENGTH(subject)
         ELSE null
     END as count_fields
 

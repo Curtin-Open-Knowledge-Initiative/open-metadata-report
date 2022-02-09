@@ -71,6 +71,13 @@ SELECT
     END
     as has_affiliations_ror,
     (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.ror is not null) as count_affiliations_ror,
+    CASE
+        WHEN
+            (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.country_code is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_affiliations_countrycode,
+    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.country_code is not null) as count_affiliations_country_code,
 
     -- Abstracts
     CASE

@@ -102,12 +102,44 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
         print('...completed')
 
 
+def openalex_native_to_truthtable(af: AnalyticsFunction,
+                                  source: str='openalex_native',
+                                  rerun: bool = RERUN,
+                                  verbose: bool = VERBOSE):
+    """
+    Convert OpenAlex Native Format Works Table to Truthtable
+    """
+
+    query = load_sql_to_string('openalex_native_truthtable.sql',
+                               parameters=dict(table=TABLES[source]['Work']),
+                               directory=SQL_DIRECTORY)
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose):
+        print(f"""Query is:
+
+    {query}
+
+    """)
+        print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
+        return
+
+    with bigquery.Client() as client:
+        job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
+                                             create_disposition='CREATE_IF_NEEDED',
+                                             write_disposition=WRITE_DISPOSITION)
+
+        query_job = client.query(query, job_config=job_config)  # Make an API request.
+        query_job.result()  # Wait for the job to complete.
+
+    if verbose:
+        print('...completed')
+
 def crossref_to_truthtable(af: AnalyticsFunction,
                            source: str = 'crossref',
                            rerun: bool = RERUN,
                            verbose: bool = VERBOSE):
     """
-    Query and download category data from the intermediate tables
+    Calculate truthtable for Crossref
     """
 
     query = load_sql_to_string('crossref_truthtable_query.sql',
@@ -307,10 +339,10 @@ if __name__ == '__main__':
     #                        source="openalex",
     #                        rerun=False,
     #                        verbose=True)
-    # crossref_to_truthtable(af='test',
-    #                        rerun=False,
-    #                        verbose=True)
-    #
+    crossref_to_truthtable(af='test',
+                           rerun=False,
+                           verbose=True)
+
     # intermediate_to_source_truthtable(af="test",
     #                        source="mag",
     #                        rerun=False,
@@ -319,11 +351,14 @@ if __name__ == '__main__':
     #                        source="openalex",
     #                        rerun=False,
     #                        verbose=True)
-    dois_category_query(af='test',
-                        rerun=False,
-                        verbose=True)
+    # dois_category_query(af='test',
+    #                     rerun=False,
+    #                     verbose=True)
     # source_category_query(af='test',
     #                       source='mag',
     #                       rerun=False,
     #                       verbose=True)
+    # openalex_native_to_truthtable(af='test',
+    #                               rerun=False,
+    #                               verbose=True)
     pass

@@ -5,7 +5,7 @@ Main Location for Storing Parameters for Report
 import datetime
 from pathlib import Path
 
-RERUN = True
+RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
@@ -27,13 +27,13 @@ WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 MAG_DATE = "20211206"
 OPENALEX_DATE = "20220130"
 OPENALEX_NATIVE_DATE = ""
-CROSSREF_DATE = "20220129"
+CROSSREF_DATE = "20220107"
 CROSSREF_MEMBER_DATE = '2022-02-07'
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
 OPENALEX_NATIVE_TABLE_LOCATION = 'utrecht-university.OpenAlex_native'
-DOI_TABLE_LOCATION = 'academic-observatory.observatory.doi'
+DOI_TABLE_LOCATION = 'academic-observatory.crossref.crossref_metadata'
 
 TABLE_NAMES = ['Papers',
                'Affiliations',
@@ -58,13 +58,20 @@ TABLE_NAMES = ['Papers',
                'Work'
                ]
 
-TABLE_DATES = dict(mag=MAG_DATE, openalex=OPENALEX_DATE, crossref=CROSSREF_DATE)
-TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION, openalex=OPENALEX_TABLE_LOCATION, crossref=DOI_TABLE_LOCATION)
+TABLE_DATES = dict(mag=MAG_DATE,
+                   openalex=OPENALEX_DATE,
+                   openalex_native=OPENALEX_NATIVE_DATE,
+                   crossref=CROSSREF_DATE)
+TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION,
+                       openalex=OPENALEX_TABLE_LOCATION,
+                       openalex_native=OPENALEX_NATIVE_TABLE_LOCATION,
+                       crossref=DOI_TABLE_LOCATION)
 
 OPENALEX_ADDITIONAL_SOURCE_FIELDS = dict(
     mag='',
     crossref=None,
-    openalex=', affiliation.RorId, author.Orcid'
+    openalex=', affiliation.RorId, author.Orcid',
+    openalex_native=None
 )
 
 OPENALEX_ADDITIONAL_TRUTHTABLE_FIELDS = dict(
@@ -83,7 +90,8 @@ OPENALEX_ADDITIONAL_TRUTHTABLE_FIELDS = dict(
     END
     as has_affiliations_ror
     , (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.RorId is not null) as count_affiliations_ror
-"""
+""",
+    openalex_native=None
 )
 
 TABLES = {
@@ -117,10 +125,6 @@ SOURCE_TRUTH_TABLES = {
     source: f'{PROJECT_ID}.{source}.{source}_truthtable{TABLE_DATES.get(source)}'
     for source in SOURCES
 }
-
-## Quasi DOI Table
-
-Q_DOI_TABLE = f'{PROJECT_ID}.crossref.crossref_intermediate{TABLE_DATES.get("crossref")}'
 
 ## Crossref Member Data Table
 
@@ -177,13 +181,16 @@ OPENALEX_DATA_ITEMS = [
     'fields_mag'
 ]
 
-ALL_DATA_ITEMS = list(set(CATEGORY_DATA_ITEMS + CROSSREF_DATA_ITEMS + MAG_DATA_ITEMS + OPENALEX_DATA_ITEMS))
+OPENALEX_NATIVE_DATA_ITEMS = OPENALEX_DATA_ITEMS
 
 SOURCE_DATA_ITEMS = dict(
     crossref=CROSSREF_DATA_ITEMS,
     mag=MAG_DATA_ITEMS,
-    openalex=OPENALEX_DATA_ITEMS
+    openalex=OPENALEX_DATA_ITEMS,
+    openalex_native=OPENALEX_NATIVE_DATA_ITEMS
 )
+
+ALL_DATA_ITEMS = list(set([item for source_list in SOURCE_DATA_ITEMS.values() for item in source_list]))
 
 SOURCE_DATA_ELEMENTS = {
 }
