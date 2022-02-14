@@ -1,5 +1,5 @@
 SELECT
-    doi,
+    UPPER(SUBSTRING(doi, 17)) as doi,
     id as source_id,
     type,
     publication_year as published_year,
@@ -62,7 +62,7 @@ SELECT
             (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.id is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_affiliations_source_id,
+    as has_affiliations_sourceid,
     (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.id is not null) as count_affiliations_sourceid,
     CASE
         WHEN
@@ -77,7 +77,7 @@ SELECT
         ELSE FALSE
     END
     as has_affiliations_countrycode,
-    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.country_code is not null) as count_affiliations_country_code,
+    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.country_code is not null) as count_affiliations_countrycode,
 
     -- Abstracts
     CASE
@@ -126,6 +126,54 @@ SELECT
         ELSE FALSE
     END
     as has_fields_mesh,
-    (SELECT COUNT(1) FROM UNNEST(mesh) AS fields WHERE fields.descriptor_ui is not null) as count_fields_mesh
+    (SELECT COUNT(1) FROM UNNEST(mesh) AS fields WHERE fields.descriptor_ui is not null) as count_fields_mesh,
+
+    -- Venue
+    CASE
+        WHEN host_venue.id is not null THEN TRUE
+        ELSE FALSE
+    END
+    as has_venue,
+    CASE
+        WHEN host_venue.id is not null THEN 1
+        ELSE 0
+    END
+    as count_venue,
+    CASE
+        WHEN host_venue.id is not null THEN TRUE
+        ELSE FALSE
+    END
+    as has_venue_sourceid,
+    CASE
+        WHEN host_venue.id is not null THEN 1
+        ELSE 0
+    END
+    as count_venue_sourceid,
+    CASE
+        WHEN host_venue.display_name is not null THEN TRUE
+        ELSE FALSE
+    END
+    as has_venue_string,
+    CASE
+        WHEN host_venue.display_name is not null THEN 1
+        ELSE 0
+    END as count_venue_string,
+    CASE
+        WHEN ARRAY_LENGTH(host_venue.issn) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_venue_issn,
+    ARRAY_LENGTH(host_venue.issn) as count_venue_issn,
+    CASE
+        WHEN host_venue.issn_l is not null THEN TRUE
+        ELSE FALSE
+    END
+    as has_venue_issnl,
+    CASE
+        WHEN host_venue.issn_l is not null THEN 1
+        ELSE 0
+    END
+    as count_venue_issnl
+
 
 FROM `{table}`

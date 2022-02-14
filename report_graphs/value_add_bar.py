@@ -188,7 +188,7 @@ class ValueAddByCrossrefTypeHorizontal(AbstractObservatoryChart):
         self.figdata = [
             go.Bar(name=category,
                    y=cr_types,
-                   x=[self.df[self.df.cr_type == t][
+                   x=[self.df[self.df.type == t][
                           self.ys.get(category).get(self.metadata_element)].values[0]
                       for t in cr_types],
                    orientation='h',

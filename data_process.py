@@ -31,75 +31,75 @@ from data_parameters import *
 
 
 def source_to_intermediate(af: AnalyticsFunction,
-                           source: str,
                            rerun: bool = RERUN,
                            verbose: bool = VERBOSE):
     """
     Generate the intermediate table from source data
     """
 
-    query = load_sql_to_string('source_to_intermediate.sql',
-                               parameters=TABLES[source],
-                               directory=SQL_DIRECTORY
-                               )
-    destination_table = INTERMEDIATE_TABLES[source]
+    for source in MAG_FORMAT_SOURCES:
+        query = load_sql_to_string('source_to_intermediate.sql',
+                                   parameters=TABLES[source],
+                                   directory=SQL_DIRECTORY
+                                   )
+        destination_table = INTERMEDIATE_TABLES[source]
 
-    if not report_utils.bigquery_rerun(af, rerun, verbose):
-        print(f"""Query String is:
-        
-{query}
+        if not report_utils.bigquery_rerun(af, rerun, verbose, source):
+            print(f"""Query String is:
+            
+    {query}
+    
+    """)
+            print(f'Destination Tables is:{destination_table}')
+            return
 
-""")
-        print(f'Destination Tables is:{destination_table}')
-        return
+        with bigquery.Client() as client:
+            job_config = bigquery.QueryJobConfig(destination=destination_table,
+                                                 create_disposition='CREATE_IF_NEEDED',
+                                                 write_disposition=WRITE_DISPOSITION)
 
-    with bigquery.Client() as client:
-        job_config = bigquery.QueryJobConfig(destination=destination_table,
-                                             create_disposition='CREATE_IF_NEEDED',
-                                             write_disposition=WRITE_DISPOSITION)
+            # Start the query, passing in the extra configuration.
+            query_job = client.query(query, job_config=job_config)  # Make an API request.
+            query_job.result()  # Wait for the job to complete.
 
-        # Start the query, passing in the extra configuration.
-        query_job = client.query(query, job_config=job_config)  # Make an API request.
-        query_job.result()  # Wait for the job to complete.
-
-    if verbose:
-        print('...completed')
+        if verbose:
+            print('...completed')
 
 
 def intermediate_to_source_truthtable(af: AnalyticsFunction,
-                                      source: str,
                                       rerun: bool = RERUN,
                                       verbose: bool = VERBOSE):
     """
     Query and download category data from the intermediate tables
     """
 
-    query = load_sql_to_string('intermediates_truthtable_query.sql',
-                               parameters=dict(
-                                   table=INTERMEDIATE_TABLES[source],
-                                   openalex_additional_fields=TABLES[source]['openalex_additional_truthtable_fields']
-                               ),
-                               directory=SQL_DIRECTORY)
+    for source in MAG_FORMAT_SOURCES:
+        query = load_sql_to_string('intermediates_truthtable_query.sql',
+                                   parameters=dict(
+                                       table=INTERMEDIATE_TABLES[source],
+                                       openalex_additional_fields=TABLES[source]['openalex_additional_truthtable_fields']
+                                   ),
+                                   directory=SQL_DIRECTORY)
 
-    if not report_utils.bigquery_rerun(af, rerun, verbose, source=source):
-        print(f"""Query is:
-        
-{query}
+        if not report_utils.bigquery_rerun(af, rerun, verbose, source):
+            print(f"""Query is:
+            
+    {query}
+    
+    """)
+            print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
+            return
 
-""")
-        print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
-        return
+        with bigquery.Client() as client:
+            job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
+                                                 create_disposition='CREATE_IF_NEEDED',
+                                                 write_disposition=WRITE_DISPOSITION)
 
-    with bigquery.Client() as client:
-        job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
-                                             create_disposition='CREATE_IF_NEEDED',
-                                             write_disposition=WRITE_DISPOSITION)
+            query_job = client.query(query, job_config=job_config)  # Make an API request.
+            query_job.result()  # Wait for the job to complete.
 
-        query_job = client.query(query, job_config=job_config)  # Make an API request.
-        query_job.result()  # Wait for the job to complete.
-
-    if verbose:
-        print('...completed')
+        if verbose:
+            print('...completed')
 
 
 def openalex_native_to_truthtable(af: AnalyticsFunction,
@@ -108,13 +108,16 @@ def openalex_native_to_truthtable(af: AnalyticsFunction,
                                   verbose: bool = VERBOSE):
     """
     Convert OpenAlex Native Format Works Table to Truthtable
+
+    Note that OpenAlex uses the fully qualified URL form of the doi in lower case and needs conversion.
+    See the query for details.
     """
 
     query = load_sql_to_string('openalex_native_truthtable.sql',
                                parameters=dict(table=TABLES[source]['Work']),
                                directory=SQL_DIRECTORY)
 
-    if not report_utils.bigquery_rerun(af, rerun, verbose):
+    if not report_utils.bigquery_rerun(af, rerun, verbose, source):
         print(f"""Query is:
 
     {query}
@@ -177,35 +180,36 @@ def source_category_query(af: AnalyticsFunction,
     Query and download category data from the intermediate tables
     """
 
-    query_template = load_sql_to_string('source_categories_query.sql.jinja2',
-                                        directory=SQL_DIRECTORY)
+    for source in [s for s in SOURCES if s !='crossref']:
+        query_template = load_sql_to_string('source_categories_query.sql.jinja2',
+                                            directory=SQL_DIRECTORY)
 
-    data_items = list(set(CATEGORY_DATA_ITEMS + SOURCE_DATA_ITEMS[source]))
-    data_items.sort()
-    data = dict(
-        table=SOURCE_TRUTH_TABLES[source],
-        data_items=data_items
-    )
-    query = jinja2.Template(query_template).render(data)
+        data_items = list(set(CATEGORY_DATA_ITEMS + SOURCE_DATA_ITEMS[source]))
+        data_items.sort()
+        data = dict(
+            table=SOURCE_TRUTH_TABLES[source],
+            data_items=data_items
+        )
+        query = jinja2.Template(query_template).render(data)
 
-    if not report_utils.bigquery_rerun(af, rerun, verbose):
-        print(f"""Query is:
-        
-{query}
+        if not report_utils.bigquery_rerun(af, rerun, verbose, source):
+            print(f"""Query is:
+            
+    {query}
+    
+    """)
+            return
 
-""")
-        return
+        categories = pd.read_gbq(query=query,
+                                 project_id=PROJECT_ID)
 
-    categories = pd.read_gbq(query=query,
-                             project_id=PROJECT_ID)
+        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+            store[STORE_ELEMENT[source]] = categories
 
-    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        store[STORE_ELEMENT[source]] = categories
+        categories.to_csv(CSV_FILE[source])
 
-    categories.to_csv(CSV_FILE[source])
-
-    if verbose:
-        print('...completed')
+        if verbose:
+            print('...completed')
 
 
 def dois_category_query(af: AnalyticsFunction,
@@ -232,6 +236,7 @@ def dois_category_query(af: AnalyticsFunction,
 """)
         return
 
+    # Run the query and download data
     categories = pd.read_gbq(query=query,
                              project_id=PROJECT_ID)
 
@@ -244,22 +249,23 @@ def dois_category_query(af: AnalyticsFunction,
 
 
 def crossref_member_status(af: AnalyticsFunction,
-                           push_to_gbq: bool = False,
+                           push_to_gbq: bool = True,
                            if_exists: str = 'fail',
                            rerun=RERUN):
     """
     Poll the Crossref Member API for data on the abstracts and citations status of a member
     """
 
-    cursor = '*'
+    print('Running crossref memberdata collection...')
 
-    total_results = 500
-    results_received = 0
-
-    if not rerun:
+    # Skip running the Crossref API if directed not to or the data should (in theory) already exist
+    if (rerun == False) or (CROSSREF_MEMBER_DATE != TODAY_STR):
         print('Skipping poking the Crossref Member API')
         return
 
+    cursor = '*'
+    total_results = 500
+    results_received = 0
     l = []
     while results_received < total_results:
         r = requests.get('http://api.crossref.org/members/',
@@ -290,7 +296,7 @@ def crossref_member_status(af: AnalyticsFunction,
                       data=l)
     df.drop_duplicates(inplace=True)
 
-    df.to_csv(DATA_DIR / 'crossref_member_data{TODAY_STR}.csv', index=False)
+    df.to_csv(DATA_DIR / f'crossref_member_data{TODAY_STR}.csv', index=False)
 
     if push_to_gbq:
         client = bigquery.Client(project=PROJECT_ID)

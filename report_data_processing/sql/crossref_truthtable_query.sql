@@ -9,7 +9,7 @@ combined AS (
 
 SELECT
     doi as source_id,
-    doi,
+    doi as doi,
     type,
     IF(ARRAY_LENGTH(issued.date_parts) > 0, issued.date_parts[offset(0)], null) as published_year,
 
@@ -55,12 +55,16 @@ SELECT
     END
     as has_abstract,
     LENGTH(abstract) as count_abstract,
+
+    -- Citations
     CASE
         WHEN is_referenced_by_count > 0 THEN TRUE
         ELSE FALSE
     END
     as has_citations,
     is_referenced_by_count as count_citations,
+
+    -- References
     CASE
         WHEN references_count > 0 THEN TRUE
         ELSE FALSE
@@ -77,6 +81,8 @@ SELECT
         ELSE 0
     END
     as count_references_open,
+
+    -- Fields
     CASE
         WHEN ARRAY_LENGTH(subject) > 0 THEN subject[OFFSET(0)]
         ELSE null
@@ -88,7 +94,27 @@ SELECT
     CASE
         WHEN ARRAY_LENGTH(subject) > 0 THEN ARRAY_LENGTH(subject)
         ELSE null
-    END as count_fields
+    END as count_fields,
+
+    -- Venue
+    CASE
+        WHEN ARRAY_LENGTH(container_title) > 0 THEN TRUE
+        ELSE FALSE
+        END
+    as has_venue,
+    ARRAY_LENGTH(container_title) as count_venue,
+    CASE
+        WHEN ARRAY_LENGTH(container_title) > 0 THEN TRUE
+        ELSE FALSE
+        END
+    as has_venue_string,
+    ARRAY_LENGTH(container_title) as count_venue_string,
+    CASE
+        WHEN ARRAY_LENGTH(ISSN) > 0 THEN TRUE
+        ELSE FALSE
+        END
+    as has_venue_issn,
+    ARRAY_LENGTH(ISSN) as count_venue_issn,
 
 FROM combined
 

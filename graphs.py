@@ -85,27 +85,18 @@ def value_add_graphs(af: AnalyticsFunction,
                                                stackedbar=True
                                                )
                 fig = chart.plotly()
-                filename = f'value_add_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type.'
+                filename = f'value_add_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
                 filepath = GRAPH_DIR / filename
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
-                # write_plotly_div(af, fig, filename + 'html')
-
-        # write_plotly_div(af, fig, filename + 'html')
-
-        # chart = ValueAddBar(df=summary_table[summary_table['Time Period'] == time_period],
-        #                     categories=['Crossref', 'MAG added value'],
-        #                     xs=['Subjects'],
-        #                     stackedbar=False)
-        # fig = chart.plotly()
-        # filename = f'value_add_subject_{time_period.lower().replace(" ", "_")}.'
-        # fig.write_image(GRAPH_DIR / filename + 'png')
-        # af.add_existing_file(GRAPH_DIR / filename + 'png')
-        # write_plotly_div(af, fig, filename + 'html')
 
 
 def source_coverage_by_crossref_type(af: AnalyticsFunction,
                                      base_comparison: str = 'crossref'):
+    """
+    Graph the coverage of the source compared to the base comparison by crossref-type
+    """
+
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
@@ -113,20 +104,15 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
         if source == base_comparison:
             continue
 
-        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-            source_data = store[STORE_ELEMENT[source]]
-
         figdata = base_comparison_data.groupby('type').agg(
-            num_dois=pd.NamedAgg(column='num_dois', aggfunc='sum'),
+            crossref_dois=pd.NamedAgg(column=f'{base_comparison}_dois', aggfunc='sum'),
             in_source=pd.NamedAgg(column=f'{source}_ids', aggfunc='sum'),
-            source_has_type=pd.NamedAgg(columns=f'{source}_has_{source}_type', aggfunc='sum')
+            source_has_type=pd.NamedAgg(column=f'{source}_has_{source}_type', aggfunc='sum')
         )
 
-        figdata['source_type_is_na'] = figdata.in_source - figdata.souce_has_type
-        figdata['not_in_source'] = figdata.num_dois - figdata.in_source
-        # Need to check whether source counts for null type will include where not in source at all
-        figdata['source_without_type'] = figdata.source_type_is_na - figdata.not_in_source
-        figdata = collate_value_add_values(figdata, ['source_with_type',
+        figdata['source_without_type'] = figdata.in_source - figdata.source_has_type
+        figdata['not_in_source'] = figdata.crossref_dois - figdata.in_source
+        figdata = collate_value_add_values(figdata, ['source_has_type',
                                                      'source_without_type',
                                                      'not_in_source'])
         figdata.reset_index(inplace=True)
@@ -138,7 +124,7 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
                                                  metadata_element='dummy',
                                                  ys={
                                                      f'in {FORMATTED_SOURCE_NAMES[source]} with Document Type': {
-                                                         'dummy': 'pc_source_with_type'},
+                                                         'dummy': 'pc_source_has_type'},
                                                      f'in {FORMATTED_SOURCE_NAMES[source]} without Document Type': {
                                                          'dummy': 'pc_source_without_type'},
                                                      f'Not in {FORMATTED_SOURCE_NAMES[source]}': {
@@ -148,8 +134,10 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
 
         # Modify the bar colors here
         fig = chart.plotly(palette=['#F6671E', '#FAA77C', '#CCCCCC'])
-        fig.write_image('mag_coverage_by_crossref_type.png')
-        af.add_existing_file('mag_coverage_by_crossref_type.png')
+        filename = f'{source}_coverage_by_crossref_type'
+        filepath = GRAPH_DIR / filename
+        fig.write_image(filepath.with_suffix('.png'))
+        af.add_existing_file(filepath.with_suffix('.png'))
         # write_plotly_div(af, fig, 'mag_coverage_by_crossref_type.html')
 
 

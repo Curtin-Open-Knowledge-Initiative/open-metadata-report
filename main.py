@@ -15,8 +15,8 @@ render_file('config.json', [data_process, graphs], storages=[])
 output_store_path = Path('reports') / f'run_{data_parameters.TODAY_STR}'
 precipy_output_path = Path('output_files')
 
+n = 2
 while output_store_path.exists():
-    n = 2
     output_store_path = Path('reports') / f'run_{data_parameters.TODAY_STR}_{str(n)}'
     n = n + 1
 

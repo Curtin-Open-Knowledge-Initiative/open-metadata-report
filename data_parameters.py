@@ -5,11 +5,12 @@ Main Location for Storing Parameters for Report
 import datetime
 from pathlib import Path
 
-RERUN = False
+RERUN = True
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
 SOURCES = ['mag', 'openalex', 'crossref', 'openalex_native']
+MAG_FORMAT_SOURCES = ['mag', 'openalex']
 CURRENT = [2019, 2020, 2021]
 
 # Files and Directories
@@ -28,7 +29,7 @@ MAG_DATE = "20211206"
 OPENALEX_DATE = "20220130"
 OPENALEX_NATIVE_DATE = ""
 CROSSREF_DATE = "20220107"
-CROSSREF_MEMBER_DATE = '2022-02-07'
+CROSSREF_MEMBER_DATE = '2022-02-14'
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
@@ -143,7 +144,8 @@ CATEGORY_DATA_ITEMS = [
     'abstract',
     'citations',
     'references',
-    'fields'
+    'fields',
+    'venue'
 ]
 
 # SOURCE_DATA_ITEMS provide special classes of the standard items. These must be a subclass of a CATEGORY_DATA_ITEM
@@ -154,7 +156,9 @@ CROSSREF_DATA_ITEMS = [
     'authors_string',
     'authors_sequence',
     'affiliations_string',
-    'references_open'
+    'references_open',
+    'venue_issn',
+    'venue_string'
 ]
 
 MAG_DATA_ITEMS = [
@@ -165,7 +169,10 @@ MAG_DATA_ITEMS = [
     'affiliations_sourceid',
     'affiliations_string',
     'affiliations_grid',
-    'fields_mag'
+    'fields_mag',
+    'venue_sourceid',
+    'venue_string',
+    'venue_issn'
 ]
 
 OPENALEX_DATA_ITEMS = [
@@ -178,10 +185,27 @@ OPENALEX_DATA_ITEMS = [
     'affiliations_string',
     'affiliations_grid',
     'affiliations_ror',
-    'fields_mag'
+    'fields_mag',
+    'venue_sourceid',
+    'venue_string',
+    'venue_issn'
 ]
 
-OPENALEX_NATIVE_DATA_ITEMS = OPENALEX_DATA_ITEMS
+OPENALEX_NATIVE_DATA_ITEMS = [
+    'authors_orcid',
+    'authors_sourceid',
+    'authors_string',
+    'authors_sequence',
+    'affiliations_countrycode',
+    'affiliations_sourceid',
+    'affiliations_string',
+    'affiliations_ror',
+    'fields_mag',
+    'venue_sourceid',
+    'venue_string',
+    'venue_issn',
+    'venue_issnl'
+]
 
 SOURCE_DATA_ITEMS = dict(
     crossref=CROSSREF_DATA_ITEMS,
@@ -190,7 +214,7 @@ SOURCE_DATA_ITEMS = dict(
     openalex_native=OPENALEX_NATIVE_DATA_ITEMS
 )
 
-ALL_DATA_ITEMS = list(set([item for source_list in SOURCE_DATA_ITEMS.values() for item in source_list]))
+ALL_DATA_ITEMS = list(set(CATEGORY_DATA_ITEMS + [item for source_list in SOURCE_DATA_ITEMS.values() for item in source_list]))
 
 SOURCE_DATA_ELEMENTS = {
 }

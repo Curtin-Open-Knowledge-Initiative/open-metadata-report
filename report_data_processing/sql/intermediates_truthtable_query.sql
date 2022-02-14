@@ -108,7 +108,57 @@ SELECT
         THEN fields.level_0[OFFSET(0)].DisplayName
         ELSE null
         END
-    as field
+    as field,
+
+    -- Venues
+    CASE
+        WHEN journal.DisplayName is not null
+        THEN TRUE
+        ELSE FALSE
+        END
+    as has_venue,
+    CASE
+        WHEN journal.DisplayName is not null
+        THEN 0
+        ELSE 1
+        END
+    as count_venue,
+    CASE
+        WHEN journal.DisplayName is not null
+        THEN TRUE
+        ELSE FALSE
+        END
+    as has_venue_string,
+    CASE
+        WHEN journal.DisplayName is not null
+        THEN 1
+        ELSE 0
+        END
+    as count_venue_string,
+    CASE
+        WHEN journal.JournalId is not null
+        THEN TRUE
+        ELSE FALSE
+        END
+    as has_venue_sourceid,
+    CASE
+        WHEN journal.JournalId is not null
+        THEN 0
+        ELSE 1
+        END
+    as count_venue_sourceid,
+    CASE
+        WHEN journal.Issn is not null
+        THEN TRUE
+        ELSE FALSE
+        END
+    as has_venue_issn,
+    CASE
+        WHEN journal.Issn is not null
+        THEN 0
+        ELSE 1
+        END
+    as count_venue_issn
 
 {openalex_additional_fields}
 
