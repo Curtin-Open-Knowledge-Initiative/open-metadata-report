@@ -5,7 +5,7 @@ Main Location for Storing Parameters for Report
 import datetime
 from pathlib import Path
 
-RERUN = True
+RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')

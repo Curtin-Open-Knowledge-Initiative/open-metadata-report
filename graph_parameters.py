@@ -36,64 +36,139 @@ ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS
 VALUE_ADD_META = {
     'crossref': {
         'mag': {
-            'xs': ['Affiliation strings', 'Authors', 'Abstracts', 'Citations to', 'Open References from'],
+            'xs': ['Affiliation strings', 'Authors', 'Abstracts', 'Citations to',
+                   'References from', 'Open References from',
+                   'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'Crossref': {
                     'Affiliation strings': 'pc_crossref_has_affiliations_string',
                     'Authors': 'pc_crossref_has_authors',
                     'Abstracts': 'pc_crossref_has_abstract',
                     'Citations to': 'pc_crossref_has_citations',
-                    'Open References from': 'pc_crossref_has_references_open'
+                    'References from': 'pc_crossref_has_references',
+                    'Open References from': 'pc_crossref_has_references_open',
+                    'Journals': 'pc_crossref_has_venue',
+                    'Journals ISSN': 'pc_crossref_has_venue_issn',
+                    'Fields': 'pc_crossref_has_fields'
+                },
+                'MAG': {
+                    'Affiliation strings': 'pc_mag_has_affiliations_string',
+                    'Authors': 'pc_mag_has_authors',
+                    'Abstracts': 'pc_mag_has_abstract',
+                    'Citations to': 'pc_mag_has_citations',
+                    'References from': 'pc_mag_has_references',
+                    'Open References from': 'pc_mag_has_references_open',
+                    'Journals': 'pc_mag_has_venue',
+                    'Journals ISSN': 'pc_mag_has_venue_issn',
+                    'Fields': 'pc_mag_has_fields'
                 },
                 'MAG Added Value': {
                     'Affiliation strings': 'pc_mag_affiliations_string_adds_presence',
                     'Authors': 'pc_mag_authors_adds_presence',
                     'Abstracts': 'pc_mag_abstract_adds_presence',
                     'Citations to': 'pc_mag_citations_adds_presence',
-                    'Open References from': 'pc_mag_references_open_adds_presence'
+                    'References from': 'pc_mag_references_adds_presence',
+                    'Open References from': 'pc_mag_references_open_adds_presence',
+                    'Journals': 'pc_mag_venue_adds_presence',
+                    'Journals ISSN': 'pc_mag_has_venue_issn_adds_presence',
+                    'Fields': 'pc_mag_fields_adds_presence'
                 }
             }
         },
         'openalex': {
-            'xs': ['Affiliation strings', 'Authors', 'Abstracts', 'Citations to', 'Open References from'],
+            'xs': ['Affiliation strings', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
+                   'References from', 'Open References from',
+                   'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'Crossref': {
                     'Affiliation strings': 'pc_crossref_has_affiliations_string',
                     'Authors': 'pc_crossref_has_authors',
+                    'Authors ORCIDs': 'pc_crossref_has_authors_orcid',
                     'Abstracts': 'pc_crossref_has_abstract',
                     'Citations to': 'pc_crossref_has_citations',
-                    'Open References from': 'pc_crossref_has_references_open'
+                    'References from': 'pc_crossref_has_references',
+                    'Open References from': 'pc_crossref_has_references_open',
+                    'Journals': 'pc_crossref_has_venue',
+                    'Journals ISSN': 'pc_crossref_has_venue_issn',
+                    'Fields': 'pc_crossref_has_fields'
+                },
+                'OpenAlex (MAG format)': {
+                    'Affiliation strings': 'pc_openalex_has_affiliations_string',
+                    'Authors': 'pc_openalex_has_authors',
+                    'Authors ORCIDs': 'pc_openalex_has_authors_orcid',
+                    'Abstracts': 'pc_openalex_has_abstract',
+                    'Citations to': 'pc_openalex_has_citations',
+                    'References from': 'pc_openalex_has_references',
+                    'Open References from': 'pc_openalex_has_references_open',
+                    'Journals': 'pc_openalex_has_venue',
+                    'Journals ISSN': 'pc_openalex_has_venue_issn',
+                    'Fields': 'pc_openalex_has_fields'
                 },
                 'OpenAlex (MAG format) Added Value': {
                     'Affiliation strings': 'pc_openalex_affiliations_string_adds_presence',
                     'Authors': 'pc_openalex_authors_adds_presence',
+                    'Authors ORCIDs': 'pc_openalex_authors_orcid_adds_presence',
                     'Abstracts': 'pc_openalex_abstract_adds_presence',
                     'Citations to': 'pc_openalex_citations_adds_presence',
-                    'Open References from': 'pc_openalex_references_open_adds_presence'
+                    'References from': 'pc_openalex_references_adds_presence',
+                    'Open References from': 'pc_openalex_references_open_adds_presence',
+                    'Journals': 'pc_openalex_venue_adds_presence',
+                    'Journals ISSN': 'pc_openalex_venue_issn_adds_presence',
+                    'Fields': 'pc_openalex_fields_adds_presence'
                 }
             },
         },
         'openalex_native': {
-            'xs': ['Affiliation strings', 'Authors', 'Abstracts', 'Citations to', 'Open References from'],
+            'xs': ['Affiliation strings', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
+                   'References from', 'Open References from',
+                   'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'Crossref': {
                     'Affiliation strings': 'pc_crossref_has_affiliations_string',
                     'Authors': 'pc_crossref_has_authors',
+                    'Authors ORCIDs': 'pc_crossref_has_authors_orcid',
                     'Abstracts': 'pc_crossref_has_abstract',
                     'Citations to': 'pc_crossref_has_citations',
-                    'Open References from': 'pc_crossref_has_references_open'
+                    'References from': 'pc_crossref_has_references',
+                    'Open References from': 'pc_crossref_has_references_open',
+                    'Journals': 'pc_crossref_has_venue',
+                    'Journals ISSN': 'pc_crossref_has_venue_issn',
+                    'Fields': 'pc_crossref_has_fields'
+                },
+                'OpenAlex': {
+                    'Affiliation strings': 'pc_openalex_native_has_affiliations_string',
+                    'Authors': 'pc_openalex_native_has_authors',
+                    'Authors ORCIDs': 'pc_openalex_native_has_authors_orcid',
+                    'Abstracts': 'pc_openalex_native_has_abstract',
+                    'Citations to': 'pc_openalex_native_has_citations',
+                    'References from': 'pc_openalex_native_has_references',
+                    'Open References from': 'pc_openalex_native_has_references_open',
+                    'Journals': 'pc_openalex_native_has_venue',
+                    'Journals ISSN': 'pc_openalex_native_has_venue_issn',
+                    'Fields': 'pc_openalex_native_has_fields'
                 },
                 'OpenAlex Added Value': {
                     'Affiliation strings': 'pc_openalex_native_affiliations_string_adds_presence',
                     'Authors': 'pc_openalex_native_authors_adds_presence',
+                    'Authors ORCIDs': 'pc_openalex_native_authors_orcid_adds_presence',
                     'Abstracts': 'pc_openalex_native_abstract_adds_presence',
                     'Citations to': 'pc_openalex_native_citations_adds_presence',
-                    'Open References from': 'pc_openalex_native_references_open_adds_presence'
+                    'References from': 'pc_openalex_native_references_adds_presence',
+                    'Open References from': 'pc_openalex_native_references_open_adds_presence',
+                    'Journals': 'pc_openalex_native_venue_adds_presence',
+                    'Journals ISSN': 'pc_openalex_native_has_venue_issn',
+                    'Fields': 'pc_openalex_native_fields_adds_presence'
                 }
             }
         }
     }
 }
+
+STACKED_BAR_SUMMARY_XS = ['Affiliation strings', 'Authors', 'Abstracts', 'Citations to', 'References from',
+                          'Journals']
+
+SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliation strings', 'Authors', 'Abstracts', 'Citations to', 'References from',
+                             'Journals', 'Fields']
 
 # Sources in Base Crossref Over Time
 

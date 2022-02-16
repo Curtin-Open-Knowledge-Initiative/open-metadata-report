@@ -42,7 +42,7 @@ SELECT
     , COUNT(DISTINCT {{ source_name }}.source_id) as {{ source_name }}_ids
     , COUNT(DISTINCT IF({{ source_name }}.type is not null, doi, null)) as {{ source_name }}_has_{{ source_name }}_type
     {% for item in data_items[source_name] -%}
-    , COUNT(DISTINCT IF({{ source_name }}.has_{{ item[1] }}, doi, null)) as {{ source_name }}_has_{{ item[1] }}
+    , COUNT(DISTINCT IF({{ source_name }}.has_{{ item[1] }}, doi, null)) as {{ source_name }}_has_{{ item[2] }}
     {% endfor -%}
     {% if source_name != 'crossref' -%}
     {% for item in data_items[source_name] -%}

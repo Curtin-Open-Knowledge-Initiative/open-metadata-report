@@ -77,7 +77,8 @@
           "crossref_to_truthtable",
           "intermediate_to_source_truthtable",
           "openalex_native_to_truthtable"
-        ]
+        ],
+        "rerun": true
       }
     ],
     [

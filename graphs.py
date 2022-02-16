@@ -21,6 +21,7 @@ from pathlib import Path
 
 import pandas as pd
 import numpy as np
+import copy
 import plotly.graph_objects as go
 from typing import Optional, Callable, Union
 from precipy.analytics_function import AnalyticsFunction
@@ -48,6 +49,7 @@ def value_add_graphs(af: AnalyticsFunction,
     :param base_comparison: Lowercase string name of the base_comparison, crossref is the default
     """
 
+    print('Generating value add graphs...')
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
@@ -60,18 +62,35 @@ def value_add_graphs(af: AnalyticsFunction,
             filtered_sum = filtered.sum(axis=0)
             figdata = collate_value_add_values(filtered_sum, ALL_COLLATED_COLUMNS)
 
+            # Stacked Bar
             chart = ValueAddBar(df=figdata,
                                 categories=[FORMATTED_SOURCE_NAMES[base_comparison],
                                             f'{FORMATTED_SOURCE_NAMES[source]} Added Value'],
-                                xs=VALUE_ADD_META[base_comparison][source]['xs'],
+                                xs=STACKED_BAR_SUMMARY_XS,
                                 ys=VALUE_ADD_META[base_comparison][source]['ys'])
 
             fig = chart.plotly()
-            filename = f'value_add_{source}_{timeframe.lower().replace(" ", "_")}'
+            filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}'
             filepath = GRAPH_DIR / filename
             fig.write_image(filepath.with_suffix('.png'))
             af.add_existing_file(filepath.with_suffix('.png'))
 
+            # Side by side bar (including Fields)
+            # Stacked Bar
+            chart = ValueAddBar(df=figdata,
+                                categories=[FORMATTED_SOURCE_NAMES[base_comparison],
+                                            f'{FORMATTED_SOURCE_NAMES[source]}'],
+                                xs=SIDEBYSIDE_BAR_SUMMARY_XS,
+                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                stackedbar=False)
+
+            fig = chart.plotly()
+            filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}'
+            filepath = GRAPH_DIR / filename
+            fig.write_image(filepath.with_suffix('.png'))
+            af.add_existing_file(filepath.with_suffix('.png'))
+
+            # Details graph for each metadata element
             for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
                 sum_by_type = filtered.groupby('type').sum().reset_index()
                 collated_sum_by_type = collate_value_add_values(sum_by_type, ALL_COLLATED_COLUMNS)
@@ -81,10 +100,11 @@ def value_add_graphs(af: AnalyticsFunction,
                                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
                                                categories=[
                                                    FORMATTED_SOURCE_NAMES[base_comparison],
-                                                   f'{FORMATTED_SOURCE_NAMES[source]} Added Value'],
-                                               stackedbar=True
+                                                   f'{FORMATTED_SOURCE_NAMES[source]}'],
+                                               stackedbar=False
                                                )
                 fig = chart.plotly()
+
                 filename = f'value_add_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
                 filepath = GRAPH_DIR / filename
                 fig.write_image(filepath.with_suffix('.png'))
@@ -154,10 +174,15 @@ def collate_value_add_values(df: pd.DataFrame,
     if type(df) == pd.Series:
         df = pd.DataFrame(df).transpose()
 
+    column_names = []
+    columns_data = []
     for col in cols:
         if col in df.columns:
-            df[f'pc_{col}'] = np.round(df[col] / df['crossref_dois'] * 100, 1)
+            column_names.append(f'pc_{col}')
+            columns_data.append(np.round(df[col] / df['crossref_dois'] * 100, 1))
 
+    added_columns = pd.DataFrame({name: data for name, data in zip(column_names, columns_data)})
+    df = pd.concat([df, added_columns], axis=1)
     return df
 
 

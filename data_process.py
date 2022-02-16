@@ -259,8 +259,8 @@ def crossref_member_status(af: AnalyticsFunction,
     print('Running crossref memberdata collection...')
 
     # Skip running the Crossref API if directed not to or the data should (in theory) already exist
-    if (rerun == False) or (CROSSREF_MEMBER_DATE != TODAY_STR):
-        print('Skipping poking the Crossref Member API')
+    if (rerun is False) or (CROSSREF_MEMBER_DATE != TODAY.isoformat()):
+        print('Skipisping poking the Crossref Member API')
         return
 
     cursor = '*'
@@ -303,7 +303,7 @@ def crossref_member_status(af: AnalyticsFunction,
 
         # Table needs to exist to be able to do this partitioned load
         job_config = bigquery.LoadJobConfig(
-            write_disposition="WRITE_TRUNCATE",
+            write_disposition="WRITE_APPEND",
         )
 
         # Include target partition in the table id:
