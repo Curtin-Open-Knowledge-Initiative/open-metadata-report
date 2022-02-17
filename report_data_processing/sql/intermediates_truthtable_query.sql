@@ -1,5 +1,5 @@
 SELECT
-    Doi as doi,
+    UPPER(TRIM(Doi)) as doi,
     PaperId as source_id,
     DocType as type,
     Year as published_year,

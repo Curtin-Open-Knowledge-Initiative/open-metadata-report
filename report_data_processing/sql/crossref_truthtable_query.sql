@@ -8,8 +8,8 @@ combined AS (
 )
 
 SELECT
-    doi as source_id,
-    doi as doi,
+    UPPER(TRIM(doi)) as source_id,
+    UPPER(TRIM(doi)) as doi,
     type,
     IF(ARRAY_LENGTH(issued.date_parts) > 0, issued.date_parts[offset(0)], null) as published_year,
 
