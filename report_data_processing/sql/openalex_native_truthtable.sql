@@ -1,5 +1,5 @@
 SELECT
-    UPPER(TRIM((SUBSTRING(doi, 17))) as doi,
+    UPPER(TRIM(SUBSTRING(doi, 17))) as doi,
     id as source_id,
     type,
     publication_year as published_year,
