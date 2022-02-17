@@ -150,12 +150,12 @@ SELECT
     END
     as count_venue_sourceid,
     CASE
-        WHEN host_venue.display_name is not null THEN TRUE
+        WHEN CHAR_LENGTH(host_venue.display_name) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_venue_string,
     CASE
-        WHEN host_venue.display_name is not null THEN 1
+        WHEN CHAR_LENGTH(host_venue.display_name) > 0 THEN 1
         ELSE 0
     END as count_venue_string,
     CASE
@@ -165,12 +165,12 @@ SELECT
     as has_venue_issn,
     ARRAY_LENGTH(host_venue.issn) as count_venue_issn,
     CASE
-        WHEN host_venue.issn_l is not null THEN TRUE
+        WHEN CHAR_LENGTH(host_venue.issn_l) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_venue_issnl,
     CASE
-        WHEN host_venue.issn_l is not null THEN 1
+        WHEN CHAR_LENGTH(host_venue.issn_l) > 0 THEN 1
         ELSE 0
     END
     as count_venue_issnl

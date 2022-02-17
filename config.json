@@ -20,13 +20,15 @@
       {
         "depends": [
           "source_to_intermediate"
-        ]
+        ],
+        "rerun": true
       }
     ],
     [
       "openalex_native_to_truthtable",
       {
-        "depends": []
+        "depends": [],
+        "rerun": true
       }
     ],
     [
@@ -40,7 +42,8 @@
         "depends": [
           "crossref_member_status"
         ],
-        "source": "crossref"
+        "source": "crossref",
+        "rerun": true
       }
     ],
     [

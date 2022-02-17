@@ -148,13 +148,13 @@ SELECT
         END
     as count_venue_sourceid,
     CASE
-        WHEN journal.Issn is not null
+        WHEN CHAR_LENGTH(journal.Issn) > 0
         THEN TRUE
         ELSE FALSE
         END
     as has_venue_issn,
     CASE
-        WHEN journal.Issn is not null
+        WHEN CHAR_LENGTH(journal.Issn) > 0
         THEN 0
         ELSE 1
         END
