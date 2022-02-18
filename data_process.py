@@ -51,7 +51,7 @@ def source_to_intermediate(af: AnalyticsFunction,
     
     """)
             print(f'Destination Tables is:{destination_table}')
-            return
+            continue
 
         with bigquery.Client() as client:
             job_config = bigquery.QueryJobConfig(destination=destination_table,
@@ -173,7 +173,6 @@ def crossref_to_truthtable(af: AnalyticsFunction,
 
 
 def source_category_query(af: AnalyticsFunction,
-                          source: str,
                           rerun: bool = RERUN,
                           verbose: bool = VERBOSE):
     """
