@@ -356,15 +356,9 @@ if __name__ == '__main__':
     source_to_intermediate(af="test",
                            rerun=False,
                            verbose=True)
-    source_to_intermediate(af="test",
-                           rerun=False,
-                           verbose=True)
     crossref_to_truthtable(af='test',
                           rerun=False,
                           verbose=True)
-    intermediate_to_source_truthtable(af="test",
-                           rerun=False,
-                           verbose=True)
     intermediate_to_source_truthtable(af="test",
                            rerun=False,
                            verbose=True)
