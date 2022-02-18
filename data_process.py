@@ -88,7 +88,7 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
     
     """)
             print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
-            return
+            continue
 
         with bigquery.Client() as client:
             job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
@@ -197,7 +197,7 @@ def source_category_query(af: AnalyticsFunction,
     {query}
     
     """)
-            return
+            continue
 
         categories = pd.read_gbq(query=query,
                                  project_id=PROJECT_ID)
@@ -336,28 +336,28 @@ def git_status(af):
 ## TESTING
 
 if __name__ == '__main__':
-    # source_to_intermediate(af="test",
-    #                        rerun=False,
-    #                        verbose=True)
-    # source_to_intermediate(af="test",
-    #                        rerun=False,
-    #                        verbose=True)
-    # crossref_to_truthtable(af='test',
-    #                       rerun=False,
-    #                       verbose=True)
-    # intermediate_to_source_truthtable(af="test",
-    #                        rerun=False,
-    #                        verbose=True)
-    # intermediate_to_source_truthtable(af="test",
-    #                        rerun=False,
-    #                        verbose=True)
-    # dois_category_query(af='test',
-    #                     rerun=False,
-    #                     verbose=True)
-    # source_category_query(af='test',
-    #                       rerun=False,
-    #                       verbose=True)
-    # openalex_native_to_truthtable(af='test',
-    #                               rerun=False,
-    #                               verbose=True)
+    source_to_intermediate(af="test",
+                           rerun=False,
+                           verbose=True)
+    source_to_intermediate(af="test",
+                           rerun=False,
+                           verbose=True)
+    crossref_to_truthtable(af='test',
+                          rerun=False,
+                          verbose=True)
+    intermediate_to_source_truthtable(af="test",
+                           rerun=False,
+                           verbose=True)
+    intermediate_to_source_truthtable(af="test",
+                           rerun=False,
+                           verbose=True)
+    dois_category_query(af='test',
+                        rerun=False,
+                        verbose=True)
+    source_category_query(af='test',
+                          rerun=False,
+                          verbose=True)
+    openalex_native_to_truthtable(af='test',
+                                  rerun=False,
+                                  verbose=True)
     pass
