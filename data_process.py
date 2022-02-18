@@ -312,6 +312,23 @@ def crossref_member_status(af: AnalyticsFunction,
         job.result()  # Wait for job to finish
 
 
+def save_data_parameters(af):
+    """
+    Write out JSON for the data parameters
+    """
+
+    import data_parameters as params
+    for f in af.generate_file('data_parameters.json'):
+        json.dump({item: getattr(params, item) for item in dir(params) if not item.startswith('__')},
+                  f,
+                  default=str)
+
+    import graph_parameters as params
+    for f in af.generate_file('graph_parameters.json'):
+        json.dump({item: getattr(params, item) for item in dir(params) if not item.startswith('__')},
+                  f,
+                  default=str)
+
 def git_status(af):
     """
     Record Git Status for Current State of the Repo

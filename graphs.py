@@ -277,3 +277,4 @@ def source_in_base_by_pubdate(af,
         fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))
         # write_plotly_div(af, fig, 'cr_in_mag_barline.html')
+

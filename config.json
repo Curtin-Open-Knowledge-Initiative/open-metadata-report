@@ -20,15 +20,13 @@
       {
         "depends": [
           "source_to_intermediate"
-        ],
-        "rerun": true
+        ]
       }
     ],
     [
       "openalex_native_to_truthtable",
       {
-        "depends": [],
-        "rerun": true
+        "depends": []
       }
     ],
     [
@@ -42,8 +40,7 @@
         "depends": [
           "crossref_member_status"
         ],
-        "source": "crossref",
-        "rerun": true
+        "source": "crossref"
       }
     ],
     [
@@ -51,26 +48,7 @@
       {
         "depends": [
           "intermediate_to_source_truthtable"
-        ],
-        "source": "mag"
-      }
-    ],
-    [
-      "source_category_query",
-      {
-        "depends": [
-          "intermediate_to_source_truthtable"
-        ],
-        "source": "openalex"
-      }
-    ],
-    [
-      "source_category_query",
-      {
-        "depends": [
-          "openalex_native_to_truthtable"
-        ],
-        "source": "openalex_native"
+        ]
       }
     ],
     [
@@ -80,8 +58,7 @@
           "crossref_to_truthtable",
           "intermediate_to_source_truthtable",
           "openalex_native_to_truthtable"
-        ],
-        "rerun": true
+        ]
       }
     ],
     [
@@ -119,6 +96,23 @@
       }
     ],
     [
+      "save_data_parameters",
+      {
+        "depends": [
+          "source_to_intermediate",
+          "intermediate_to_source_truthtable",
+          "crossref_member_status",
+          "crossref_to_truthtable",
+          "source_category_query",
+          "dois_category_query",
+          "graphs.value_add_graphs",
+          "graphs.overall_comparison",
+          "graphs.source_coverage_by_crossref_type",
+          "graphs.source_in_base_by_pubdate"
+        ]
+      }
+    ],
+    [
       "git_status",
       {
         "depends": [
@@ -128,7 +122,10 @@
           "crossref_to_truthtable",
           "source_category_query",
           "dois_category_query",
-          "graphs.value_add_graphs"
+          "graphs.value_add_graphs",
+          "graphs.overall_comparison",
+          "graphs.source_coverage_by_crossref_type",
+          "graphs.source_in_base_by_pubdate"
         ]
       }
     ]
