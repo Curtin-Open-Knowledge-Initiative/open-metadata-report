@@ -338,30 +338,24 @@ def git_status(af):
 
 if __name__ == '__main__':
     # source_to_intermediate(af="test",
-    #                        source="mag",
     #                        rerun=False,
     #                        verbose=True)
     # source_to_intermediate(af="test",
-    #                        source="openalex",
     #                        rerun=False,
     #                        verbose=True)
-    crossref_to_truthtable(af='test',
-                           rerun=False,
-                           verbose=True)
-
+    # crossref_to_truthtable(af='test',
+    #                       rerun=False,
+    #                       verbose=True)
     # intermediate_to_source_truthtable(af="test",
-    #                        source="mag",
     #                        rerun=False,
     #                        verbose=True)
     # intermediate_to_source_truthtable(af="test",
-    #                        source="openalex",
     #                        rerun=False,
     #                        verbose=True)
     # dois_category_query(af='test',
     #                     rerun=False,
     #                     verbose=True)
     # source_category_query(af='test',
-    #                       source='mag',
     #                       rerun=False,
     #                       verbose=True)
     # openalex_native_to_truthtable(af='test',
