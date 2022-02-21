@@ -278,3 +278,26 @@ def source_in_base_by_pubdate(af,
         af.add_existing_file(filepath.with_suffix('.png'))
         # write_plotly_div(af, fig, 'cr_in_mag_barline.html')
 
+
+def generate_tables(af,
+                    base_comparison: str = 'crossref'):
+    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    for source in SOURCES:
+
+        summary_table_df = pd.DataFrame(columns=['Time Frame'] + ALL_COLLATED_COLUMNS)
+        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+            source_data = store[STORE_ELEMENT[source]]
+
+        for timeframe in TIME_FRAMES.keys():
+            filtered_comparison = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered_comparison_sum = filtered_comparison.sum(axis=0)
+
+            filtered_source  = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered_source_sum = filtered_source.sum(axis=0)
+
+            summary_table_df = summary_table_df.append
+
+
+
