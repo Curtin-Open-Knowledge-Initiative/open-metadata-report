@@ -9,7 +9,7 @@ RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
-SOURCES = ['mag', 'openalex', 'crossref', 'openalex_native']
+SOURCES = ['mag', 'openalex','openalex_native', 'crossref']
 MAG_FORMAT_SOURCES = ['mag', 'openalex']
 CURRENT = [2019, 2020, 2021]
 
