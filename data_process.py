@@ -82,8 +82,7 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
                                    directory=SQL_DIRECTORY)
 
         if not report_utils.bigquery_rerun(af, rerun, verbose, source):
-            print(f"""Query is:
-            
+            print(f"""Query is:            
     {query}
     
     """)
@@ -228,8 +227,7 @@ def dois_category_query(af: AnalyticsFunction,
     query = jinja2.Template(query_template).render(data)
 
     if not report_utils.bigquery_rerun(af, rerun, verbose):
-        print(f"""Query is:
-        
+        print(f"""Query is:      
 {query}
 
 """)

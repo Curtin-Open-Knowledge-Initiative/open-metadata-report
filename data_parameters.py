@@ -113,7 +113,7 @@ ADDITIONAL_TRUTHTABLE_FIELDS = dict(
         END
     as has_venue_issnl
     , CASE
-        WHEN TRIM(journal.Issn) !=""
+        WHEN TRIM(journal.Issn) !=""    
         THEN 0
         ELSE 1
         END
@@ -226,6 +226,7 @@ OPENALEX_DATA_ITEMS = [
     'fields_mag',
     'venue_sourceid',
     'venue_string',
+    'venue_issn',
     'venue_issnl'
 ]
 

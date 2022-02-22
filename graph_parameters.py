@@ -57,7 +57,7 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_mag_has_abstract',
                     'Citations to': 'pc_mag_has_citations',
                     'References from': 'pc_mag_has_references',
-                    'Open References from': 'pc_mag_has_references_open',
+                    'Open References from': 'pc_mag_has_references',
                     'Journals': 'pc_mag_has_venue',
                     'Journals ISSN': 'pc_mag_has_venue_issn',
                     'Fields': 'pc_mag_has_fields'
@@ -68,7 +68,7 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_mag_abstract_adds_presence',
                     'Citations to': 'pc_mag_citations_adds_presence',
                     'References from': 'pc_mag_references_adds_presence',
-                    'Open References from': 'pc_mag_references_open_adds_presence',
+                    'Open References from': 'pc_mag_references_adds_presence',
                     'Journals': 'pc_mag_venue_adds_presence',
                     'Journals ISSN': 'pc_mag_has_venue_issn_adds_presence',
                     'Fields': 'pc_mag_fields_adds_presence'
@@ -99,7 +99,7 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_openalex_has_abstract',
                     'Citations to': 'pc_openalex_has_citations',
                     'References from': 'pc_openalex_has_references',
-                    'Open References from': 'pc_openalex_has_references_open',
+                    'Open References from': 'pc_openalex_has_references',
                     'Journals': 'pc_openalex_has_venue',
                     'Journals ISSN': 'pc_openalex_has_venue_issn',
                     'Fields': 'pc_openalex_has_fields'
@@ -111,7 +111,7 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_openalex_abstract_adds_presence',
                     'Citations to': 'pc_openalex_citations_adds_presence',
                     'References from': 'pc_openalex_references_adds_presence',
-                    'Open References from': 'pc_openalex_references_open_adds_presence',
+                    'Open References from': 'pc_openalex_references_adds_presence',
                     'Journals': 'pc_openalex_venue_adds_presence',
                     'Journals ISSN': 'pc_openalex_venue_issn_adds_presence',
                     'Fields': 'pc_openalex_fields_adds_presence'
@@ -142,7 +142,7 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_openalex_native_has_abstract',
                     'Citations to': 'pc_openalex_native_has_citations',
                     'References from': 'pc_openalex_native_has_references',
-                    'Open References from': 'pc_openalex_native_has_references_open',
+                    'Open References from': 'pc_openalex_native_has_references',
                     'Journals': 'pc_openalex_native_has_venue',
                     'Journals ISSN': 'pc_openalex_native_has_venue_issn',
                     'Fields': 'pc_openalex_native_has_fields'
@@ -154,7 +154,7 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_openalex_native_abstract_adds_presence',
                     'Citations to': 'pc_openalex_native_citations_adds_presence',
                     'References from': 'pc_openalex_native_references_adds_presence',
-                    'Open References from': 'pc_openalex_native_references_open_adds_presence',
+                    'Open References from': 'pc_openalex_native_references_adds_presence',
                     'Journals': 'pc_openalex_native_venue_adds_presence',
                     'Journals ISSN': 'pc_openalex_native_has_venue_issn',
                     'Fields': 'pc_openalex_native_fields_adds_presence'
