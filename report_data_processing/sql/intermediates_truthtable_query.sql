@@ -149,6 +149,6 @@ SELECT
     as count_venue_sourceid
 
 
-{openalex_additional_fields}
+{additional_fields}
 
 FROM `{table}`

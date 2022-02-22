@@ -77,7 +77,7 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
         query = load_sql_to_string('intermediates_truthtable_query.sql',
                                    parameters=dict(
                                        table=INTERMEDIATE_TABLES[source],
-                                       openalex_additional_fields=TABLES[source]['openalex_additional_truthtable_fields']
+                                       additional_fields=TABLES[source]['additional_truthtable_fields']
                                    ),
                                    directory=SQL_DIRECTORY)
 
@@ -353,22 +353,22 @@ def git_status(af):
 ## TESTING
 
 if __name__ == '__main__':
-    source_to_intermediate(af="test",
-                           rerun=False,
-                           verbose=True)
-    crossref_to_truthtable(af='test',
-                          rerun=False,
-                          verbose=True)
-    intermediate_to_source_truthtable(af="test",
-                           rerun=False,
-                           verbose=True)
+    #source_to_intermediate(af="test",
+    #                       rerun=False,
+    #                       verbose=True)
+    #crossref_to_truthtable(af='test',
+    #                      rerun=False,
+    #                      verbose=True)
+    #intermediate_to_source_truthtable(af="test",
+    #                       rerun=False,
+    #                      verbose=True)
     dois_category_query(af='test',
                         rerun=False,
                         verbose=True)
-    source_category_query(af='test',
-                          rerun=False,
-                          verbose=True)
-    openalex_native_to_truthtable(af='test',
-                                  rerun=False,
-                                  verbose=True)
+    #source_category_query(af='test',
+    #                      rerun=False,
+    #                      verbose=True)
+    #openalex_native_to_truthtable(af='test',
+    #                              rerun=False,
+    #                              verbose=True)
     pass
