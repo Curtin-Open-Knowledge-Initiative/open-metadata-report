@@ -68,21 +68,21 @@ TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION,
                        openalex_native=OPENALEX_NATIVE_TABLE_LOCATION,
                        crossref=DOI_TABLE_LOCATION)
 
-OPENALEX_ADDITIONAL_SOURCE_JOURNAL_FIELDS = dict(
+ADDITIONAL_SOURCE_JOURNAL_FIELDS = dict(
     mag='',
     crossref=None,
     openalex=', journal.Issns',
     openalex_native=None
 )
 
-OPENALEX_ADDITIONAL_SOURCE_ORG_FIELDS = dict(
+ADDITIONAL_SOURCE_ORG_FIELDS = dict(
     mag='',
     crossref=None,
     openalex=', affiliation.RorId, author.Orcid',
     openalex_native=None
 )
 
-OPENALEX_ADDITIONAL_TRUTHTABLE_FIELDS = dict(
+ADDITIONAL_TRUTHTABLE_FIELDS = dict(
     mag="""
     , CASE
         WHEN CHAR_LENGTH(journal.Issn) > 0
@@ -145,9 +145,9 @@ TABLES = {
 
 for source in SOURCES:
     TABLES[source].update(dict(
-        openalex_additional_source_journal_fields=OPENALEX_ADDITIONAL_SOURCE_JOURNAL_FIELDS[source],
-        openalex_additional_source_org_fields=OPENALEX_ADDITIONAL_SOURCE_ORG_FIELDS[source],
-        openalex_additional_truthtable_fields=OPENALEX_ADDITIONAL_TRUTHTABLE_FIELDS[source]
+        additional_source_journal_fields=ADDITIONAL_SOURCE_JOURNAL_FIELDS[source],
+        additional_source_org_fields=ADDITIONAL_SOURCE_ORG_FIELDS[source],
+        additional_truthtable_fields=ADDITIONAL_TRUTHTABLE_FIELDS[source]
     )
     )
 
