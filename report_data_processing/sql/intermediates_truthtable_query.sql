@@ -146,19 +146,8 @@ SELECT
         THEN 0
         ELSE 1
         END
-    as count_venue_sourceid,
-    CASE
-        WHEN CHAR_LENGTH(journal.Issn) > 0
-        THEN TRUE
-        ELSE FALSE
-        END
-    as has_venue_issn,
-    CASE
-        WHEN CHAR_LENGTH(journal.Issn) > 0
-        THEN 0
-        ELSE 1
-        END
-    as count_venue_issn
+    as count_venue_sourceid
+
 
 {openalex_additional_fields}
 

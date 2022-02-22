@@ -68,7 +68,14 @@ TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION,
                        openalex_native=OPENALEX_NATIVE_TABLE_LOCATION,
                        crossref=DOI_TABLE_LOCATION)
 
-OPENALEX_ADDITIONAL_SOURCE_FIELDS = dict(
+OPENALEX_ADDITIONAL_SOURCE_JOURNAL_FIELDS = dict(
+    mag='',
+    crossref=None,
+    openalex=', journal.Issns',
+    openalex_native=None
+)
+
+OPENALEX_ADDITIONAL_SOURCE_ORG_FIELDS = dict(
     mag='',
     crossref=None,
     openalex=', affiliation.RorId, author.Orcid',
@@ -76,9 +83,41 @@ OPENALEX_ADDITIONAL_SOURCE_FIELDS = dict(
 )
 
 OPENALEX_ADDITIONAL_TRUTHTABLE_FIELDS = dict(
-    mag='',
+    mag="""
+    , CASE
+        WHEN CHAR_LENGTH(journal.Issn) > 0
+        THEN TRUE
+        ELSE FALSE
+        END
+    as has_venue_issn,
+    CASE
+        WHEN CHAR_LENGTH(journal.Issn) > 0
+        THEN 0
+        ELSE 1
+        END
+    as count_venue_issn
+    """,
     crossref=None,
     openalex="""
+    , CASE
+        WHEN (SELECT COUNT(1) from UNNEST(journal.Issns) as issn WHERE issn !="") > 0
+        THEN TRUE
+        ELSE FALSE
+        END
+    as has_venue_issn
+    , (SELECT COUNT(1) from UNNEST(journal.Issns) as issn WHERE issn !="") as count_venue_issn
+    , CASE
+        WHEN CHAR_LENGTH(journal.Issn) > 0
+        THEN TRUE
+        ELSE FALSE
+        END
+    as has_venue_issnl
+    , CASE
+        WHEN CHAR_LENGTH(journal.Issn) > 0
+        THEN 0
+        ELSE 1
+        END
+    as count_venue_issnl
     , CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) > 0 THEN TRUE
         ELSE FALSE
@@ -106,15 +145,14 @@ TABLES = {
 
 for source in SOURCES:
     TABLES[source].update(dict(
-        openalex_additional_source_fields=OPENALEX_ADDITIONAL_SOURCE_FIELDS[source],
+        openalex_additional_source_journal_fields=OPENALEX_ADDITIONAL_SOURCE_JOURNAL_FIELDS[source],
+        openalex_additional_source_org_fields=OPENALEX_ADDITIONAL_SOURCE_ORG_FIELDS[source],
         openalex_additional_truthtable_fields=OPENALEX_ADDITIONAL_TRUTHTABLE_FIELDS[source]
     )
     )
 
 TABLES.update(dict(crossref=f'{DOI_TABLE_LOCATION}{CROSSREF_DATE}'))
 
-# TODO These should probably go into the TABLES data structure
-# TODO Replace all calls to INTERMEDIATE_TABLES, SOURCE_TABLES with calls to TABLES[source]['xx_table']
 ## Intermediate Tables
 
 INTERMEDIATE_TABLES = {
@@ -188,7 +226,7 @@ OPENALEX_DATA_ITEMS = [
     'fields_mag',
     'venue_sourceid',
     'venue_string',
-    'venue_issn'
+    'venue_issnl'
 ]
 
 OPENALEX_NATIVE_DATA_ITEMS = [
@@ -231,15 +269,15 @@ for source in SOURCES:
         for elem in SOURCE_DATA_ITEMS[source]
     }
 
-    data_elements = data_elements | {
-        (
-            elem,
-            elem if elem in SOURCE_DATA_ITEMS[source] else CATEGORY_DATA_ITEMS[
-                CATEGORY_DATA_ITEMS.index(elem.split('_')[0])],
-            elem
-        )
-        for elem in CROSSREF_DATA_ITEMS
-    }
+    # data_elements = data_elements | {
+    #     (
+    #         elem,
+    #         elem if elem in SOURCE_DATA_ITEMS[source] else CATEGORY_DATA_ITEMS[
+    #             CATEGORY_DATA_ITEMS.index(elem.split('_')[0])],
+    #         elem
+    #     )
+    #     for elem in CROSSREF_DATA_ITEMS
+    # }
     data_elements = list(data_elements)
     data_elements.sort()
     SOURCE_DATA_ELEMENTS[source] = data_elements

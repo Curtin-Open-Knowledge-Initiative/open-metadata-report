@@ -18,7 +18,7 @@ SELECT
   fields.fields,
   mesh.mesh,
   authors.authors,
-  STRUCT(journal.JournalId, journal.DisplayName, journal.Issn, journal.Publisher) as journal,
+  STRUCT(journal.JournalId, journal.DisplayName, journal.Issn, journal.Publisher{openalex_additional_source_journal_fields}) as journal,
   STRUCT(conferenceInstance.ConferenceInstanceId,
          conferenceInstance.NormalizedName,
          conferenceInstance.DisplayName,
@@ -69,7 +69,7 @@ LEFT JOIN (SELECT
 -- Authors
 LEFT JOIN (SELECT
               papers.PaperId,
-              ARRAY_AGG(IF(paperAuthorAffiliations.AuthorSequenceNumber is not null, STRUCT(paperAuthorAffiliations.AuthorSequenceNumber, paperAuthorAffiliations.AuthorID, paperAuthorAffiliations.OriginalAuthor, paperAuthorAffiliations.AffiliationId, paperAuthorAffiliations.OriginalAffiliation, affiliation.GridId, affiliation.Iso3166Code, affiliation.DisplayName{openalex_additional_source_fields}), null) IGNORE NULLS ORDER BY paperAuthorAffiliations.AuthorSequenceNumber ASC) as authors
+              ARRAY_AGG(IF(paperAuthorAffiliations.AuthorSequenceNumber is not null, STRUCT(paperAuthorAffiliations.AuthorSequenceNumber, paperAuthorAffiliations.AuthorID, paperAuthorAffiliations.OriginalAuthor, paperAuthorAffiliations.AffiliationId, paperAuthorAffiliations.OriginalAffiliation, affiliation.GridId, affiliation.Iso3166Code, affiliation.DisplayName{openalex_additional_source_org_fields}), null) IGNORE NULLS ORDER BY paperAuthorAffiliations.AuthorSequenceNumber ASC) as authors
             FROM `{Papers}` as papers
             LEFT JOIN `{PaperAuthorAffiliations}` as paperAuthorAffiliations on paperAuthorAffiliations.PaperId = papers.PaperId
             LEFT JOIN `{Affiliations}` as affiliation on affiliation.AffiliationId = paperAuthorAffiliations.AffiliationId
