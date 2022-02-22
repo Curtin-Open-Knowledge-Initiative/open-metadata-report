@@ -100,20 +100,20 @@ OPENALEX_ADDITIONAL_TRUTHTABLE_FIELDS = dict(
     crossref=None,
     openalex="""
     , CASE
-        WHEN (SELECT COUNT(1) from UNNEST(journal.Issns) as issn WHERE issn !="") > 0
+        WHEN (SELECT COUNT(1) from UNNEST(journal.Issns) as issn WHERE TRIM(issn) !="") > 0
         THEN TRUE
         ELSE FALSE
         END
     as has_venue_issn
-    , (SELECT COUNT(1) from UNNEST(journal.Issns) as issn WHERE issn !="") as count_venue_issn
+    , (SELECT COUNT(1) from UNNEST(journal.Issns) as issn WHERE TRIM(issn) !="") as count_venue_issn
     , CASE
-        WHEN CHAR_LENGTH(journal.Issn) > 0
+        WHEN TRIM(journal.Issn) != ""
         THEN TRUE
         ELSE FALSE
         END
     as has_venue_issnl
     , CASE
-        WHEN CHAR_LENGTH(journal.Issn) > 0
+        WHEN TRIM(journal.Issn) !=""
         THEN 0
         ELSE 1
         END
