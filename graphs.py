@@ -37,6 +37,7 @@ from report_graphs import (
     BarLine,
     Alluvial
 )
+from observatory.reports.report_utils import generate_table_data
 
 
 def value_add_graphs(af: AnalyticsFunction,
@@ -281,23 +282,41 @@ def source_in_base_by_pubdate(af,
 
 def generate_tables(af,
                     base_comparison: str = 'crossref'):
+
+    table_json = {}
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    for source in SOURCES:
+    summary_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
+    summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
 
-        summary_table_df = pd.DataFrame(columns=['Time Frame'] + ALL_COLLATED_COLUMNS)
+    for timeframe in TIME_FRAMES.keys():
+        filtered_comparison = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+        filtered_comparison_sum = filtered_comparison.sum(axis=0)
+        filtered_comparison_sum['timeframe'] = timeframe
+        summary_table_df = summary_table_df.append(filtered_comparison_sum, ignore_index=True)
+
+
+
+    for source in SOURCES:
         with pd.HDFStore(LOCAL_DATA_PATH) as store:
             source_data = store[STORE_ELEMENT[source]]
 
         for timeframe in TIME_FRAMES.keys():
-            filtered_comparison = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
-            filtered_comparison_sum = filtered_comparison.sum(axis=0)
-
-            filtered_source  = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
             filtered_source_sum = filtered_source.sum(axis=0)
+            filtered_source_sum['timeframe'] = timeframe
+            summary_source_table_df = summary_source_table_df.append(filtered_comparison_sum, ignore_index=True)
 
-            summary_table_df = summary_table_df.append
-
-
-
+        table_dict = generate_table_data(
+            title=f'{FORMATTED_SOURCE_NAMES[source]} Metadata Coverage of Crossref DOIs',
+            df=summary_table_df,
+            columns=SUMMARY_TABLE_COLUMNS[source]['column_names'],
+            short_column_names=SUMMARY_TABLE_COLUMNS[source]['nice_column_names'],
+            identifier=None,
+            sort_column=None
+        )
+        table_json[source] = {
+            'summary_comparison_table': table_dict
+        }
+    pass

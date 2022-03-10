@@ -170,6 +170,58 @@ STACKED_BAR_SUMMARY_XS = ['Affiliation strings', 'Authors', 'Abstracts', 'Citati
 SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliation strings', 'Authors', 'Abstracts', 'Citations to', 'References from',
                              'Journals', 'Fields']
 
+CROSSREF_TYPES = ['journal-article',
+                  'proceedings-article',
+                  'book-chapter',
+                  'book',
+                  'posted-content',
+                  'report',
+                  'monograph']
+
 # Sources in Base Crossref Over Time
 
 SOURCE_IN_BASE_YEAR_RANGE = range(1980, 2022)
+
+# Tables
+
+SUMMARY_TABLE_COMMON_COLUMNS = [
+    'timeframe',
+    'crossref_dois'
+]
+
+SUMMARY_TABLE_COLUMNS = {
+    'crossref': {
+        'column_names': ['timeframe',
+                         'crossref_dois',
+                         'crossref_has_authors',
+                         'crossref_has_authors_orcid',
+                         'crossref_has_affiliations',
+                         'crossref_has_abstract',
+                         'crossref_has_references_open',
+                         'crossref_has_fields',
+                         'crossref_has_venue',
+                         'crossref_has_venue_issn'],
+        'nice_column_names': ['Time Frame',
+                              'Crossref DOIs',
+                              'Author Strings',
+                              'Author ORCIDs',
+                              'Affiliation Strings',
+                              'Abstracts',
+                              'Open Abstracts',
+                              'Field Classification',
+                              'Venue Names',
+                              'ISSNs']
+    },
+    'mag': {
+        'column_names': [],
+        'nice_column_names': []
+    },
+    'openalex': {
+        'column_names': [],
+        'nice_column_names': []
+    },
+    'openalex_native': {
+        'column_names': [],
+        'nice_column_names': []
+    }
+}
