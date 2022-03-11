@@ -29,7 +29,9 @@ MAG_DATE = "20211206"
 OPENALEX_DATE = "20220130"
 OPENALEX_NATIVE_DATE = ""
 CROSSREF_DATE = "20220107"
-CROSSREF_MEMBER_DATE = '2022-02-14'
+# By default the most recent Crossref member data collection will be used. Change this to rerun or compare
+# to a previous run
+CROSSREF_MEMBER_DATE = '2022-03-10'
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'

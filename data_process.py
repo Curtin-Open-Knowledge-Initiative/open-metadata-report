@@ -102,7 +102,7 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
 
 
 def openalex_native_to_truthtable(af: AnalyticsFunction,
-                                  source: str='openalex_native',
+                                  source: str = 'openalex_native',
                                   rerun: bool = RERUN,
                                   verbose: bool = VERBOSE):
     """
@@ -136,18 +136,37 @@ def openalex_native_to_truthtable(af: AnalyticsFunction,
     if verbose:
         print('...completed')
 
+
 def crossref_to_truthtable(af: AnalyticsFunction,
                            source: str = 'crossref',
                            rerun: bool = RERUN,
-                           verbose: bool = VERBOSE):
+                           verbose: bool = VERBOSE,
+                           crossref_member_date: str = 'recent'):
     """
     Calculate truthtable for Crossref
     """
 
+
+    if crossref_member_date == 'recent':
+        # Identify the most recent update to Crossref Member Data Table
+        bq_dataset, table_name = CROSSREF_MEMBER_DATA_TABLE.split
+        cmt = pd.read_gbq(
+            query=f"""
+SELECT collection_date 
+FROM `{CROSSREF_MEMBER_DATA_TABLE}`
+GROUP BY collection_date
+ORDER BY collection_date DESC
+""",
+            project_id=PROJECT_ID)
+        crossref_member_date = cmt.collection_date.values[0]
+
+    else:
+        crossref_member_date = CROSSREF_MEMBER_DATE
+
     query = load_sql_to_string('crossref_truthtable_query.sql',
                                parameters=dict(table=TABLES[source],
                                                crossref_member_table=CROSSREF_MEMBER_DATA_TABLE,
-                                               crossref_member_date=CROSSREF_MEMBER_DATE),
+                                               crossref_member_date=crossref_member_date),
                                directory=SQL_DIRECTORY)
 
     if not report_utils.bigquery_rerun(af, rerun, verbose):
@@ -178,7 +197,7 @@ def source_category_query(af: AnalyticsFunction,
     Query and download category data from the intermediate tables
     """
 
-    for source in [s for s in SOURCES if s !='crossref']:
+    for source in [s for s in SOURCES if s != 'crossref']:
         query_template = load_sql_to_string('source_categories_query.sql.jinja2',
                                             directory=SQL_DIRECTORY)
 
@@ -327,6 +346,7 @@ def save_data_parameters(af):
                   f,
                   default=str)
 
+
 def git_status(af):
     """
     Record Git Status for Current State of the Repo
@@ -351,22 +371,22 @@ def git_status(af):
 ## TESTING
 
 if __name__ == '__main__':
-    #source_to_intermediate(af="test",
+    # source_to_intermediate(af="test",
     #                       rerun=False,
     #                       verbose=True)
-    #crossref_to_truthtable(af='test',
+    # crossref_to_truthtable(af='test',
     #                      rerun=False,
     #                      verbose=True)
-    #intermediate_to_source_truthtable(af="test",
+    # intermediate_to_source_truthtable(af="test",
     #                       rerun=False,
     #                      verbose=True)
     dois_category_query(af='test',
                         rerun=False,
                         verbose=True)
-    #source_category_query(af='test',
+    # source_category_query(af='test',
     #                      rerun=False,
     #                      verbose=True)
-    #openalex_native_to_truthtable(af='test',
+    # openalex_native_to_truthtable(af='test',
     #                              rerun=False,
     #                              verbose=True)
     pass
