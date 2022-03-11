@@ -140,14 +140,13 @@ def openalex_native_to_truthtable(af: AnalyticsFunction,
 def crossref_to_truthtable(af: AnalyticsFunction,
                            source: str = 'crossref',
                            rerun: bool = RERUN,
-                           verbose: bool = VERBOSE,
-                           crossref_member_date: str = 'recent'):
+                           verbose: bool = VERBOSE):
     """
     Calculate truthtable for Crossref
     """
 
 
-    if crossref_member_date == 'recent':
+    if CROSSREF_MEMBER_DATE == 'recent':
         # Identify the most recent update to Crossref Member Data Table
         cmt = pd.read_gbq(
             query=f"""
