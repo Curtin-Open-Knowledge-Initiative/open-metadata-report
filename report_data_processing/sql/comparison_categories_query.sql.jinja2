@@ -49,6 +49,8 @@ SELECT
     , COUNT(DISTINCT IF((NOT crossref.has_{{ item[0] }} AND {{ source_name }}.has_{{ item[1] }}), doi, null)) as {{ source_name }}_{{ item[2] }}_adds_presence
     , COUNT(DISTINCT IF((crossref.count_{{ item[0] }} < {{ source_name }}.count_{{ item[1] }}), doi, null)) as {{ source_name }}_{{ item[2] }}_adds_counts
     {% endfor -%}
+    , COUNT(DISTINCT IF((NOT crossref_has_references_open AND {{ source_name }}.has_references), doi, null)) as {{ source_name }}_referencesvsopen_adds_presence
+    , COUNT(DISTINCT IF((crossref_count_references_open < {{ source_name }}.count_references), doi, null)) as {{ source_name }}_referencesvsopen_adds_counts
     {% endif -%}
     {% endfor -%}
 
