@@ -184,33 +184,30 @@ SOURCE_IN_BASE_YEAR_RANGE = range(1980, 2022)
 
 # Tables
 
-SUMMARY_TABLE_COMMON_COLUMNS = [
-    'timeframe',
-    'crossref_dois'
-]
-
 SUMMARY_TABLE_COLUMNS = {
     'crossref': {
-        'column_names': ['timeframe',
-                         'crossref_dois',
-                         'crossref_has_authors',
-                         'crossref_has_authors_orcid',
-                         'crossref_has_affiliations',
-                         'crossref_has_abstract',
-                         'crossref_has_references_open',
-                         'crossref_has_fields',
-                         'crossref_has_venue',
-                         'crossref_has_venue_issn'],
-        'nice_column_names': ['Time Frame',
-                              'Crossref DOIs',
-                              'Author Strings',
-                              'Author ORCIDs',
-                              'Affiliation Strings',
-                              'Abstracts',
-                              'Open Abstracts',
-                              'Field Classification',
-                              'Venue Names',
-                              'ISSNs']
+        'column_names': [
+            'timeframe',
+            'crossref_dois',
+            'crossref_has_authors',
+            'crossref_has_authors_orcid',
+            'crossref_has_affiliations',
+            'crossref_has_abstract',
+            'crossref_has_references_open',
+            'crossref_has_fields',
+            'crossref_has_venue',
+            'crossref_has_venue_issn'],
+        'nice_column_names': [
+            'Time Frame',
+            'Crossref DOIs',
+            'Author Strings',
+            'Author ORCIDs',
+            'Affiliation Strings',
+            'Abstracts',
+            'Open Abstracts',
+            'Field Classification',
+            'Venue Names',
+            'ISSNs']
     },
     'mag': {
         'column_names': [],
