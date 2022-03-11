@@ -272,9 +272,9 @@ def crossref_member_status(af: AnalyticsFunction,
 
     print('Running crossref memberdata collection...')
 
-    # Skip running the Crossref API if directed not to or the data should (in theory) already exist
-    if (rerun is False) or (CROSSREF_MEMBER_DATE != TODAY.isoformat()):
-        print('Skipisping poking the Crossref Member API')
+    # Skip running the Crossref API if directed not to
+    if rerun is False:
+        print('Skipping poking the Crossref Member API')
         return
 
     cursor = '*'
@@ -309,8 +309,6 @@ def crossref_member_status(af: AnalyticsFunction,
     df = pd.DataFrame(columns=['id', 'primary_name', 'prefix', 'name', 'public_references', 'collection_date'],
                       data=l)
     df.drop_duplicates(inplace=True)
-
-    df.to_csv(DATA_DIR / f'crossref_member_data{TODAY_STR}.csv', index=False)
 
     if push_to_gbq:
         client = bigquery.Client(project=PROJECT_ID)
@@ -378,9 +376,9 @@ if __name__ == '__main__':
     # intermediate_to_source_truthtable(af="test",
     #                       rerun=False,
     #                      verbose=True)
-    dois_category_query(af='test',
-                        rerun=False,
-                        verbose=True)
+    #dois_category_query(af='test',
+    #                    rerun=False,
+    #                    verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                      verbose=True)
