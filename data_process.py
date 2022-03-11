@@ -149,7 +149,6 @@ def crossref_to_truthtable(af: AnalyticsFunction,
 
     if crossref_member_date == 'recent':
         # Identify the most recent update to Crossref Member Data Table
-        bq_dataset, table_name = CROSSREF_MEMBER_DATA_TABLE.split
         cmt = pd.read_gbq(
             query=f"""
 SELECT collection_date 
