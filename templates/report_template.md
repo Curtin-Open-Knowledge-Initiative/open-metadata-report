@@ -26,6 +26,23 @@ DATE: {{ helper.created_at()|upper }}</p>
 Here we write some background stuff, probably using the abstracts we have I guess, can also include some
 summary statistics and other useful things.
 
+In January 2022, OpenAlex was launched as a source of open bibliographic metadata. Intended both as a replacement of 
+and improvement on Microsoft Academic, it provides structured data on publications, authors, institutions and 
+publication venues.
+
+Many tools, projects and services relied on Microsoft Academic as source of largely open metadata, and might consider 
+switching to OpenAlex. More broadly, the launch of OpenAlex has increased interest in the potential of open metadata 
+to enable discovery, linking and integration of data on research processes and outputs.
+
+Unlike metadata from closed sources, open metadata can be combined and enriched to provide a rich open metadata 
+landscape. Transparency and provenance allow identifying and addressing existing gaps and biases in coverage and 
+quality. 
+
+In this project, we assess and compare the value added by OpenAlex to Crossref metadata, and compare this to 
+to Microsoft Academic before it closed. We look both at the coverage of publications and other research output (with and without DOIs) as well as the coverage 
+of metadata for authors, institutions and publication venues and disciplines.  
+
+
 This report was run using the following tables as source data:
 Crossref: {{ metadata.TABLES.crossref }}
 Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date {{ metadata.CROSSREF_MEMBER_DATE }}
