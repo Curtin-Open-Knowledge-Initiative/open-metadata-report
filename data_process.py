@@ -624,7 +624,6 @@ def generate_tables(af,
     table_json = {}
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
-
     summary_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
     summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
 
@@ -633,8 +632,6 @@ def generate_tables(af,
         filtered_comparison_sum = filtered_comparison.sum(axis=0)
         filtered_comparison_sum['timeframe'] = timeframe
         summary_table_df = summary_table_df.append(filtered_comparison_sum, ignore_index=True)
-
-
 
     for source in SOURCES:
         with pd.HDFStore(LOCAL_DATA_PATH) as store:
@@ -654,10 +651,13 @@ def generate_tables(af,
             identifier=None,
             sort_column=None
         )
+
         table_json[source] = {
             'summary_comparison_table': table_dict
         }
-    pass
+
+    for f in af.generate_file('tables.json'):
+        json.dump(table_json, f)
 
 
 if __name__ == '__main__':

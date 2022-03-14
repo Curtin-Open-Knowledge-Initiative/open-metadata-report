@@ -41,5 +41,4 @@
 {%- endif %}
 {%- endfor %}
 {% endfor %}
-{% set table_number = table_number + 1 %}
 {% endmacro -%}
