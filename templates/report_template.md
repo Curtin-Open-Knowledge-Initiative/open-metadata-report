@@ -72,13 +72,13 @@ consistent with for publications over all time. Noting that OpenAlex has made a 
 content types that MAG did, these two charts show a difference for the non-Crossref materials but very similar
 results for the content that has Crossref DOIs.
 
-![](openalex_native_crossref_coverage_all_time.png)
+![]({{ source_coverage_by_crossref_type.files["openalex_native_crossref_coverage_all_time.png"].cache_filepath }})
 
-![](mag_crossref_coverage_all_time.png)
+![]({{ source_coverage_by_crossref_type.files["mag_crossref_coverage_all_time.png"].cache_filepath }})
 
 Therefore it is of interest to look at a specific recent year, in this case {{ graphs_metadata.FOCUS_YEAR }}.
 
-![](openalex_native_crossref_coverage_focus_year.png)
+![]({{ source_coverage_by_crossref_type.files["openalex_native_crossref_coverage_focus_year.png"].cache_filepath }})
 
 ## Value Add of OpenAlex to Crossref
 
@@ -98,7 +98,9 @@ path but I'm not sure whether we can use a variable inside that full path declar
 
 ### {{ data_element }}
 
-![](value_add_openalex_native_all_time_for_{{ data_element.lower().replace(' ', '_') }}_by_cr_type.png)
+
+{% set filename = "value_add_openalex_native_all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+![]({{ value_add_graphs.files[filename].cache_filepath }})
 
 The above will not work on windows...may need to figure a work around for that
 
