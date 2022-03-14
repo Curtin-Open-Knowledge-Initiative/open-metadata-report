@@ -156,7 +156,7 @@ GROUP BY collection_date
 ORDER BY collection_date DESC
 """,
             project_id=PROJECT_ID)
-        crossref_member_date = cmt.collection_date.values[0]
+        crossref_member_date = cmt.collection_date.dt.date.values[0]
 
     else:
         crossref_member_date = CROSSREF_MEMBER_DATE
@@ -372,11 +372,11 @@ if __name__ == '__main__':
     #                       verbose=True)
     # crossref_to_truthtable(af='test',
     #                      rerun=False,
-    #                      verbose=True)
+    #                     verbose=True)
     # intermediate_to_source_truthtable(af="test",
     #                       rerun=False,
     #                      verbose=True)
-    #dois_category_query(af='test',
+    # dois_category_query(af='test',
     #                    rerun=False,
     #                    verbose=True)
     # source_category_query(af='test',
@@ -385,4 +385,4 @@ if __name__ == '__main__':
     # openalex_native_to_truthtable(af='test',
     #                              rerun=False,
     #                              verbose=True)
-    pass
+     pass
