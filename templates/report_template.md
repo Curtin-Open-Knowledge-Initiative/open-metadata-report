@@ -5,7 +5,8 @@
 <!-- TODO - these will currently break because they need to be created/added to the precipy index -->
 {% set metadata = load_json(save_data_parameters.files["data_parameters.json"].cache_filepath) %}
 {% set graphs_metadata = load_json(save_data_parameters.files["graph_parameters.json"].cache_filepath) %}
-{# set tables = load_json(generate_tables.files["tables.json"].cache_filepath #}
+{% set tables = load_json(generate_tables.files["tables.json"].cache_filepath) %}
+{% set tablenum = 1 %}
 
 <!-- Title Page -->
 <pdf:nexttemplate name="titlepage">
@@ -104,12 +105,7 @@ Therefore it is of interest to look at a specific recent year, in this case {{ g
 ### Details
 
 We can do loops eg over the data elements. But this might be better for a supplementary data section as we will 
-presumably want to actually comment on the graphs themselves? 
-
-TODO:
-There is a bug in the xhtml2pdf package which means it
-only works with complete paths on windows. This creates an issue as we would need to use precipy to give us the full
-path but I'm not sure whether we can use a variable inside that full path declaration. Some experimentation required.
+presumably want to actually comment on the graphs themselves?
 
 {% for data_element in graphs_metadata.SIDEBYSIDE_BAR_SUMMARY_XS %}
 
@@ -140,6 +136,18 @@ The above may not work on windows??CHECK??...may need to figure a work around fo
 # Appendices
 
 ## Appendix A - Complete Tables
+
+{% for source in metadata.SOURCES %}
+
+### {{ source }} Coverage
+
+{% set tablenum = tablenum + loop.index0 %}
+{{ helper.tableize(tables[source]["summary_comparison_table"], tablenum) }}
+
+{% endfor %}
+
+{% set tablenum = tablenum + metadata.SOURCES|length %}
+
 
 ## Appendix B - Historical MAG Analysis??
 

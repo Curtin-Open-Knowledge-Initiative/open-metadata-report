@@ -210,15 +210,51 @@ SUMMARY_TABLE_COLUMNS = {
             'ISSNs']
     },
     'mag': {
-        'column_names': [],
-        'nice_column_names': []
+        'column_names': [
+            'timeframe',
+            'crossref_dois',
+            'mag_ids',
+            'mag_has_authors',
+            'mag_has_authors_orcid',
+            'mag_has_affiliations',
+            'mag_has_abstract',
+            'mag_has_references',
+            'mag_has_fields',
+            'mag_has_venue',
+            'mag_has_venue_issn'],
+        'nice_column_names': [
+            'Time Frame',
+            'Crossref DOIs',
+            'MAG Coverage of DOIs',
+            'Author Strings',
+            'Author ORCIDs',
+            'Affiliation Strings',
+            'Abstracts',
+            'References',
+            'Field Classification',
+            'Venue Names',
+            'ISSNs']
     },
     'openalex': {
-        'column_names': [],
-        'nice_column_names': []
+        'column_names': [
+            'timeframe',
+            'crossref_dois',
+            'openalex_ids'],
+        'nice_column_names': [
+            'Time Frame',
+            'Crossref DOIs',
+            'OpenAlex Coverage of DOIs'
+        ]
     },
     'openalex_native': {
-        'column_names': [],
-        'nice_column_names': []
+        'column_names': [
+            'timeframe',
+            'crossref_dois',
+            'openalex_native_ids'],
+        'nice_column_names': [
+            'Time Frame',
+            'Crossref DOIs',
+            'OpenAlex Coverage of DOIs'
+        ]
     }
 }
