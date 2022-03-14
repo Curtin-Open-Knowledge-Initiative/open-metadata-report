@@ -62,7 +62,7 @@
       }
     ],
     [
-      "graphs.value_add_graphs",
+      "value_add_graphs",
       {
         "depends": [
           "dois_category_query"
@@ -70,7 +70,7 @@
       }
     ],
     [
-      "graphs.overall_comparison",
+      "overall_comparison",
       {
         "depends": [
           "dois_category_query",
@@ -79,7 +79,7 @@
       }
     ],
     [
-      "graphs.source_coverage_by_crossref_type",
+      "source_coverage_by_crossref_type",
       {
         "depends": [
           "dois_category_query"
@@ -87,7 +87,7 @@
       }
     ],
     [
-      "graphs.source_in_base_by_pubdate",
+      "source_in_base_by_pubdate",
       {
         "depends": [
           "dois_category_query",
@@ -96,7 +96,7 @@
       }
     ],
     [
-      "graphs.generate_tables",
+      "generate_tables",
       {
         "depends": [
           "dois_category_query",
@@ -114,10 +114,10 @@
           "crossref_to_truthtable",
           "source_category_query",
           "dois_category_query",
-          "graphs.value_add_graphs",
-          "graphs.overall_comparison",
-          "graphs.source_coverage_by_crossref_type",
-          "graphs.source_in_base_by_pubdate"
+          "value_add_graphs",
+          "overall_comparison",
+          "source_coverage_by_crossref_type",
+          "source_in_base_by_pubdate"
         ]
       }
     ],
@@ -131,10 +131,10 @@
           "crossref_to_truthtable",
           "source_category_query",
           "dois_category_query",
-          "graphs.value_add_graphs",
-          "graphs.overall_comparison",
-          "graphs.source_coverage_by_crossref_type",
-          "graphs.source_in_base_by_pubdate"
+          "value_add_graphs",
+          "overall_comparison",
+          "source_coverage_by_crossref_type",
+          "source_in_base_by_pubdate"
         ]
       }
     ]
