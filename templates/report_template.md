@@ -4,7 +4,7 @@
 <!-- Loading JSON data files for access -->
 <!-- TODO - these will currently break because they need to be created/added to the precipy index -->
 {% set metadata = load_json(save_data_parameters.files["data_parameters.json"].cache_filepath) %}
-{% set graphs_metadata = load_json(save_data_parameters.files["graph_parameters.json"].cache_filepath) %}
+{% set graph_metadata = load_json(save_data_parameters.files["graph_parameters.json"].cache_filepath) %}
 {% set tables = load_json(generate_tables.files["tables.json"].cache_filepath) %}
 {% set tablenum = 1 %}
 
@@ -45,15 +45,15 @@ of metadata for authors, institutions and publication venues and disciplines.
 
 
 This report was run using the following tables as source data:
-Crossref: {{ metadata.TABLES.crossref }}
-Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date {{ metadata.CROSSREF_MEMBER_DATE }}
-OpenAlex Native Format {{ metadata.TABLES.openalex.Work }}
-Microsoft Academic:
 
-* Papers: {{ metadata.TABLES.mag.Papers }}
-* Authors: {{ metadata.TABLES.mag.Authors }}
-* Affiliations: {{ metadata.TABLES.mag.Affiliations }}
-* Intermediate: {{ metadata.INTERMEDIATE_TABLES.mag }}
+* Crossref: {{ metadata.TABLES.crossref }}
+* Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date {{ metadata.CROSSREF_MEMBER_DATE }}
+* OpenAlex Native Format {{ metadata.TABLES.openalex.Work }}
+* Microsoft Academic:
+    * Papers: {{ metadata.TABLES.mag.Papers }}
+    * Authors: {{ metadata.TABLES.mag.Authors }}
+    * Affiliations: {{ metadata.TABLES.mag.Affiliations }}
+    * Intermediate: {{ metadata.INTERMEDIATE_TABLES.mag }}
 
 
 <pdf:nextpage>
@@ -94,7 +94,7 @@ results for the content that has Crossref DOIs.
 
 ![]({{ overall_comparison.files["mag_crossref_coverage_all_time.png"].cache_filepath }})
 
-Therefore it is of interest to look at a specific recent year, in this case {{ graphs_metadata.FOCUS_YEAR }}.
+Therefore it is of interest to look at a specific recent year, in this case {{ graph_metadata.FOCUS_YEAR }}.
 
 ![]({{ overall_comparison.files["openalex_native_crossref_coverage_focus_year.png"].cache_filepath }})
 
@@ -107,7 +107,9 @@ Therefore it is of interest to look at a specific recent year, in this case {{ g
 We can do loops eg over the data elements. But this might be better for a supplementary data section as we will 
 presumably want to actually comment on the graphs themselves?
 
-{% for data_element in graphs_metadata.SIDEBYSIDE_BAR_SUMMARY_XS %}
+{% for data_element in graph_metadata.SIDEBYSIDE_BAR_SUMMARY_XS %}
+
+<pdf:nextpage>
 
 ### {{ data_element }}
 
@@ -139,7 +141,7 @@ The above may not work on windows??CHECK??...may need to figure a work around fo
 
 {% for source in metadata.SOURCES %}
 
-### {{ source }} Coverage
+### {{ graph_metadata.FORMATTED_SOURCE_NAMES[source] }} Coverage
 
 {% set tablenum = tablenum + loop.index0 %}
 {{ helper.tableize(tables[source]["summary_comparison_table"], tablenum) }}
