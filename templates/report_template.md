@@ -117,8 +117,6 @@ presumably want to actually comment on the graphs themselves?
 {% set filename = "value_add_openalex_native_all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
 ![]({{ value_add_graphs.files[filename].cache_filepath }})
 
-The above may not work on windows??CHECK??...may need to figure a work around for that
-
 {% endfor %}
 
 # OpenAlex Coverage Beyond Crossref
