@@ -70,7 +70,7 @@ VALUE_ADD_META = {
                     'References from': 'pc_mag_references_adds_presence',
                     'Open References from': 'pc_mag_references_adds_presence',
                     'Journals': 'pc_mag_venue_adds_presence',
-                    'Journals ISSN': 'pc_mag_has_venue_issn_adds_presence',
+                    'Journals ISSN': 'pc_mag_venue_issn_adds_presence',
                     'Fields': 'pc_mag_fields_adds_presence'
                 }
             }
