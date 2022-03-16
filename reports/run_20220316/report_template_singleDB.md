@@ -220,6 +220,7 @@ This report was run using the following tables as source data:
 
 * Crossref: academic-observatory.crossref.crossref_metadata20220107
 * Crossref Member Data: utrecht-university.crossref.member_data with date recent
+* OpenAlex Native Format utrecht-university.OpenAlex_native.Work
 
 
 <pdf:nextpage>
@@ -254,6 +255,7 @@ This report was run using the following tables as source data:
 
 * Crossref: academic-observatory.crossref.crossref_metadata20220107
 * Crossref Member Data: utrecht-university.crossref.member_data with date recent
+* OpenAlex Native Format: utrecht-university.OpenAlex_native.Work
 
 ### Crossref Metadata
 
@@ -306,8 +308,8 @@ Added value of OpenAlex for different metadata types over all publications
 
 <table>
   <tr>
-    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\ec\ec4717e1a7786bd064dad030c57ac9f09c9e3375f1e45b8c24bee9ca75e8d177.png"></td>
-    <td valign="top">  <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\75\75414313727eeb5099f20c3499cb37d99b772308bc5b10a404329806a6c8569d.png"></td>
+    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\63\6398ed53ff70ae210c7d910167fe73f036d29f540d4f646d3b9d378538ac98ae.png"></td>
+    <td valign="top">  <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\28\28625eb1238483f4c106635dfaa3477609766dee873a76bf97c4713d2c5f0b9f.png"></td>
   </tr>
   <tr>
     <td>all time</td>
@@ -319,8 +321,8 @@ Looking at 2020 only -> describe differences
 
 <table>
   <tr>
-    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\9c\9c243e29dbc03f875903a4d98bc2ecfd6eda90afb35b2d9099e6e8e47a531b83.png"></td>
-    <td valign="top">  <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\99\994698c81c1dc32a76602f81344749e7b19927329387e87f3c23cec80e693dfe.png"></td>
+    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\e1\e160e33e10eb62986c6d0e72c012db598e65b3cd980ed4796fa59567f385ca94.png"></td>
+    <td valign="top">  <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\e7\e7f2aac86f272be32e7abd7d787b7122141ee191160f675da416659454dfa0f9.png"></td>
   </tr>
   <tr>
     <td>2020</td>
@@ -344,7 +346,20 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-![](C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\87\876bb62815844dd1bda0c7ad36577b2ceda020b79c35dea99b9ecb84e5a1d7a3.png)
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\f9\f91b7c7d504f1d84493e809dfc5a3773decab6665114bd02af311ac136174a50.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\b0\b008886e5bb61dfc2e8e5dc900d427fae99d071276654adb260f2cb63f198cec.png"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
 
 
 
@@ -354,7 +369,20 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-![](C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\89\89a0a57153dedb447d4a6a14bebd6386d2856526ecb29847a8fc9a05e38cac74.png)
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\2f\2f56eb2c6475527a280996d059a0df7a5c33e877220cd1669c3cbc71c2a7571c.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\f6\f6dfeb67d82004235d3dd4b88a37547404154f8e0c03b2317829074291cca431.png"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
 
 
 
@@ -364,7 +392,20 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-![](C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\2f\2fb047103aad3a1ecf60d4624652784242358ec47822a89c61c6060b217365a0.png)
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\43\434dcbb523a271236f563820232da5b99524bfb54ac4ead2966249d550e87e05.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\c5\c511ecd7f660f29c437174808972ca9a7519ef3f1538d364f33a215daa65a647.png"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
 
 
 
@@ -374,7 +415,20 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-![](C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\9d\9dbf120c23706f8948c105d28e929a5662af355edbc188d1e0956df7ab4cc8d2.png)
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\25\2528c2c27b7f89f0924c2b90f895f34647731dc25307ad4439ae665cef49f2d8.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\b0\b0eee35c9f38b3a8c251e665c34039aa814d12e2887e5ad434fc10db0bee30de.png"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
 
 
 
@@ -384,7 +438,20 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-![](C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\5d\5d46122118d223819ef499cc97c29629ba6fa49e94a157996eda7ef751f9d741.png)
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\02\022071a7a429413c5233894560a94bcbc26c44194d4501a7166f38d7064a60b9.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\70\70a27efa52c3705bceb7f1e77864576c6bb17a18607397708b87e8bd8a3f4ff5.png"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
 
 
 
@@ -394,7 +461,20 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-![](C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\ba\ba1d73b285089ef1999882e999984f51a87114dbd9e47356a50cbd0f2032c3f6.png)
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\cf\cf51f3c573b8286f47ec269d68d732437d1e4280057535416d62f3c1538a2704.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\bf\bf10fd75ef484f6bf1dfeadfb6bcde541cd7932ac454ae3f884f69ee1742e934.png"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
 
 
 
@@ -404,7 +484,20 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-![](C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\c2\c2a09f69f70e785ddb441e3d4f4a6a824ab62218d63bcada4db3d995dea84a81.png)
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\2b\2b86369527a578f22d7f14ad0e179e23b3496a1dcbfd728ed215879e1f3593b0.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\e9\e95c50e4278da311c98684255273f65ce4a1fb8a54848a54809bb54b929b335a.png"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
 
 
 
@@ -428,162 +521,11 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-### MAG Coverage
-
-
-<table>
-    <caption><strong>Table 1.</strong> MAG Metadata Coverage of Crossref DOIs</caption>
-    <thead>
-        <tr>
-            
-                <th 
-                    
-                    text-align=center>Time Frame
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Crossref DOIs
-                </th>
-            
-                <th 
-                    
-                    text-align=center>MAG Coverage of DOIs
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Author Strings
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Author ORCIDs
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Affiliation Strings
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Abstracts
-                </th>
-            
-                <th 
-                    
-                    text-align=center>References
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Field Classification
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Venue Names
-                </th>
-            
-                <th 
-                    
-                    text-align=center>ISSNs
-                </th>
-            
-        </tr>
-    </thead>
-    <tbody>
-        
-            <tr style="background-color: white;">
-                
-                    <td text-align=center>All Time</td>
-                
-                    <td text-align=center>120141465</td>
-                
-                    <td text-align=center>91604073</td>
-                
-                    <td text-align=center>91604073</td>
-                
-                    <td text-align=center>nan</td>
-                
-                    <td text-align=center>61757635</td>
-                
-                    <td text-align=center>62222493</td>
-                
-                    <td text-align=center>57167548</td>
-                
-                    <td text-align=center>83255485</td>
-                
-                    <td text-align=center>68014618</td>
-                
-                    <td text-align=center>62899573</td>
-                
-            </tr>
-        
-            <tr style="background-color: Gainsboro;">
-                
-                    <td text-align=center>Crossref Current</td>
-                
-                    <td text-align=center>20058172</td>
-                
-                    <td text-align=center>15351173</td>
-                
-                    <td text-align=center>15351173</td>
-                
-                    <td text-align=center>nan</td>
-                
-                    <td text-align=center>10670101</td>
-                
-                    <td text-align=center>10022562</td>
-                
-                    <td text-align=center>9361893</td>
-                
-                    <td text-align=center>13582180</td>
-                
-                    <td text-align=center>9297507</td>
-                
-                    <td text-align=center>8488171</td>
-                
-            </tr>
-        
-            <tr style="background-color: white;">
-                
-                    <td text-align=center>Focus Year</td>
-                
-                    <td text-align=center>7012560</td>
-                
-                    <td text-align=center>5413872</td>
-                
-                    <td text-align=center>5413872</td>
-                
-                    <td text-align=center>nan</td>
-                
-                    <td text-align=center>3770219</td>
-                
-                    <td text-align=center>3523628</td>
-                
-                    <td text-align=center>3269285</td>
-                
-                    <td text-align=center>4767469</td>
-                
-                    <td text-align=center>3219642</td>
-                
-                    <td text-align=center>2922199</td>
-                
-            </tr>
-        
-    </tbody>
-</table>
-
-
-
-
 ### OpenAlex Coverage
 
 
 <table>
-    <caption><strong>Table 2.</strong> OpenAlex Metadata Coverage of Crossref DOIs</caption>
+    <caption><strong>Table 1.</strong> OpenAlex Metadata Coverage of Crossref DOIs</caption>
     <thead>
         <tr>
             
@@ -646,7 +588,7 @@ presumably want to actually comment on the graphs themselves?
 
 
 <table>
-    <caption><strong>Table 3.</strong> Crossref Metadata Coverage of Crossref DOIs</caption>
+    <caption><strong>Table 2.</strong> Crossref Metadata Coverage of Crossref DOIs</caption>
     <thead>
         <tr>
             
