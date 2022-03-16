@@ -36,7 +36,7 @@ This report was run using the following tables as source data:
 
 * Crossref: {{ metadata.TABLES.crossref }}
 * Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date {{ metadata.CROSSREF_MEMBER_DATE }}
-* OpenAlex Native Format {{ metadata.TABLES.openalex.Work }}
+* OpenAlex Native Format {{ metadata.TABLES.openalex_native.Work }}
 
 
 <pdf:nextpage>
@@ -71,7 +71,7 @@ This report was run using the following tables as source data:
 
 * Crossref: {{ metadata.TABLES.crossref }}
 * Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date {{ metadata.CROSSREF_MEMBER_DATE }}
-* OpenAlex Native Format {{ metadata.TABLES.openalex.Work }}
+* OpenAlex Native Format: {{ metadata.TABLES.openalex_native.Work }}
 
 ### Crossref Metadata
 
@@ -160,9 +160,22 @@ presumably want to actually comment on the graphs themselves?
 
 ### {{ data_element }}
 
+{% set filename1 = "value_add_sidebyside_openalex_native_all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_stacked_openalex_native_all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
 
-{% set filename = "value_add_openalex_native_all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
-![]({{ value_add_graphs.files[filename].cache_filepath }})
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
 
 {% endfor %}
 
