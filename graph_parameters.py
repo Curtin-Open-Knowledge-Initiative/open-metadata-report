@@ -36,12 +36,12 @@ ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS
 VALUE_ADD_META = {
     'crossref': {
         'mag': {
-            'xs': ['Affiliation strings', 'Authors', 'Abstracts', 'Citations to',
+            'xs': ['Affiliations', 'Authors', 'Abstracts', 'Citations to',
                    'References from', 'Open References from',
                    'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'Crossref': {
-                    'Affiliation strings': 'pc_crossref_has_affiliations_string',
+                    'Affiliations': 'pc_crossref_has_affiliations_string',
                     'Authors': 'pc_crossref_has_authors',
                     'Abstracts': 'pc_crossref_has_abstract',
                     'Citations to': 'pc_crossref_has_citations',
@@ -52,7 +52,7 @@ VALUE_ADD_META = {
                     'Fields': 'pc_crossref_has_fields'
                 },
                 'MAG': {
-                    'Affiliation strings': 'pc_mag_has_affiliations_string',
+                    'Affiliations': 'pc_mag_has_affiliations_string',
                     'Authors': 'pc_mag_has_authors',
                     'Abstracts': 'pc_mag_has_abstract',
                     'Citations to': 'pc_mag_has_citations',
@@ -63,7 +63,7 @@ VALUE_ADD_META = {
                     'Fields': 'pc_mag_has_fields'
                 },
                 'MAG Added Value': {
-                    'Affiliation strings': 'pc_mag_affiliations_string_adds_presence',
+                    'Affiliations': 'pc_mag_affiliations_string_adds_presence',
                     'Authors': 'pc_mag_authors_adds_presence',
                     'Abstracts': 'pc_mag_abstract_adds_presence',
                     'Citations to': 'pc_mag_citations_adds_presence',
@@ -76,12 +76,12 @@ VALUE_ADD_META = {
             }
         },
         'openalex': {
-            'xs': ['Affiliation strings', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
+            'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
                    'References from', 'Open References from',
                    'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'Crossref': {
-                    'Affiliation strings': 'pc_crossref_has_affiliations_string',
+                    'Affiliations': 'pc_crossref_has_affiliations_string',
                     'Authors': 'pc_crossref_has_authors',
                     'Authors ORCIDs': 'pc_crossref_has_authors_orcid',
                     'Abstracts': 'pc_crossref_has_abstract',
@@ -93,7 +93,7 @@ VALUE_ADD_META = {
                     'Fields': 'pc_crossref_has_fields'
                 },
                 'OpenAlex (MAG format)': {
-                    'Affiliation strings': 'pc_openalex_has_affiliations_string',
+                    'Affiliations': 'pc_openalex_has_affiliations_string',
                     'Authors': 'pc_openalex_has_authors',
                     'Authors ORCIDs': 'pc_openalex_has_authors_orcid',
                     'Abstracts': 'pc_openalex_has_abstract',
@@ -105,7 +105,7 @@ VALUE_ADD_META = {
                     'Fields': 'pc_openalex_has_fields'
                 },
                 'OpenAlex (MAG format) Added Value': {
-                    'Affiliation strings': 'pc_openalex_affiliations_string_adds_presence',
+                    'Affiliations': 'pc_openalex_affiliations_string_adds_presence',
                     'Authors': 'pc_openalex_authors_adds_presence',
                     'Authors ORCIDs': 'pc_openalex_authors_orcid_adds_presence',
                     'Abstracts': 'pc_openalex_abstract_adds_presence',
@@ -119,12 +119,12 @@ VALUE_ADD_META = {
             },
         },
         'openalex_native': {
-            'xs': ['Affiliation strings', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
+            'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
                    'References from', 'Open References from',
                    'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'Crossref': {
-                    'Affiliation strings': 'pc_crossref_has_affiliations_string',
+                    'Affiliations': 'pc_crossref_has_affiliations_string',
                     'Authors': 'pc_crossref_has_authors',
                     'Authors ORCIDs': 'pc_crossref_has_authors_orcid',
                     'Abstracts': 'pc_crossref_has_abstract',
@@ -136,7 +136,7 @@ VALUE_ADD_META = {
                     'Fields': 'pc_crossref_has_fields'
                 },
                 'OpenAlex': {
-                    'Affiliation strings': 'pc_openalex_native_has_affiliations_string',
+                    'Affiliations': 'pc_openalex_native_has_affiliations_string',
                     'Authors': 'pc_openalex_native_has_authors',
                     'Authors ORCIDs': 'pc_openalex_native_has_authors_orcid',
                     'Abstracts': 'pc_openalex_native_has_abstract',
@@ -148,7 +148,7 @@ VALUE_ADD_META = {
                     'Fields': 'pc_openalex_native_has_fields'
                 },
                 'OpenAlex Added Value': {
-                    'Affiliation strings': 'pc_openalex_native_affiliations_string_adds_presence',
+                    'Affiliations': 'pc_openalex_native_affiliations_string_adds_presence',
                     'Authors': 'pc_openalex_native_authors_adds_presence',
                     'Authors ORCIDs': 'pc_openalex_native_authors_orcid_adds_presence',
                     'Abstracts': 'pc_openalex_native_abstract_adds_presence',
@@ -164,10 +164,10 @@ VALUE_ADD_META = {
     }
 }
 
-STACKED_BAR_SUMMARY_XS = ['Affiliation strings', 'Authors', 'Abstracts', 'Citations to', 'References from',
+STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstracts', 'Citations to', 'References from',
                           'Journals']
 
-SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliation strings', 'Authors', 'Abstracts', 'Citations to', 'References from',
+SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstracts', 'Citations to', 'References from',
                              'Journals', 'Fields']
 
 CROSSREF_TYPES = ['journal-article',

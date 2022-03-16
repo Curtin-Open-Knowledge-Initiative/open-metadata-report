@@ -197,7 +197,7 @@
 
 <p class="subtitle">OPEN METADATA SOURCES</p>
 <p class="titlemeta">
-COMPARING OPENALEX TO CROSSREF AND MAG<br>
+COMPARING OPENALEX TO CROSSREF <br>
 DATE: 16 MARCH 2022
 </p>
 
@@ -258,8 +258,6 @@ This report was run using the following tables as source data:
 * OpenAlex Native Format: utrecht-university.OpenAlex_native.Work
 
 ### Crossref Metadata
-
-### Microsoft Academic
 
 ### OpenAlex
 
@@ -340,17 +338,17 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-<pdf:nextpage>
+<!-- <pdf:nextpage> -->
 
-### Affiliation strings
+### Affiliations
 
 
 
 
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\f9\f91b7c7d504f1d84493e809dfc5a3773decab6665114bd02af311ac136174a50.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\b0\b008886e5bb61dfc2e8e5dc900d427fae99d071276654adb260f2cb63f198cec.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\2e\2e16bc96ec5ba8944fec44b8a2cb686df70ffaa7a95e87628e275a701330379a.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\db\db88571da84baaa9d2400e5fdcf40eab742e6992ab4dda3f6e254e5d54cf9b30.png"></td>
   </tr>
   <tr>
     <td>all time</td>
@@ -360,10 +358,7 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-
-
-
-<pdf:nextpage>
+<!-- <pdf:nextpage> -->
 
 ### Authors
 
@@ -383,10 +378,27 @@ presumably want to actually comment on the graphs themselves?
 
 
 
+<!-- <pdf:nextpage> -->
+
+### Authors ORCIDs
 
 
 
-<pdf:nextpage>
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\58\58ca759d499b2c7ff44ec8e4083cbf18303ee94917a74a61c707104dc19664ea.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\e2\e2dc89e19640ab1ee5d531432c266c5f7273d6fa3313aa5cccf249f568fc90f9.png"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
+<!-- <pdf:nextpage> -->
 
 ### Abstracts
 
@@ -406,10 +418,7 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-
-
-
-<pdf:nextpage>
+<!-- <pdf:nextpage> -->
 
 ### Citations to
 
@@ -429,10 +438,7 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-
-
-
-<pdf:nextpage>
+<!-- <pdf:nextpage> -->
 
 ### References from
 
@@ -452,10 +458,27 @@ presumably want to actually comment on the graphs themselves?
 
 
 
+<!-- <pdf:nextpage> -->
+
+### Open References from
 
 
 
-<pdf:nextpage>
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\cf\cf080f9b2c5fc8b51864bb62215118a475375784281fe8511901b1f2b0350e7b.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\f4\f4a6f2aaf41a16079323e8912ed71ff5739eddd6f6ff181af3210df5a70c208e.png"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
+<!-- <pdf:nextpage> -->
 
 ### Journals
 
@@ -475,10 +498,27 @@ presumably want to actually comment on the graphs themselves?
 
 
 
+<!-- <pdf:nextpage> -->
+
+### Journals ISSN
 
 
 
-<pdf:nextpage>
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\72\72ebbd477017769c63212ea3061fe003484b1a5de1d5d838d68e7529186cf744.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\3c\3ceab108a643c540fa93a5a3a83d5f3efdf5badc9ecef54596c2ccd63f534800.png"></td>
+  </tr>
+  <tr>
+    <td>all time</td>
+    <td>all time</td>
+  </tr>
+ </table>
+
+
+
+<!-- <pdf:nextpage> -->
 
 ### Fields
 
@@ -495,9 +535,6 @@ presumably want to actually comment on the graphs themselves?
     <td>all time</td>
   </tr>
  </table>
-
-
-
 
 
 
@@ -521,11 +558,225 @@ presumably want to actually comment on the graphs themselves?
 
 
 
+### MAG Coverage
+
+
+<table>
+    <caption><strong>Table 1.</strong> MAG Metadata Coverage of Crossref DOIs</caption>
+    <thead>
+        <tr>
+            
+                <th 
+                    
+                    text-align=center>Time Frame
+                </th>
+            
+                <th 
+                    
+                    text-align=center>Crossref DOIs
+                </th>
+            
+                <th 
+                    
+                    text-align=center>MAG Coverage of DOIs
+                </th>
+            
+                <th 
+                    
+                    text-align=center>Author Strings
+                </th>
+            
+                <th 
+                    
+                    text-align=center>Author ORCIDs
+                </th>
+            
+                <th 
+                    
+                    text-align=center>Affiliation Strings
+                </th>
+            
+                <th 
+                    
+                    text-align=center>Abstracts
+                </th>
+            
+                <th 
+                    
+                    text-align=center>References
+                </th>
+            
+                <th 
+                    
+                    text-align=center>Field Classification
+                </th>
+            
+                <th 
+                    
+                    text-align=center>Venue Names
+                </th>
+            
+                <th 
+                    
+                    text-align=center>ISSNs
+                </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        
+            <tr style="background-color: white;">
+                
+                    <td text-align=center>All Time</td>
+                
+                    <td text-align=center>120141465</td>
+                
+                    <td text-align=center>91604073</td>
+                
+                    <td text-align=center>91604073</td>
+                
+                    <td text-align=center>nan</td>
+                
+                    <td text-align=center>61757635</td>
+                
+                    <td text-align=center>62222493</td>
+                
+                    <td text-align=center>57167548</td>
+                
+                    <td text-align=center>83255485</td>
+                
+                    <td text-align=center>68014618</td>
+                
+                    <td text-align=center>62899573</td>
+                
+            </tr>
+        
+            <tr style="background-color: Gainsboro;">
+                
+                    <td text-align=center>Crossref Current</td>
+                
+                    <td text-align=center>20058172</td>
+                
+                    <td text-align=center>15351173</td>
+                
+                    <td text-align=center>15351173</td>
+                
+                    <td text-align=center>nan</td>
+                
+                    <td text-align=center>10670101</td>
+                
+                    <td text-align=center>10022562</td>
+                
+                    <td text-align=center>9361893</td>
+                
+                    <td text-align=center>13582180</td>
+                
+                    <td text-align=center>9297507</td>
+                
+                    <td text-align=center>8488171</td>
+                
+            </tr>
+        
+            <tr style="background-color: white;">
+                
+                    <td text-align=center>Focus Year</td>
+                
+                    <td text-align=center>7012560</td>
+                
+                    <td text-align=center>5413872</td>
+                
+                    <td text-align=center>5413872</td>
+                
+                    <td text-align=center>nan</td>
+                
+                    <td text-align=center>3770219</td>
+                
+                    <td text-align=center>3523628</td>
+                
+                    <td text-align=center>3269285</td>
+                
+                    <td text-align=center>4767469</td>
+                
+                    <td text-align=center>3219642</td>
+                
+                    <td text-align=center>2922199</td>
+                
+            </tr>
+        
+    </tbody>
+</table>
+
+
+
+
+### OpenAlex (MAG format) Coverage
+
+
+<table>
+    <caption><strong>Table 2.</strong> OpenAlex (MAG format) Metadata Coverage of Crossref DOIs</caption>
+    <thead>
+        <tr>
+            
+                <th 
+                    
+                    text-align=center>Time Frame
+                </th>
+            
+                <th 
+                    
+                    text-align=center>Crossref DOIs
+                </th>
+            
+                <th 
+                    
+                    text-align=center>OpenAlex Coverage of DOIs
+                </th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        
+            <tr style="background-color: white;">
+                
+                    <td text-align=center>All Time</td>
+                
+                    <td text-align=center>120141465</td>
+                
+                    <td text-align=center>93837117</td>
+                
+            </tr>
+        
+            <tr style="background-color: Gainsboro;">
+                
+                    <td text-align=center>Crossref Current</td>
+                
+                    <td text-align=center>20058172</td>
+                
+                    <td text-align=center>16408905</td>
+                
+            </tr>
+        
+            <tr style="background-color: white;">
+                
+                    <td text-align=center>Focus Year</td>
+                
+                    <td text-align=center>7012560</td>
+                
+                    <td text-align=center>5515485</td>
+                
+            </tr>
+        
+    </tbody>
+</table>
+
+
+
+
 ### OpenAlex Coverage
 
 
 <table>
-    <caption><strong>Table 1.</strong> OpenAlex Metadata Coverage of Crossref DOIs</caption>
+    <caption><strong>Table 3.</strong> OpenAlex Metadata Coverage of Crossref DOIs</caption>
     <thead>
         <tr>
             
@@ -588,7 +839,7 @@ presumably want to actually comment on the graphs themselves?
 
 
 <table>
-    <caption><strong>Table 2.</strong> Crossref Metadata Coverage of Crossref DOIs</caption>
+    <caption><strong>Table 4.</strong> Crossref Metadata Coverage of Crossref DOIs</caption>
     <thead>
         <tr>
             

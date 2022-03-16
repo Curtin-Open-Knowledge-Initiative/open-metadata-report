@@ -14,7 +14,7 @@
 
 <p class="subtitle">OPEN METADATA SOURCES</p>
 <p class="titlemeta">
-COMPARING OPENALEX TO CROSSREF AND MAG<br>
+COMPARING OPENALEX TO CROSSREF <br>
 DATE: {{ helper.created_at()|upper }}</p>
 
 <!-- switch page templates -->
@@ -74,8 +74,6 @@ This report was run using the following tables as source data:
 * OpenAlex Native Format: {{ metadata.TABLES.openalex_native.Work }}
 
 ### Crossref Metadata
-
-### Microsoft Academic
 
 ### OpenAlex
 
@@ -154,9 +152,9 @@ Looking at {{ graph_metadata.FOCUS_YEAR }} only -> describe differences
 We can do loops eg over the data elements. But this might be better for a supplementary data section as we will 
 presumably want to actually comment on the graphs themselves?
 
-{% for data_element in graph_metadata.SIDEBYSIDE_BAR_SUMMARY_XS %}
+{% for data_element in graph_metadata.VALUE_ADD_META['crossref']['openalex_native']['xs'] %}
 
-<pdf:nextpage>
+<!-- <pdf:nextpage> -->
 
 ### {{ data_element }}
 
@@ -173,9 +171,6 @@ presumably want to actually comment on the graphs themselves?
     <td>all time</td>
   </tr>
  </table>
-
-
-
 
 {% endfor %}
 
