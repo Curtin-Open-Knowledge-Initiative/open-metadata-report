@@ -9,8 +9,8 @@ RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
-SOURCES = ['mag', 'openalex','openalex_native', 'crossref']
-MAG_FORMAT_SOURCES = ['mag', 'openalex']
+SOURCES = ['mag', 'openalex', 'openalex_native', 'crossref']
+MAG_FORMAT_SOURCES = [s  for s in ['mag', 'openalex'] if s in SOURCES]
 CURRENT = [2019, 2020, 2021]
 
 # Files and Directories
