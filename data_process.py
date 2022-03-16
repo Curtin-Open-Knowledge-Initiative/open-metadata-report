@@ -414,7 +414,6 @@ def value_add_graphs(af: AnalyticsFunction,
             af.add_existing_file(filepath.with_suffix('.png'))
 
             # Side by side bar (including Fields)
-            # Stacked Bar
             chart = ValueAddBar(df=figdata,
                                 categories=[FORMATTED_SOURCE_NAMES[base_comparison],
                                             f'{FORMATTED_SOURCE_NAMES[source]}'],
@@ -433,6 +432,21 @@ def value_add_graphs(af: AnalyticsFunction,
                 sum_by_type = filtered.groupby('type').sum().reset_index()
                 collated_sum_by_type = collate_value_add_values(sum_by_type, ALL_COLLATED_COLUMNS)
 
+                # Stacked Bar
+                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                               metadata_element=metadata_element,
+                                               ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                               categories=[
+                                                   FORMATTED_SOURCE_NAMES[base_comparison],
+                                                   f'{FORMATTED_SOURCE_NAMES[source]} Added Value']
+                                               )
+                fig = chart.plotly()
+                filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                filepath = GRAPH_DIR / filename
+                fig.write_image(filepath.with_suffix('.png'))
+                af.add_existing_file(filepath.with_suffix('.png'))
+
+                # Side by side bar
                 chart = ValueAddByCrossrefType(df=collated_sum_by_type,
                                                metadata_element=metadata_element,
                                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
@@ -442,12 +456,10 @@ def value_add_graphs(af: AnalyticsFunction,
                                                stackedbar=False
                                                )
                 fig = chart.plotly()
-
-                filename = f'value_add_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
                 filepath = GRAPH_DIR / filename
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
-
 
 def source_coverage_by_crossref_type(af: AnalyticsFunction,
                                      base_comparison: str = 'crossref'):
