@@ -140,7 +140,7 @@
     ]
   ],
   "templates": [
-    "report_template.md"
+    "report_template_singleDB.md"
   ],
   "filters": [
     [
