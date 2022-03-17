@@ -206,7 +206,7 @@ def source_category_query(af: AnalyticsFunction,
     Query and download category data from the intermediate tables
     """
 
-    for source in [s for s in SOURCES if s != 'crossref']:
+    for source in NON_BASE_SOURCES:
         query_template = load_sql_to_string('source_categories_query.sql.jinja2',
                                             directory=SQL_DIRECTORY)
 
@@ -378,22 +378,21 @@ def git_status(af):
 ## Graphs
 
 def value_add_graphs(af: AnalyticsFunction,
-                     base_comparison: str = 'crossref'):
+                     base_comparison: str = BASE_COMPARISON):
     """
     Generate graphs that provide information on the value add of a source compared to base_comparison
 
     :param af: AnalyticsFunction for the precipy run
     :param source: Lowercase string name of the source being compared
-    :param base_comparison: Lowercase string name of the base_comparison, crossref is the default
+    :param base_comparison: Lowercase string name of the base_comparison, crossref is generally the default which is
+    set as BASE_COMPARISON in data_parameters.py
     """
 
     print('Generating value add graphs...')
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    for source in SOURCES:
-        if source == base_comparison:
-            continue
+    for source in NON_BASE_SOURCES:
 
         for timeframe in TIME_FRAMES.keys():
             filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
@@ -462,7 +461,7 @@ def value_add_graphs(af: AnalyticsFunction,
                 af.add_existing_file(filepath.with_suffix('.png'))
 
 def source_coverage_by_crossref_type(af: AnalyticsFunction,
-                                     base_comparison: str = 'crossref'):
+                                     base_comparison: str = BASE_COMPARISON):
     """
     Graph the coverage of the source compared to the base comparison by crossref-type
     """
@@ -470,10 +469,9 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    for source in SOURCES:
-        if source == base_comparison:
-            continue
+    for source in NON_BASE_SOURCES:
 
+        # TODO Cleanup variable names here to abstract away from crossref to generalised base comparison
         figdata = base_comparison_data.groupby('type').agg(
             crossref_dois=pd.NamedAgg(column=f'{base_comparison}_dois', aggfunc='sum'),
             in_source=pd.NamedAgg(column=f'{source}_ids', aggfunc='sum'),
@@ -518,6 +516,8 @@ def collate_value_add_values(df: pd.DataFrame,
     Convenience function for cleaning up the value add tables
     :param df: summed data frame from the doi_table_categories_query
     :param cols: type: list set of columns to calculate percentages for
+    :param total_column: type: str Name of column that contains totals for calculation of percentages
+
     :return df: type: pd.DataFrame modified dataframe with percentages calculated and all columns remaining
     """
 
@@ -529,7 +529,7 @@ def collate_value_add_values(df: pd.DataFrame,
     for col in cols:
         if col in df.columns:
             column_names.append(f'pc_{col}')
-            columns_data.append(np.round(df[col] / df['crossref_dois'] * 100, 1))
+            columns_data.append(np.round(df[col] / df[total_column] * 100, 1))
 
     added_columns = pd.DataFrame({name: data for name, data in zip(column_names, columns_data)})
     df = pd.concat([df, added_columns], axis=1)
@@ -539,7 +539,7 @@ def collate_value_add_values(df: pd.DataFrame,
 def calculate_overall_coverage(base_df: pd.DataFrame,
                                source_df: pd.DataFrame,
                                source: str,
-                               base_comparison: str = 'crossref') -> dict:
+                               base_comparison: str = BASE_COMPARISON) -> dict:
     base_total = base_df[f'{base_comparison}_ids'].sum()
     dois_in_source = base_df[f'{source}_ids'].sum()
     source_total = source_df.num_objects.sum()
@@ -562,7 +562,7 @@ def calculate_overall_coverage(base_df: pd.DataFrame,
 
 
 def overall_comparison(af: AnalyticsFunction,
-                       base_comparison: str = 'crossref'):
+                       base_comparison: str = BASE_COMPARISON):
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
@@ -592,7 +592,7 @@ def overall_comparison(af: AnalyticsFunction,
 
 
 def source_in_base_by_pubdate(af,
-                              base_comparison: str = 'crossref'):
+                              base_comparison: str = BASE_COMPARISON):
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
@@ -631,7 +631,7 @@ def source_in_base_by_pubdate(af,
 ## Tables
 
 def generate_tables(af,
-                    base_comparison: str = 'crossref'):
+                    base_comparison: str = BASE_COMPARISON):
 
     table_json = {}
     with pd.HDFStore(LOCAL_DATA_PATH) as store:

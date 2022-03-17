@@ -63,7 +63,7 @@ class ValueAddBar(AbstractObservatoryChart):
             fig.update_layout(barmode='stack')
         fig.update_yaxes(range=[0, 100],
                          title_text='Coverage (%)'
-        )
+                         )
         fig.update_layout(template='none')
         return fig
 
@@ -116,6 +116,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                    x=cr_types,
                    y=[self.df[self.df.type == t][
                           self.ys.get(category).get(self.metadata_element)].values[0]
+                      if self.ys.get(category).get(self.metadata_element) is not 'zeros' else 0
                       for t in cr_types])
             for category in self.categories
         ]
@@ -136,6 +137,7 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                          title_text='Coverage (%)')
         fig.update_layout(template='none')
         return fig
+
 
 class ValueAddByCrossrefTypeHorizontal(AbstractObservatoryChart):
 
@@ -177,7 +179,7 @@ class ValueAddByCrossrefTypeHorizontal(AbstractObservatoryChart):
         palette = kwargs.get('palette')
         if palette:
             [self.ys[category].update({'marker_color': palette[i]}) for i, category
-                             in enumerate(self.ys.keys())]
+             in enumerate(self.ys.keys())]
         cr_types = ['journal-article',
                     'proceedings-article',
                     'book-chapter',

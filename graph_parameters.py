@@ -119,12 +119,13 @@ VALUE_ADD_META = {
             },
         },
         'openalex_native': {
-            'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
+            'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
                    'References from', 'Open References from',
                    'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'Crossref': {
                     'Affiliations': 'pc_crossref_has_affiliations_string',
+                    'Affiliations ROR': 'zeros',
                     'Authors': 'pc_crossref_has_authors',
                     'Authors ORCIDs': 'pc_crossref_has_authors_orcid',
                     'Abstracts': 'pc_crossref_has_abstract',
@@ -137,6 +138,7 @@ VALUE_ADD_META = {
                 },
                 'OpenAlex': {
                     'Affiliations': 'pc_openalex_native_has_affiliations_string',
+                    'Affiliations ROR': 'pc_openalex_native_has_affiliations_ror',
                     'Authors': 'pc_openalex_native_has_authors',
                     'Authors ORCIDs': 'pc_openalex_native_has_authors_orcid',
                     'Abstracts': 'pc_openalex_native_has_abstract',
@@ -149,6 +151,7 @@ VALUE_ADD_META = {
                 },
                 'OpenAlex Added Value': {
                     'Affiliations': 'pc_openalex_native_affiliations_string_adds_presence',
+                    'Affiliations ROR': 'pc_openalex_native_affiliations_ror_adds_presence',
                     'Authors': 'pc_openalex_native_authors_adds_presence',
                     'Authors ORCIDs': 'pc_openalex_native_authors_orcid_adds_presence',
                     'Abstracts': 'pc_openalex_native_abstract_adds_presence',
