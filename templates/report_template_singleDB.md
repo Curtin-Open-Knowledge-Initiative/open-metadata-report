@@ -6,6 +6,8 @@
 {% set metadata = load_json(save_data_parameters.files["data_parameters.json"].cache_filepath) %}
 {% set graph_metadata = load_json(save_data_parameters.files["graph_parameters.json"].cache_filepath) %}
 {% set tables = load_json(generate_tables.files["tables.json"].cache_filepath) %}
+{% set name_source = metadata.NON_BASE_SOURCES[0] + "_" %}
+{% set name_base = metadata.BASE_COMPARISON + "_" %}
 {% set tablenum = 1 %}
 
 <!-- Title Page -->
@@ -90,12 +92,12 @@ OpenAlex coverage of {{ graph_metadata.FOCUS_YEAR }}: smaller proportion publica
 
 <table>
   <tr>
-    <td valign="top"><img src="{{ overall_comparison.files["openalex_native_crossref_coverage_all_time.png"].cache_filepath }}"></td>
-    <td valign="top">  <img src="{{ overall_comparison.files["openalex_native_crossref_coverage_focus_year.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ overall_comparison.files[name_source + name_base + "coverage_all_time.png"].cache_filepath }}"></td>
+    <td valign="top">  <img src="{{overall_comparison.files[name_source + name_base + "coverage_focus_year.png"].cache_filepath }}"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>{{ graph_metadata.FOCUS_YEAR }}</td>
+    <td>overall comparison - all time</td>
+    <td>overall comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
   </tr>
  </table>
 
@@ -104,62 +106,60 @@ Coverage in OpenAlex of publication types in Crossref [describe]
 
 <table>
   <tr>
-    <td valign="top"><img src="{{ source_in_base_by_pubdate.files["crossref_in_openalex_native_by_pubdate.png"].cache_filepath }}"></td>
-    <td valign="top"><img src="{{ source_coverage_by_crossref_type.files["openalex_native_coverage_by_crossref_type.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ source_in_base_by_pubdate.files[name_base + "in_" + name_source + "by_pubdate.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ source_coverage_by_crossref_type.files[name_source + "coverage_by_" + name_base + "type.png"].cache_filepath }}"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage by publication date - all time</td>
+    <td>coverage by publication type  - all time</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
 ## Value Add of OpenAlex to Crossref
 
-Comparing coverage of metadata types in Crossref and OpenAlex
-Added value of OpenAlex for different metadata types over all publications
-
-
-<table>
-  <tr>
-    <td valign="top"><img src="{{ value_add_graphs.files["value_add_sidebyside_openalex_native_all_time.png"].cache_filepath }}"></td>
-    <td valign="top">  <img src="{{ value_add_graphs.files["value_add_stacked_openalex_native_all_time.png"].cache_filepath }}"></td>
-  </tr>
-  <tr>
-    <td>all time</td>
-    <td>all time</td>
-  </tr>
- </table>
-
-Looking at {{ graph_metadata.FOCUS_YEAR }} only -> describe differences
-
-<table>
-  <tr>
-    <td valign="top"><img src="{{ value_add_graphs.files["value_add_sidebyside_openalex_native_focus_year.png"].cache_filepath }}"></td>
-    <td valign="top">  <img src="{{ value_add_graphs.files["value_add_stacked_openalex_native_focus_year.png"].cache_filepath }}"></td>
-  </tr>
-  <tr>
-    <td>{{ graph_metadata.FOCUS_YEAR }}</td>
-    <td>{{ graph_metadata.FOCUS_YEAR }}</td>
-  </tr>
- </table>
-
 
 ### Overview
+
+Comparing coverage of metadata types in Crossref and OpenAlex (all time and {{ graph_metadata.FOCUS_YEAR }}) -> describe differences
+Added value of OpenAlex for different metadata types over all publications (all time and {{ graph_metadata.FOCUS_YEAR }}) -> describe differences
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files["value_add_sidebyside_" + name_source + "all_time.png"].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files["value_add_sidebyside_" + name_source + "focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"><img src="{{ value_add_graphs.files["value_add_stacked_" + name_source + "all_time.png"].cache_filepath }}"></td>
+    <td valign="top">  <img src="{{ value_add_graphs.files["value_add_stacked_" + name_source + "focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
 
 ### Details
 
 We can do loops eg over the data elements. But this might be better for a supplementary data section as we will 
 presumably want to actually comment on the graphs themselves?
 
-{% for data_element in graph_metadata.VALUE_ADD_META['crossref']['openalex_native']['xs'] %}
+{% set data_element_array = graph_metadata.VALUE_ADD_META[metadata.BASE_COMPARISON][metadata.NON_BASE_SOURCES[0]]['xs'] %}
 
-<!-- <pdf:nextpage> -->
-
+{% set data_element = data_element_array[0] %}
 ### {{ data_element }}
 
-{% set filename1 = "value_add_sidebyside_openalex_native_all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
-{% set filename2 = "value_add_stacked_openalex_native_all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
 
 <table>
   <tr>
@@ -167,12 +167,311 @@ presumably want to actually comment on the graphs themselves?
     <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
   </tr>
  </table>
 
-{% endfor %}
+<pdf:nextpage>
+
+{% set data_element = data_element_array[1] %}
+### {{ data_element }}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[2] %}
+### {{ data_element }}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[3] %}
+### {{ data_element }}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[4] %}
+### {{ data_element }}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[5] %}
+### {{ data_element }}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[6] %}
+### {{ data_element }}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[7] %}
+### {{ data_element }}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[8] %}
+### {{ data_element }}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[9] %}
+### {{ data_element }}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[10] %}
+### {{ data_element }}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
 
 # OpenAlex Coverage Beyond Crossref
 
