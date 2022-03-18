@@ -42,3 +42,33 @@
 {%- endfor %}
 {% endfor %}
 {% endmacro -%}
+
+
+{% macro value_add_tableize(name_source, data_element, focus_year) -%}
+
+{% set filename1 = "value_add_sidebyside_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2 = "value_add_sidebyside_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3 = "value_add_stacked_" + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4 = "value_add_stacked_"  + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename1].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename2].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ focus_year }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename3].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files[filename4].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ focus_year }}</td>
+  </tr>
+ </table>
+
+{% endmacro -%}
+
