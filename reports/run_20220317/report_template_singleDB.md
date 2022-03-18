@@ -191,6 +191,8 @@
 
 
 
+
+
 <!-- Title Page -->
 <pdf:nexttemplate name="titlepage">
 <pdf:nextpage>
@@ -198,7 +200,7 @@
 <p class="subtitle">OPEN METADATA SOURCES</p>
 <p class="titlemeta">
 COMPARING OPENALEX TO CROSSREF <br>
-DATE: 16 MARCH 2022
+DATE: 17 MARCH 2022
 </p>
 
 <!-- switch page templates -->
@@ -274,12 +276,12 @@ OpenAlex coverage of 2020: smaller proportion publications without DOI, same cov
 
 <table>
   <tr>
-    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\e7\e785cd2286a38369964fd2fd70e83cd59d031b7c59cf32411b0d921834b2ba12.png"></td>
-    <td valign="top">  <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\c2\c2d4d7fa56d4c5a60eb86bcf01323506206c22eb4955f4ce0d74e9b63db0397b.png"></td>
+    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\86\861c7d0605e2fc37d15c80987bec37cce3903799e01d045c4eadc0769bf5a553.png"></td>
+    <td valign="top">  <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\46\46e06d8f9c163903386f00bdfaaf6f6480f091c3ffff458dc1ec752a22306a66.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>2020</td>
+    <td>overall comparison - all time</td>
+    <td>overall comparison - 2020</td>
   </tr>
  </table>
 
@@ -288,48 +290,45 @@ Coverage in OpenAlex of publication types in Crossref [describe]
 
 <table>
   <tr>
-    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\76\76689ea74242c8ed6ddcd20cc9166ebec90335874614d8d40cd50c97876d3cb5.png"></td>
-    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\76\769f42c0d17112cf07c035325ace95d1c6f08e2e6f4e45d00ef2b9d2fd7e0985.png"></td>
+    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\ed\ed7f91c75af0f9ea56ab80295417c5b56541fdd61fe48cce5111b42bbcfb863a.png"></td>
+    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\58\58cef39b1ea5ad1f54cd3ad459bf6296d7d8fb6af87e12220fe5f0eb9505b3f5.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage by publication date - all time</td>
+    <td>coverage by publication type  - all time</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
 ## Value Add of OpenAlex to Crossref
 
-Comparing coverage of metadata types in Crossref and OpenAlex
-Added value of OpenAlex for different metadata types over all publications
-
-
-<table>
-  <tr>
-    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\63\6398ed53ff70ae210c7d910167fe73f036d29f540d4f646d3b9d378538ac98ae.png"></td>
-    <td valign="top">  <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\28\28625eb1238483f4c106635dfaa3477609766dee873a76bf97c4713d2c5f0b9f.png"></td>
-  </tr>
-  <tr>
-    <td>all time</td>
-    <td>all time</td>
-  </tr>
- </table>
-
-Looking at 2020 only -> describe differences
-
-<table>
-  <tr>
-    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\e1\e160e33e10eb62986c6d0e72c012db598e65b3cd980ed4796fa59567f385ca94.png"></td>
-    <td valign="top">  <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\e7\e7f2aac86f272be32e7abd7d787b7122141ee191160f675da416659454dfa0f9.png"></td>
-  </tr>
-  <tr>
-    <td>2020</td>
-    <td>2020</td>
-  </tr>
- </table>
-
 
 ### Overview
+
+Comparing coverage of metadata types in Crossref and OpenAlex (all time and 2020) -> describe differences
+Added value of OpenAlex for different metadata types over all publications (all time and 2020) -> describe differences
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\6d\6d94935a4a39af3ee86956ae4503bc37b828fcfcc65039f00d4f4177790a810f.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\66\66b5042917b308b1dd4b23fa34b49fed66b455394459f9f1b876dd6229548a43.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\43\438f543c9f1cb8ba97264d131e83a2a159d514271b32029c456a2ed6d9409752.png"></td>
+    <td valign="top">  <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\1a\1a41ecb04562198f28299b89e0be874f5194f907f7b09ef65654844d9401d89c.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
 
 ### Details
 
@@ -338,204 +337,324 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-<!-- <pdf:nextpage> -->
 
 ### Affiliations
 
 
 
 
+
+
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\2e\2e16bc96ec5ba8944fec44b8a2cb686df70ffaa7a95e87628e275a701330379a.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\db\db88571da84baaa9d2400e5fdcf40eab742e6992ab4dda3f6e254e5d54cf9b30.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\1c\1ce2cf5959fed7e0ce71e35579844e19e442dc3ae7a797dd4cdf0b372abf5025.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\f8\f8d848d30f91e8eadb136713bc1683e469dfc61bae90a613f8dd0dc20af3b023.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\d0\d07e1a201303cac90d0f7945580a1362d0a4097d5ddf634dc57866591e5f15ad.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\94\94e9644ec3b5d33833f5dab4081a3322a714d2cdbbb5dd421881f6c942d20e17.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
 
-<!-- <pdf:nextpage> -->
+### Affiliations ROR
+
+
+
+
+
+
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\35\35e0668796bc438924e05d271699882a2960fc482783a60cbd2767f95958b7b0.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\8d\8d23a4425de4f4793d3f88309629f2ee1d0839d4c9ac043553c82074cef6c328.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\28\288635b47c174e0d0fb350a1d8b8a65338b490e00c97cf41e690d95eea7b36dc.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\da\da629a9526dc892bf912fc32df0aafe53e2a21fb6c151e925e17a40d0f75deb1.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
 
 ### Authors
 
 
 
 
+
+
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\2f\2f56eb2c6475527a280996d059a0df7a5c33e877220cd1669c3cbc71c2a7571c.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\f6\f6dfeb67d82004235d3dd4b88a37547404154f8e0c03b2317829074291cca431.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\35\35cb9f11e618283af76baa5c2af38bd1859b96aa665e41e4ab1c4971e9e916d2.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\53\53cfbabeb4d1b098cbbd27b6aa902241d39d16da733e272e37c3169b5552becc.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\17\17a71656d5174185cb697785eaf1d0489c492548dd21a9922ccecb6bf3baceeb.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\95\95846fec1c7febaf1bb9bd74b8994d18934901194f6e237dba4c9d4006152095.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
-
-<!-- <pdf:nextpage> -->
 
 ### Authors ORCIDs
 
 
 
 
+
+
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\58\58ca759d499b2c7ff44ec8e4083cbf18303ee94917a74a61c707104dc19664ea.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\e2\e2dc89e19640ab1ee5d531432c266c5f7273d6fa3313aa5cccf249f568fc90f9.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\db\db67120d5168b0459afe4812eb5945b9871f05c6cf6dd7779e2df3a6ccade8f3.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\19\19b3dcb23e7c5e396d947e5f0536439479e46eafa6c0b2ebd567e3a9f4d40fd4.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\20\20f52e36fc7bd239ee3893dcc1fbe4e3f4bb905a06ad780111debdd3ebb6f2a7.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\da\daf86ad5701830e53a26f77a01c58e5beee11a9c1babdcc8aa8dbd1ee1b39cac.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
-
-<!-- <pdf:nextpage> -->
 
 ### Abstracts
 
 
 
 
+
+
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\43\434dcbb523a271236f563820232da5b99524bfb54ac4ead2966249d550e87e05.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\c5\c511ecd7f660f29c437174808972ca9a7519ef3f1538d364f33a215daa65a647.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\da\daa0e6135f3427d95d2ea9135f45c1a5c0cb38608d826a07ba3307b07c21e557.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\37\37f481f77868629253223ebb61ed9d55bea989647e4c816a5f737c722e712619.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\ae\ae4b94ce68f5f28307066cfe7410d445977d1566f3b708102c28473076a3559a.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\4f\4fbda3e2f1748de38f3cfaa920e2a1a41c8e340fd814d385dd6a48d547143a59.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
-
-<!-- <pdf:nextpage> -->
 
 ### Citations to
 
 
 
 
+
+
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\25\2528c2c27b7f89f0924c2b90f895f34647731dc25307ad4439ae665cef49f2d8.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\b0\b0eee35c9f38b3a8c251e665c34039aa814d12e2887e5ad434fc10db0bee30de.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\7f\7fa3713a8e22e61a2d5004ed31578530ebe19433179971998c0d3415bc0087e7.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\87\87c2dbbb15d35952d970bdd5de053b6d5af493e6c4e81ae3a15a8d7103f3f29e.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\49\4991e387828ac80226239018d0d14f44deb7ced44708102d65c09434dd79d015.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\ec\ec6257ef6169c6b54c7b26b15e01dd73a1ace50d7d300eb3312379081fc4c523.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
-
-<!-- <pdf:nextpage> -->
 
 ### References from
 
 
 
 
+
+
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\02\022071a7a429413c5233894560a94bcbc26c44194d4501a7166f38d7064a60b9.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\70\70a27efa52c3705bceb7f1e77864576c6bb17a18607397708b87e8bd8a3f4ff5.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\0c\0c424ba352b1da8c0b2db571f040ab220091b851a09333588b885d402d243287.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\f0\f0029572ab1b0e95b695c658cac81b5a9125623e9b4fac8b596ecbe634e558f1.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\d4\d4ed0b0a133f0cadfaf59cf405a1a638edaa6a016bb68d541df82f74aa5927f8.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\77\77c35c24b1bf2e634b70b5ce90bedfcf0d99e8b4bfd65f590412a40184b035a1.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
-
-<!-- <pdf:nextpage> -->
 
 ### Open References from
 
 
 
 
+
+
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\cf\cf080f9b2c5fc8b51864bb62215118a475375784281fe8511901b1f2b0350e7b.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\f4\f4a6f2aaf41a16079323e8912ed71ff5739eddd6f6ff181af3210df5a70c208e.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\c1\c102e28bc8785553a39c016d2ab8881766c39ec89789012fad4f9761ed34a6e5.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\c7\c7376779b49feb2ab519983c6c6c4591c1f009fe867ae5ccbedc5a3d97fc8aec.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\5c\5ca7cd987a339f30e864f1d04e9952b82e348f3c9c4049f084d23e72964b8cbf.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\09\09b9fdad189b5325ae754a3b46f0d35465f4b1fe8c34e1480ba83e649685e216.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
-
-<!-- <pdf:nextpage> -->
 
 ### Journals
 
 
 
 
+
+
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\cf\cf51f3c573b8286f47ec269d68d732437d1e4280057535416d62f3c1538a2704.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\bf\bf10fd75ef484f6bf1dfeadfb6bcde541cd7932ac454ae3f884f69ee1742e934.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\8a\8af03f5b1bff59ddec200f021120c3a0254dd08e34d126da6992afb929be0691.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\ef\efe7470b7a005073638d8d5b17fcaa542adc732f658ae171a516b70b8b3db31e.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\03\03c5b7150d19cb602c2fdc0e6ce32bc3ea8b928243a11506bd08f872faf60743.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\90\9019e626381abbbedebda5788a8e458718e45223db6752bc89a3b349e385e726.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
-
-<!-- <pdf:nextpage> -->
 
 ### Journals ISSN
 
 
 
 
+
+
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\72\72ebbd477017769c63212ea3061fe003484b1a5de1d5d838d68e7529186cf744.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\3c\3ceab108a643c540fa93a5a3a83d5f3efdf5badc9ecef54596c2ccd63f534800.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\21\21243bd6ade749c3c8d6a91fa61996aaf13061a05ac94d63fabb9bc84666b503.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\2f\2fb8feb864a43533b1d879667f3c248461279e119f06c8da914f51353a1b0210.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\c7\c72d2cbec4d6a909af7632ee8340980c3ac5218f1eeffe36dc4bde6464198aa3.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\af\afd5f0168e79157029d330825f5d25593f3f6a51b672e30bc73ffbf7772bce12.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
-
-<!-- <pdf:nextpage> -->
 
 ### Fields
 
 
 
 
+
+
 <table>
   <tr>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\2b\2b86369527a578f22d7f14ad0e179e23b3496a1dcbfd728ed215879e1f3593b0.png"></td>
-    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\e9\e95c50e4278da311c98684255273f65ce4a1fb8a54848a54809bb54b929b335a.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\42\42d8020649610acbb149979b5a7eee2795fec91482834b962d20a041cefeb085.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\03\036bf621bbc79b3d2f47156becdd20fd40139d9daedf4f0ace0b4501ec1fd84d.png"></td>
   </tr>
   <tr>
-    <td>all time</td>
-    <td>all time</td>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2020</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\45\457a3e8a6ca6fef9d6d5f78873ddb7c692377d9df7014ae8c0b737599b230956.png"></td>
+    <td valign="top"> <img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\e5\e5e991ff7786089b967162acca3a7794744132ef6790e883752bdaf11ed8b779.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2020</td>
   </tr>
  </table>
 
+<pdf:nextpage>
 
 
 # OpenAlex Coverage Beyond Crossref
@@ -558,225 +677,11 @@ presumably want to actually comment on the graphs themselves?
 
 
 
-### MAG Coverage
-
-
-<table>
-    <caption><strong>Table 1.</strong> MAG Metadata Coverage of Crossref DOIs</caption>
-    <thead>
-        <tr>
-            
-                <th 
-                    
-                    text-align=center>Time Frame
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Crossref DOIs
-                </th>
-            
-                <th 
-                    
-                    text-align=center>MAG Coverage of DOIs
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Author Strings
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Author ORCIDs
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Affiliation Strings
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Abstracts
-                </th>
-            
-                <th 
-                    
-                    text-align=center>References
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Field Classification
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Venue Names
-                </th>
-            
-                <th 
-                    
-                    text-align=center>ISSNs
-                </th>
-            
-        </tr>
-    </thead>
-    <tbody>
-        
-            <tr style="background-color: white;">
-                
-                    <td text-align=center>All Time</td>
-                
-                    <td text-align=center>120141465</td>
-                
-                    <td text-align=center>91604073</td>
-                
-                    <td text-align=center>91604073</td>
-                
-                    <td text-align=center>nan</td>
-                
-                    <td text-align=center>61757635</td>
-                
-                    <td text-align=center>62222493</td>
-                
-                    <td text-align=center>57167548</td>
-                
-                    <td text-align=center>83255485</td>
-                
-                    <td text-align=center>68014618</td>
-                
-                    <td text-align=center>62899573</td>
-                
-            </tr>
-        
-            <tr style="background-color: Gainsboro;">
-                
-                    <td text-align=center>Crossref Current</td>
-                
-                    <td text-align=center>20058172</td>
-                
-                    <td text-align=center>15351173</td>
-                
-                    <td text-align=center>15351173</td>
-                
-                    <td text-align=center>nan</td>
-                
-                    <td text-align=center>10670101</td>
-                
-                    <td text-align=center>10022562</td>
-                
-                    <td text-align=center>9361893</td>
-                
-                    <td text-align=center>13582180</td>
-                
-                    <td text-align=center>9297507</td>
-                
-                    <td text-align=center>8488171</td>
-                
-            </tr>
-        
-            <tr style="background-color: white;">
-                
-                    <td text-align=center>Focus Year</td>
-                
-                    <td text-align=center>7012560</td>
-                
-                    <td text-align=center>5413872</td>
-                
-                    <td text-align=center>5413872</td>
-                
-                    <td text-align=center>nan</td>
-                
-                    <td text-align=center>3770219</td>
-                
-                    <td text-align=center>3523628</td>
-                
-                    <td text-align=center>3269285</td>
-                
-                    <td text-align=center>4767469</td>
-                
-                    <td text-align=center>3219642</td>
-                
-                    <td text-align=center>2922199</td>
-                
-            </tr>
-        
-    </tbody>
-</table>
-
-
-
-
-### OpenAlex (MAG format) Coverage
-
-
-<table>
-    <caption><strong>Table 2.</strong> OpenAlex (MAG format) Metadata Coverage of Crossref DOIs</caption>
-    <thead>
-        <tr>
-            
-                <th 
-                    
-                    text-align=center>Time Frame
-                </th>
-            
-                <th 
-                    
-                    text-align=center>Crossref DOIs
-                </th>
-            
-                <th 
-                    
-                    text-align=center>OpenAlex Coverage of DOIs
-                </th>
-            
-        </tr>
-    </thead>
-    <tbody>
-        
-            <tr style="background-color: white;">
-                
-                    <td text-align=center>All Time</td>
-                
-                    <td text-align=center>120141465</td>
-                
-                    <td text-align=center>93837117</td>
-                
-            </tr>
-        
-            <tr style="background-color: Gainsboro;">
-                
-                    <td text-align=center>Crossref Current</td>
-                
-                    <td text-align=center>20058172</td>
-                
-                    <td text-align=center>16408905</td>
-                
-            </tr>
-        
-            <tr style="background-color: white;">
-                
-                    <td text-align=center>Focus Year</td>
-                
-                    <td text-align=center>7012560</td>
-                
-                    <td text-align=center>5515485</td>
-                
-            </tr>
-        
-    </tbody>
-</table>
-
-
-
-
 ### OpenAlex Coverage
 
 
 <table>
-    <caption><strong>Table 3.</strong> OpenAlex Metadata Coverage of Crossref DOIs</caption>
+    <caption><strong>Table 1.</strong> OpenAlex Metadata Coverage of Crossref DOIs</caption>
     <thead>
         <tr>
             
@@ -839,7 +744,7 @@ presumably want to actually comment on the graphs themselves?
 
 
 <table>
-    <caption><strong>Table 4.</strong> Crossref Metadata Coverage of Crossref DOIs</caption>
+    <caption><strong>Table 2.</strong> Crossref Metadata Coverage of Crossref DOIs</caption>
     <thead>
         <tr>
             
