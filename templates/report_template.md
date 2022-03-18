@@ -113,7 +113,7 @@ presumably want to actually comment on the graphs themselves?
 ### {{ data_element }}
 
 
-{% set filename = "value_add_openalex_native_all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename = "value_add_sidebyside_openalex_native_all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
 ![]({{ value_add_graphs.files[filename].cache_filepath }})
 
 {% endfor %}
