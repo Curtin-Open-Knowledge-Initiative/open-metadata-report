@@ -193,6 +193,7 @@
 
 
 
+
 <!-- Title Page -->
 <pdf:nexttemplate name="titlepage">
 <pdf:nextpage>
@@ -200,7 +201,7 @@
 <p class="subtitle">OPEN METADATA SOURCES</p>
 <p class="titlemeta">
 COMPARING OPENALEX TO CROSSREF <br>
-DATE: 17 MARCH 2022
+DATE: 18 MARCH 2022
 </p>
 
 <!-- switch page templates -->
@@ -364,6 +365,8 @@ presumably want to actually comment on the graphs themselves?
   </tr>
  </table>
 
+
+
 <pdf:nextpage>
 
 
@@ -392,6 +395,8 @@ presumably want to actually comment on the graphs themselves?
     <td>coverage added value - 2020</td>
   </tr>
  </table>
+
+
 
 <pdf:nextpage>
 
@@ -422,6 +427,8 @@ presumably want to actually comment on the graphs themselves?
   </tr>
  </table>
 
+
+
 <pdf:nextpage>
 
 
@@ -450,6 +457,8 @@ presumably want to actually comment on the graphs themselves?
     <td>coverage added value - 2020</td>
   </tr>
  </table>
+
+
 
 <pdf:nextpage>
 
@@ -480,6 +489,8 @@ presumably want to actually comment on the graphs themselves?
   </tr>
  </table>
 
+
+
 <pdf:nextpage>
 
 
@@ -508,6 +519,8 @@ presumably want to actually comment on the graphs themselves?
     <td>coverage added value - 2020</td>
   </tr>
  </table>
+
+
 
 <pdf:nextpage>
 
@@ -538,6 +551,8 @@ presumably want to actually comment on the graphs themselves?
   </tr>
  </table>
 
+
+
 <pdf:nextpage>
 
 
@@ -566,6 +581,8 @@ presumably want to actually comment on the graphs themselves?
     <td>coverage added value - 2020</td>
   </tr>
  </table>
+
+
 
 <pdf:nextpage>
 
@@ -596,6 +613,8 @@ presumably want to actually comment on the graphs themselves?
   </tr>
  </table>
 
+
+
 <pdf:nextpage>
 
 
@@ -624,6 +643,8 @@ presumably want to actually comment on the graphs themselves?
     <td>coverage added value - 2020</td>
   </tr>
  </table>
+
+
 
 <pdf:nextpage>
 
@@ -654,8 +675,9 @@ presumably want to actually comment on the graphs themselves?
   </tr>
  </table>
 
-<pdf:nextpage>
 
+
+<pdf:nextpage>
 
 # OpenAlex Coverage Beyond Crossref
 
