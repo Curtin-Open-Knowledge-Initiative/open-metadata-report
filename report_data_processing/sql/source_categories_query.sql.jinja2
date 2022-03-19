@@ -1,7 +1,6 @@
 SELECT
     published_year
     , type
-    , field
     , COUNT(DISTINCT doi) as num_dois
     , COUNT(DISTINCT source_id) as num_objects
 
@@ -14,5 +13,5 @@ SELECT
     {% endfor %}
 
 FROM {{ table }}
-GROUP BY published_year, type, field
+GROUP BY published_year, type
 ORDER BY published_year DESC, type ASC, field ASC
