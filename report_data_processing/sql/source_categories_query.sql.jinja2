@@ -5,11 +5,15 @@ SELECT
     , COUNT(DISTINCT source_id) as num_objects
 
     {% for item in data_items -%}
+    , COUNT(DISTINCT IF(has_{{ item }}, source_id, null)) as objects_has_{{ item }}
+    {% endfor %}
+
+    {% for item in data_items -%}
     , COUNT(DISTINCT IF(has_{{ item }}, doi, null)) as dois_has_{{ item }}
     {% endfor -%}
 
     {% for item in data_items -%}
-    , COUNT(DISTINCT IF(has_{{ item }}, source_id, null)) as objects_has_{{ item }}
+    , COUNT(DISTINCT IF(has_{{ item }}, source_id, null)) - COUNT(DISTINCT IF(has_{{ item }}, doi, null)) as non_dois_has_{{ item }}
     {% endfor %}
 
 FROM {{ table }}
