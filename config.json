@@ -70,6 +70,14 @@
       }
     ],
     [
+      "value_add_self_graphs",
+      {
+        "depends": [
+          "source_category_query"
+        ]
+      }
+    ],
+    [
       "overall_comparison",
       {
         "depends": [

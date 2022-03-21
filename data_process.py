@@ -129,7 +129,7 @@ def openalex_native_to_truthtable(af: AnalyticsFunction,
 
     if not report_utils.bigquery_rerun(af, rerun, verbose, source):
         print(f"""Query is:
-
++
     {query}
 
     """)
@@ -633,6 +633,74 @@ def source_in_base_by_pubdate(af,
         fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))
         # write_plotly_div(af, fig, 'cr_in_mag_barline.html')
+
+
+## Graphs for comparing source database with itself (eg dois vs non-dois)
+
+def value_add_self_graphs(af: AnalyticsFunction,
+                          # base_comparison: str = BASE_COMPARISON):
+                          base_comparison: str = NON_BASE_SOURCES[0]):
+    """
+    Generate graphs that provide information on metadata coverage of dois and non-dois in a given source
+    Adaptation of value_add_graphs
+
+    :param af: AnalyticsFunction for the precipy run
+    :param source: Lowercase string name of the source being compared
+    :param base_comparison: Lowercase string name of the base_comparison, set the same as the source being compared
+    use NON_BASE_SOURCES in data_parameters.py
+    """
+    # TODO Dynamically set base_comparison when looping over multiple sources?
+
+    print('Generating value add graphs...')
+    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    for source in NON_BASE_SOURCES:
+
+        for timeframe in TIME_FRAMES.keys():
+            filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered_sum = filtered.sum(axis=0)
+            figdata = collate_value_add_values(filtered_sum,
+                                               PRESENCE_COLUMNS_SELF,
+                                               'num_objects')
+            # TODO This calculates pc of num_objects for both dois and non-dois; need to define separate total_column
+
+            # Side by side bar (including Fields)
+            chart = ValueAddBar(df=figdata,
+                                categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
+                                            f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
+                                xs=SIDEBYSIDE_BAR_SUMMARY_XS,
+                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                stackedbar=False)
+
+            fig = chart.plotly()
+            filename = f'value_add_self_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}'
+            filepath = GRAPH_DIR / filename
+            fig.write_image(filepath.with_suffix('.png'))
+            af.add_existing_file(filepath.with_suffix('.png'))
+
+            # Details graph for each metadata element
+            for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
+                sum_by_type = filtered.groupby('type').sum().reset_index()
+                collated_sum_by_type = collate_value_add_values(sum_by_type,
+                                                                PRESENCE_COLUMNS_SELF,
+                                                                'num_objects')
+                # TODO This calculates pc of num_objects for both dois and non-dois; need to define separate total_column
+
+                # Side by side bar
+                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                               metadata_element=metadata_element,
+                                               ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                               categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
+                                                           f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
+                                               stackedbar=False
+                                               )
+                fig = chart.plotly()
+                filename = f'value_add_self_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_type'
+                filepath = GRAPH_DIR / filename
+                fig.write_image(filepath.with_suffix('.png'))
+                af.add_existing_file(filepath.with_suffix('.png'))
+
 
 ## Tables
 

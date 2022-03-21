@@ -235,13 +235,110 @@ presumably want to actually comment on the graphs themselves?
 
 ## Publication Types
 
+To add
+
 ## Metadata Coverage
 
-### Overall
+### Overview
 
-### By publication type
+Comparing coverage of metadata types for DOIs and non-DOIs in OpenAlex (all time and {{ graph_metadata.FOCUS_YEAR }}) -> describe differences
 
-### By field
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_self_graphs.files["value_add_self_sidebyside_" + name_source + "all_time.png"].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_self_graphs.files["value_add_self_sidebyside_" + name_source + "focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+### Details
+
+Metadata coverage for DOIs and non-DOIs by publication type
+
+{% set data_element = data_element_array[0] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[0] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+
+{% set data_element = data_element_array[1] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[2] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+
+{% set data_element = data_element_array[3] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[4] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+
+{% set data_element = data_element_array[5] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[6] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+
+{% set data_element = data_element_array[7] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[8] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+
+{% set data_element = data_element_array[9] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+<pdf:nextpage>
+
+{% set data_element = data_element_array[10] %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+
+
+<pdf:nextpage>
 
 # Methodology
 
