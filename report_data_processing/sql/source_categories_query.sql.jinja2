@@ -1,8 +1,9 @@
 SELECT
     published_year
     , type
-    , COUNT(DISTINCT doi) as num_dois
     , COUNT(DISTINCT source_id) as num_objects
+    , COUNT(DISTINCT doi) as num_dois
+    , COUNT(DISTINCT source_id) - COUNT(DISTINCT doi) as num_non_dois
 
     {% for item in data_items -%}
     , COUNT(DISTINCT IF(has_{{ item }}, source_id, null)) as objects_has_{{ item }}
