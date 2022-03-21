@@ -397,7 +397,9 @@ def value_add_graphs(af: AnalyticsFunction,
         for timeframe in TIME_FRAMES.keys():
             filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
             filtered_sum = filtered.sum(axis=0)
-            figdata = collate_value_add_values(filtered_sum, ALL_COLLATED_COLUMNS)
+            figdata = collate_value_add_values(filtered_sum,
+                                               ALL_COLLATED_COLUMNS,
+                                               'crossref_dois')
 
             # Stacked Bar
             chart = ValueAddBar(df=figdata,
@@ -429,7 +431,9 @@ def value_add_graphs(af: AnalyticsFunction,
             # Details graph for each metadata element
             for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
                 sum_by_type = filtered.groupby('type').sum().reset_index()
-                collated_sum_by_type = collate_value_add_values(sum_by_type, ALL_COLLATED_COLUMNS)
+                collated_sum_by_type = collate_value_add_values(sum_by_type,
+                                                                ALL_COLLATED_COLUMNS,
+                                                                'crossref_dois')
 
                 # Stacked Bar
                 chart = ValueAddByCrossrefType(df=collated_sum_by_type,
@@ -480,9 +484,11 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
 
         figdata['source_without_type'] = figdata.in_source - figdata.source_has_type
         figdata['not_in_source'] = figdata.crossref_dois - figdata.in_source
-        figdata = collate_value_add_values(figdata, ['source_has_type',
+        figdata = collate_value_add_values(figdata,
+                                           ['source_has_type',
                                                      'source_without_type',
-                                                     'not_in_source'])
+                                                     'not_in_source'],
+                                           'crossref_dois')
         figdata.reset_index(inplace=True)
 
         chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
@@ -511,7 +517,7 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
 
 def collate_value_add_values(df: pd.DataFrame,
                              cols: list,
-                             total_column: str = 'crossref_dois'):
+                             total_column: str):
     """
     Convenience function for cleaning up the value add tables
     :param df: summed data frame from the doi_table_categories_query
