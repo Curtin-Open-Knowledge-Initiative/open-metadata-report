@@ -541,7 +541,6 @@ def collate_value_add_values(df: pd.DataFrame,
     df = pd.concat([df, added_columns], axis=1)
     return df
 
-
 def calculate_overall_coverage(base_df: pd.DataFrame,
                                source_df: pd.DataFrame,
                                source: str,
@@ -660,10 +659,8 @@ def value_add_self_graphs(af: AnalyticsFunction,
         for timeframe in TIME_FRAMES.keys():
             filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
             filtered_sum = filtered.sum(axis=0)
-            figdata = collate_value_add_values(filtered_sum,
-                                               PRESENCE_COLUMNS_SELF,
-                                               'num_objects')
-            # TODO This calculates pc of num_objects for both dois and non-dois; need to define separate total_column
+            figdata = collate_value_add_self_values(filtered_sum,
+                                               PRESENCE_COLUMNS_SELF)
 
             # Side by side bar (including Fields)
             chart = ValueAddBar(df=figdata,
@@ -682,10 +679,8 @@ def value_add_self_graphs(af: AnalyticsFunction,
             # Details graph for each metadata element
             for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
                 sum_by_type = filtered.groupby('type').sum().reset_index()
-                collated_sum_by_type = collate_value_add_values(sum_by_type,
-                                                                PRESENCE_COLUMNS_SELF,
-                                                                'num_objects')
-                # TODO This calculates pc of num_objects for both dois and non-dois; need to define separate total_column
+                collated_sum_by_type = collate_value_add_self_values(sum_by_type,
+                                                                PRESENCE_COLUMNS_SELF)
 
                 # Side by side bar
                 chart = ValueAddByCrossrefType(df=collated_sum_by_type,
@@ -700,6 +695,35 @@ def value_add_self_graphs(af: AnalyticsFunction,
                 filepath = GRAPH_DIR / filename
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
+
+def collate_value_add_self_values(df: pd.DataFrame,
+                                  cols: list):
+    """
+    Convenience function for cleaning up the value add tables, customized for comparing dois and non-dois in source database
+    Adapted from collate_value_add_values
+    :param df: summed data frame from the doi_table_categories_query
+    :param cols: type: list set of columns to calculate percentages for
+
+    :return df: type: pd.DataFrame modified dataframe with percentages calculated and all columns remaining
+    """
+
+    if type(df) == pd.Series:
+        df = pd.DataFrame(df).transpose()
+
+    column_names = []
+    columns_data = []
+    for col in cols:
+        if col in df.columns:
+            column_names.append(f'pc_{col}')
+            if col.startswith('dois'):
+                columns_data.append(np.round(df[col] / df['num_dois'] * 100, 1))
+            elif col.startswith('non_dois'):
+                columns_data.append(np.round(df[col] / df['num_non_dois'] * 100, 1))
+
+    added_columns = pd.DataFrame({name: data for name, data in zip(column_names, columns_data)})
+    df = pd.concat([df, added_columns], axis=1)
+    return df
+
 
 
 ## Tables
