@@ -13,6 +13,7 @@ SOURCES = ['openalex_native', 'crossref']
 MAG_FORMAT_SOURCES = [s  for s in ['mag', 'openalex'] if s in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
+SOURCES_SELF = ['dois', 'non_dois']
 CURRENT = [2019, 2020, 2021]
 
 # Files and Directories

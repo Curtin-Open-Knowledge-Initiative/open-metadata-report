@@ -1,5 +1,5 @@
 from pathlib import Path
-from data_parameters import ALL_DATA_ITEMS, SOURCES
+from data_parameters import ALL_DATA_ITEMS, SOURCES, SOURCES_SELF
 
 BASE_COMPARISON = 'crossref'
 GRAPH_DIR = Path('graphs')
@@ -26,6 +26,11 @@ TIME_FRAMES = {
 PRESENCE_COLUMNS = [
     f'{source}_has_{item}' for item in ALL_DATA_ITEMS for source in SOURCES
 ]
+
+PRESENCE_COLUMNS_SELF = [
+    f'{source_self}_has_{item}' for item in ALL_DATA_ITEMS for source_self in SOURCES_SELF
+]
+
 
 ADDED_VALUE_COLUMNS = [
     f'{source}_{item}_adds_presence' for item in ALL_DATA_ITEMS for source in SOURCES if source is not BASE_COMPARISON
@@ -161,6 +166,107 @@ VALUE_ADD_META = {
                     'Journals': 'pc_openalex_native_venue_adds_presence',
                     'Journals ISSN': 'pc_openalex_native_has_venue_issn',
                     'Fields': 'pc_openalex_native_fields_adds_presence'
+                }
+            }
+        }
+    },
+    'mag': {
+        'mag': {
+            'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
+                   'References from', 'Open References from',
+                   'Journals', 'Journals ISSN', 'Fields'],
+            'ys': {
+                'MAG DOIs': {
+                    'Affiliations': 'pc_dois_has_affiliations_string',
+                    'Authors': 'pc_dois_has_authors',
+                    'Authors ORCIDs': 'pc_dois_has_authors_orcid',
+                    'Abstracts': 'pc_dois_has_abstract',
+                    'Citations to': 'pc_dois_has_citations',
+                    'References from': 'pc_dois_has_references',
+                    'Open References from': 'pc_dois_has_references',
+                    'Journals': 'pc_dois_has_venue',
+                    'Journals ISSN': 'pc_dois_has_venue_issn',
+                    'Fields': 'pc_dois_has_fields'
+                },
+                'MAG non-DOIs': {
+                    'Affiliations': 'pc_non_dois_has_affiliations_string',
+                    'Authors': 'pc_non_dois_has_authors',
+                    'Authors ORCIDs': 'pc_non_dois_has_authors_orcid',
+                    'Abstracts': 'pc_non_dois_has_abstract',
+                    'Citations to': 'pc_non_dois_has_citations',
+                    'References from': 'pc_non_dois_has_references',
+                    'Open References from': 'pc_non_dois_has_references',
+                    'Journals': 'pc_non_dois_has_venue',
+                    'Journals ISSN': 'pc_non_dois_has_venue_issn',
+                    'Fields': 'pc_non_dois_has_fields'
+                }
+            }
+        }
+    },
+    'openalex': {
+        'openalex': {
+            'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
+                   'References from', 'Open References from',
+                   'Journals', 'Journals ISSN', 'Fields'],
+            'ys': {
+                'OpenAlex (MAG format) DOIs': {
+                    'Affiliations': 'pc_dois_has_affiliations_string',
+                    'Authors': 'pc_dois_has_authors',
+                    'Authors ORCIDs': 'pc_dois_has_authors_orcid',
+                    'Abstracts': 'pc_dois_has_abstract',
+                    'Citations to': 'pc_dois_has_citations',
+                    'References from': 'pc_dois_has_references',
+                    'Open References from': 'pc_dois_has_references',
+                    'Journals': 'pc_dois_has_venue',
+                    'Journals ISSN': 'pc_dois_has_venue_issn',
+                    'Fields': 'pc_dois_has_fields'
+                },
+                'OpenAlex (MAG format) non-DOIs': {
+                    'Affiliations': 'pc_non_dois_has_affiliations_string',
+                    'Authors': 'pc_non_dois_has_authors',
+                    'Authors ORCIDs': 'pc_non_dois_has_authors_orcid',
+                    'Abstracts': 'pc_non_dois_has_abstract',
+                    'Citations to': 'pc_non_dois_has_citations',
+                    'References from': 'pc_non_dois_has_references',
+                    'Open References from': 'pc_non_dois_has_references',
+                    'Journals': 'pc_non_dois_has_venue',
+                    'Journals ISSN': 'pc_non_dois_has_venue_issn',
+                    'Fields': 'pc_non_dois_has_fields'
+                }
+            }
+        }
+    },
+    'openalex_native': {
+        'openalex_native': {
+            'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
+                   'References from', 'Open References from',
+                   'Journals', 'Journals ISSN', 'Fields'],
+            'ys': {
+                'OpenAlex DOIs': {
+                    'Affiliations': 'pc_dois_has_affiliations_string',
+                    'Affiliations ROR': 'pc_dois_has_affiliations_ror',
+                    'Authors': 'pc_dois_has_authors',
+                    'Authors ORCIDs': 'pc_dois_has_authors_orcid',
+                    'Abstracts': 'pc_dois_has_abstract',
+                    'Citations to': 'pc_dois_has_citations',
+                    'References from': 'pc_dois_has_references',
+                    'Open References from': 'pc_dois_has_references',
+                    'Journals': 'pc_dois_has_venue',
+                    'Journals ISSN': 'pc_dois_has_venue_issn',
+                    'Fields': 'pc_dois_has_fields'
+                },
+                'OpenAlex non-DOIs': {
+                    'Affiliations': 'pc_non_dois_has_affiliations_string',
+                    'Affiliations ROR': 'pc_non_dois_has_affiliations_ror',
+                    'Authors': 'pc_non_dois_has_authors',
+                    'Authors ORCIDs': 'pc_non_dois_has_authors_orcid',
+                    'Abstracts': 'pc_non_dois_has_abstract',
+                    'Citations to': 'pc_non_dois_has_citations',
+                    'References from': 'pc_non_dois_has_references',
+                    'Open References from': 'pc_non_dois_has_references',
+                    'Journals': 'pc_non_dois_has_venue',
+                    'Journals ISSN': 'pc_non_dois_has_venue_issn',
+                    'Fields': 'pc_non_dois_has_fields'
                 }
             }
         }

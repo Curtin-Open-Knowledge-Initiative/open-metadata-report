@@ -129,7 +129,7 @@ def openalex_native_to_truthtable(af: AnalyticsFunction,
 
     if not report_utils.bigquery_rerun(af, rerun, verbose, source):
         print(f"""Query is:
-
++
     {query}
 
     """)
@@ -397,7 +397,9 @@ def value_add_graphs(af: AnalyticsFunction,
         for timeframe in TIME_FRAMES.keys():
             filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
             filtered_sum = filtered.sum(axis=0)
-            figdata = collate_value_add_values(filtered_sum, ALL_COLLATED_COLUMNS)
+            figdata = collate_value_add_values(filtered_sum,
+                                               ALL_COLLATED_COLUMNS,
+                                               'crossref_dois')
 
             # Stacked Bar
             chart = ValueAddBar(df=figdata,
@@ -429,7 +431,9 @@ def value_add_graphs(af: AnalyticsFunction,
             # Details graph for each metadata element
             for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
                 sum_by_type = filtered.groupby('type').sum().reset_index()
-                collated_sum_by_type = collate_value_add_values(sum_by_type, ALL_COLLATED_COLUMNS)
+                collated_sum_by_type = collate_value_add_values(sum_by_type,
+                                                                ALL_COLLATED_COLUMNS,
+                                                                'crossref_dois')
 
                 # Stacked Bar
                 chart = ValueAddByCrossrefType(df=collated_sum_by_type,
@@ -480,9 +484,11 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
 
         figdata['source_without_type'] = figdata.in_source - figdata.source_has_type
         figdata['not_in_source'] = figdata.crossref_dois - figdata.in_source
-        figdata = collate_value_add_values(figdata, ['source_has_type',
+        figdata = collate_value_add_values(figdata,
+                                           ['source_has_type',
                                                      'source_without_type',
-                                                     'not_in_source'])
+                                                     'not_in_source'],
+                                           'crossref_dois')
         figdata.reset_index(inplace=True)
 
         chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
@@ -511,7 +517,7 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
 
 def collate_value_add_values(df: pd.DataFrame,
                              cols: list,
-                             total_column: str = 'crossref_dois'):
+                             total_column: str):
     """
     Convenience function for cleaning up the value add tables
     :param df: summed data frame from the doi_table_categories_query
@@ -534,7 +540,6 @@ def collate_value_add_values(df: pd.DataFrame,
     added_columns = pd.DataFrame({name: data for name, data in zip(column_names, columns_data)})
     df = pd.concat([df, added_columns], axis=1)
     return df
-
 
 def calculate_overall_coverage(base_df: pd.DataFrame,
                                source_df: pd.DataFrame,
@@ -627,6 +632,99 @@ def source_in_base_by_pubdate(af,
         fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))
         # write_plotly_div(af, fig, 'cr_in_mag_barline.html')
+
+
+## Graphs for comparing source database with itself (eg dois vs non-dois)
+
+def value_add_self_graphs(af: AnalyticsFunction,
+                          # base_comparison: str = BASE_COMPARISON):
+                          base_comparison: str = NON_BASE_SOURCES[0]):
+    """
+    Generate graphs that provide information on metadata coverage of dois and non-dois in a given source
+    Adaptation of value_add_graphs
+
+    :param af: AnalyticsFunction for the precipy run
+    :param source: Lowercase string name of the source being compared
+    :param base_comparison: Lowercase string name of the base_comparison, set the same as the source being compared
+    use NON_BASE_SOURCES in data_parameters.py
+    """
+    # TODO Dynamically set base_comparison when looping over multiple sources?
+
+    print('Generating value add graphs...')
+    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    for source in NON_BASE_SOURCES:
+
+        for timeframe in TIME_FRAMES.keys():
+            filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered_sum = filtered.sum(axis=0)
+            figdata = collate_value_add_self_values(filtered_sum,
+                                               PRESENCE_COLUMNS_SELF)
+
+            # Side by side bar (including Fields)
+            chart = ValueAddBar(df=figdata,
+                                categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
+                                            f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
+                                xs=SIDEBYSIDE_BAR_SUMMARY_XS,
+                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                stackedbar=False)
+
+            fig = chart.plotly()
+            filename = f'value_add_self_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}'
+            filepath = GRAPH_DIR / filename
+            fig.write_image(filepath.with_suffix('.png'))
+            af.add_existing_file(filepath.with_suffix('.png'))
+
+            # Details graph for each metadata element
+            for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
+                sum_by_type = filtered.groupby('type').sum().reset_index()
+                collated_sum_by_type = collate_value_add_self_values(sum_by_type,
+                                                                PRESENCE_COLUMNS_SELF)
+
+                # Side by side bar
+                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                               metadata_element=metadata_element,
+                                               ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                               categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
+                                                           f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
+                                               stackedbar=False
+                                               )
+                fig = chart.plotly()
+                filename = f'value_add_self_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_type'
+                filepath = GRAPH_DIR / filename
+                fig.write_image(filepath.with_suffix('.png'))
+                af.add_existing_file(filepath.with_suffix('.png'))
+
+def collate_value_add_self_values(df: pd.DataFrame,
+                                  cols: list):
+    """
+    Convenience function for cleaning up the value add tables, customized for comparing dois and non-dois in source database
+    Adapted from collate_value_add_values
+    :param df: summed data frame from the doi_table_categories_query
+    :param cols: type: list set of columns to calculate percentages for
+
+    :return df: type: pd.DataFrame modified dataframe with percentages calculated and all columns remaining
+    """
+
+    if type(df) == pd.Series:
+        df = pd.DataFrame(df).transpose()
+
+    column_names = []
+    columns_data = []
+    for col in cols:
+        if col in df.columns:
+            column_names.append(f'pc_{col}')
+            if col.startswith('dois'):
+                columns_data.append(np.round(df[col] / df['num_dois'] * 100, 1))
+            elif col.startswith('non_dois'):
+                columns_data.append(np.round(df[col] / df['num_non_dois'] * 100, 1))
+
+    added_columns = pd.DataFrame({name: data for name, data in zip(column_names, columns_data)})
+    df = pd.concat([df, added_columns], axis=1)
+    return df
+
+
 
 ## Tables
 
