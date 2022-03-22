@@ -260,12 +260,6 @@ Comparing coverage of metadata types for DOIs and non-DOIs in OpenAlex (all time
 
 Metadata coverage for DOIs and non-DOIs by publication type
 
-{% set data_element = data_element_array[0] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
-
-<pdf:nextpage>
 
 {% set data_element = data_element_array[0] %}
 ### {{ data_element }}
@@ -298,21 +292,15 @@ Metadata coverage for DOIs and non-DOIs by publication type
 
 {{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
 
+<pdf:nextpage>
 
 {% set data_element = data_element_array[5] %}
 ### {{ data_element }}
 
 {{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
 
-<pdf:nextpage>
 
 {% set data_element = data_element_array[6] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
-
-
-{% set data_element = data_element_array[7] %}
 ### {{ data_element }}
 
 {{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
