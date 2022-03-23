@@ -506,8 +506,11 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
                                                  }
                                                  )
 
-        # Modify the bar colors here
-        fig = chart.plotly(palette=['#F6671E', '#FAA77C', '#CCCCCC'])
+        chart.process_data(
+            doc_types=CROSSREF_TYPES,
+            palette=['#F6671E', '#FAA77C', '#CCCCCC']
+        )
+        fig = chart.plotly()
 
         # TODO Cleanup file name here (and downstream!) to abstract away from crossref to generalised base comparison
         filename = f'{source}_coverage_by_crossref_type'
@@ -723,7 +726,6 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
             source_non_dois=pd.NamedAgg(column='num_non_dois', aggfunc='sum')
         )
 
-        #figdata['source_non_dois'] = figdata.source_objects - figdata.source_dois
         figdata = collate_value_add_values(figdata,
                                            ['source_dois', 'source_non_dois'],
                                            'source_objects')
