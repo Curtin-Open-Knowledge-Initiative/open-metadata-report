@@ -743,6 +743,16 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
                                        )
 
         # Modify the bar colors here
+        chart.processed_data(types=[
+            'journal-article',
+            'proceedings-article',
+            'book-chapter',
+            'book',
+            'posted-content',
+            'report',
+            'monograph',
+            'none'
+        ])
         fig = chart.plotly(palette=['#F6671E', '#CCCCCC'])
         filename = f'{source}_coverage_self_by_type'
         filepath = GRAPH_DIR / filename

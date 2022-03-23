@@ -174,25 +174,30 @@ class ValueAddByCrossrefTypeHorizontal(AbstractObservatoryChart):
             }
 
     def process_data(self,
+                     types: Union[List[str], None] = None,
+                     type_column: str = 'type',
                      **kwargs):
 
         palette = kwargs.get('palette')
         if palette:
             [self.ys[category].update({'marker_color': palette[i]}) for i, category
              in enumerate(self.ys.keys())]
-        cr_types = ['journal-article',
-                    'proceedings-article',
-                    'book-chapter',
-                    'book',
-                    'posted-content',
-                    'report',
-                    'monograph']
+        if not types:
+            types = ['journal-article',
+                     'proceedings-article',
+                     'book-chapter',
+                     'book',
+                     'posted-content',
+                     'report',
+                     'monograph']
+        else:
+            assert type(types) == list
         self.figdata = [
             go.Bar(name=category,
-                   y=cr_types,
-                   x=[self.df[self.df.type == t][
+                   y=types,
+                   x=[self.df[self.df[type_column] == t][
                           self.ys.get(category).get(self.metadata_element)].values[0]
-                      for t in cr_types],
+                      for t in types],
                    orientation='h',
                    marker_color=self.ys.get(category).get('marker_color'))
             for category in self.categories
