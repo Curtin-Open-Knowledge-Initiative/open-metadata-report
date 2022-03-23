@@ -156,7 +156,11 @@ VALUE_ADD_META = {
                 },
                 'OpenAlex Added Value': {
                     'Affiliations': 'pc_openalex_native_affiliations_string_adds_presence',
-                    'Affiliations ROR': 'pc_openalex_native_affiliations_ror_adds_presence',
+                    # NOTE THIS IS A HACK BECAUSE THE COMPARISON IS ZEROs (ROR not being pulled from Crossref currently)
+                    # USING pc_has_affiliations_ror NOT pc___adds_presence
+                    # TODO Change back when ROR from Crossref is flowing through
+                    'Affiliations ROR': 'pc_openalex_native_has_affiliations_ror',
+                    ###
                     'Authors': 'pc_openalex_native_authors_adds_presence',
                     'Authors ORCIDs': 'pc_openalex_native_authors_orcid_adds_presence',
                     'Abstracts': 'pc_openalex_native_abstract_adds_presence',
