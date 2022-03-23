@@ -291,6 +291,15 @@ CROSSREF_TYPES = ['journal-article',
                   'report',
                   'monograph']
 
+OPENALEX_NATIVE_TYPES = ['journal-article',
+                         'proceedings-article',
+                         'book-chapter',
+                         'book',
+                         'posted-content',
+                         'report',
+                         'monograph',
+                         'none']
+
 # Sources in Base Crossref Over Time
 
 SOURCE_IN_BASE_YEAR_RANGE = range(1980, 2022)

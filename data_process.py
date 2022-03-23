@@ -729,7 +729,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
                                            'source_objects')
         figdata.reset_index(inplace=True)
 
-        # TODO Make types a variable to set, rather than fixed
+
         chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
                                        categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
                                                    f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
@@ -741,19 +741,12 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
                                                'dummy': 'pc_source_non_dois'}
                                        }
                                        )
-
-        # Modify the bar colors here
-        chart.process_data(doc_types=[
-            'journal-article',
-            'proceedings-article',
-            'book-chapter',
-            'book',
-            'posted-content',
-            'report',
-            'monograph',
-            'none'
-        ])
-        fig = chart.plotly(palette=['#F6671E', '#CCCCCC'])
+        # Modify chart parameters here
+        chart.process_data(
+            doc_types = OPENALEX_NATIVE_TYPES,
+            palette = ['#F6671E', '#CCCCCC']
+        )
+        fig = chart.plotly()
         filename = f'{source}_coverage_self_by_type'
         filepath = GRAPH_DIR / filename
         fig.write_image(filepath.with_suffix('.png'))
