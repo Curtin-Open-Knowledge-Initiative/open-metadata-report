@@ -477,18 +477,18 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
 
         # TODO Cleanup variable names here to abstract away from crossref to generalised base comparison
         figdata = base_comparison_data.groupby('type').agg(
-            crossref_dois=pd.NamedAgg(column=f'{base_comparison}_dois', aggfunc='sum'),
+            in_base_comparison=pd.NamedAgg(column=f'{base_comparison}_dois', aggfunc='sum'),
             in_source=pd.NamedAgg(column=f'{source}_ids', aggfunc='sum'),
             source_has_type=pd.NamedAgg(column=f'{source}_has_{source}_type', aggfunc='sum')
         )
 
         figdata['source_without_type'] = figdata.in_source - figdata.source_has_type
-        figdata['not_in_source'] = figdata.crossref_dois - figdata.in_source
+        figdata['not_in_source'] = figdata.in_base_comparison - figdata.in_source
         figdata = collate_value_add_values(figdata,
                                            ['source_has_type',
-                                                     'source_without_type',
-                                                     'not_in_source'],
-                                           'crossref_dois')
+                                            'source_without_type',
+                                            'not_in_source'],
+                                           'in_base_comparison')
         figdata.reset_index(inplace=True)
 
         chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
@@ -508,11 +508,13 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
 
         # Modify the bar colors here
         fig = chart.plotly(palette=['#F6671E', '#FAA77C', '#CCCCCC'])
+
+        # TODO Cleanup file name here (and downstream!) to abstract away from crossref to generalised base comparison
         filename = f'{source}_coverage_by_crossref_type'
         filepath = GRAPH_DIR / filename
         fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))
-        # write_plotly_div(af, fig, 'mag_coverage_by_crossref_type.html')
+        # write_plotly_div(af, fig, f'{source}_coverage_by_crossref_type.html')
 
 
 def collate_value_add_values(df: pd.DataFrame,
@@ -696,6 +698,58 @@ def value_add_self_graphs(af: AnalyticsFunction,
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
 
+
+def source_coverage_self_by_type(af: AnalyticsFunction,
+                                 # base_comparison: str = BASE_COMPARISON):
+                                 base_comparison: str = NON_BASE_SOURCES[0]):
+    """
+    Graph the coverage of dois and non-dois in source by source type
+    Adapted from source_coverage_by_crossref_type
+    """
+    # TODO Dynamically set base_comparison when looping over multiple sources?
+
+    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    for source in NON_BASE_SOURCES:
+
+        #Replace None (which is not a string) values with string 'none' to include in aggregation
+        figdata = base_comparison_data
+        figdata[['type']] = base_comparison_data[['type']].fillna(value='none')
+
+        figdata = base_comparison_data.groupby('type').agg(
+            source_objects=pd.NamedAgg(column='num_objects', aggfunc='sum'),
+            source_dois=pd.NamedAgg(column='num_dois', aggfunc='sum'),
+            source_non_dois=pd.NamedAgg(column='num_non_dois', aggfunc='sum')
+        )
+
+        #figdata['source_non_dois'] = figdata.source_objects - figdata.source_dois
+        figdata = collate_value_add_values(figdata,
+                                           ['source_dois', 'source_non_dois'],
+                                           'source_objects')
+        figdata.reset_index(inplace=True)
+
+        # TODO Make types a variable to set, rather than fixed
+        chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
+                                       categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
+                                                   f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
+                                       metadata_element='dummy',
+                                       ys={
+                                           f'{FORMATTED_SOURCE_NAMES[source]} DOIs': {
+                                               'dummy': 'pc_source_dois'},
+                                           f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs': {
+                                               'dummy': 'pc_source_non_dois'}
+                                       }
+                                       )
+
+        # Modify the bar colors here
+        fig = chart.plotly(palette=['#F6671E', '#CCCCCC'])
+        filename = f'{source}_coverage_self_by_type'
+        filepath = GRAPH_DIR / filename
+        fig.write_image(filepath.with_suffix('.png'))
+        af.add_existing_file(filepath.with_suffix('.png'))
+
+
 def collate_value_add_self_values(df: pd.DataFrame,
                                   cols: list):
     """
@@ -789,4 +843,4 @@ if __name__ == '__main__':
     # openalex_native_to_truthtable(af='test',
     #                              rerun=False,
     #                              verbose=True)
-     pass
+    pass

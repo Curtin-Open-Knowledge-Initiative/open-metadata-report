@@ -95,6 +95,14 @@
       }
     ],
     [
+      "source_coverage_self_by_type",
+      {
+        "depends": [
+          "source_category_query"
+        ]
+      }
+    ],
+    [
       "source_in_base_by_pubdate",
       {
         "depends": [

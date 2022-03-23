@@ -201,7 +201,7 @@
 <p class="subtitle">OPEN METADATA SOURCES</p>
 <p class="titlemeta">
 COMPARING OPENALEX TO CROSSREF <br>
-DATE: 22 MARCH 2022
+DATE: 23 MARCH 2022
 </p>
 
 <!-- switch page templates -->
@@ -292,7 +292,7 @@ Coverage in OpenAlex of publication types in Crossref [describe]
 <table>
   <tr>
     <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\b2\b2baa6f6e85acd1219004822067945a8134863c1c4833bd5688928810742a63a.png"></td>
-    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\b1\b1937a9a5ec2593029c4c97888f7d3ac8ff340c86796243e9132cdd51be02c41.png"></td>
+    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\d3\d3b329196c8c9787201345a28b67e1876792edb5c257fb4b734522929bcdd862.png"></td>
   </tr>
   <tr>
     <td>coverage by publication date - all time</td>
@@ -683,7 +683,21 @@ presumably want to actually comment on the graphs themselves?
 
 ## Publication Types
 
-To add
+The proportion of OpenAlex that has DOIs is stable/not stable* over time, around 75-80%.  
+Proportion of DOIs vs non-DOIs by publication type in OpenAlex [describe]
+
+<table>
+  <tr>
+    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\b2\b2baa6f6e85acd1219004822067945a8134863c1c4833bd5688928810742a63a.png"></td>
+    <td valign="top"><img src="C:\Users\Krame117\AppData\Local\Temp\precipy\output_cache\05\050a71fcc4796f77ff7a0f2bcaf6321925f1c0f72483d6cf6a9703b6b688bb6c.png"></td>
+  </tr>
+  <tr>
+    <td>coverage by publication date - all time</td>
+    <td>coverage by publication type  - all time</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
 
 ## Metadata Coverage
 
