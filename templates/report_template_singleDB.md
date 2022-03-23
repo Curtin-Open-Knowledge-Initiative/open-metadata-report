@@ -235,7 +235,21 @@ presumably want to actually comment on the graphs themselves?
 
 ## Publication Types
 
-To add
+The proportion of OpenAlex that has DOIs is stable/not stable* over time, around 75-80%.  
+Proportion of DOIs vs non-DOIs by publication type in OpenAlex [describe]
+
+<table>
+  <tr>
+    <td valign="top"><img src="{{ source_in_base_by_pubdate.files[name_base + "in_" + name_source + "by_pubdate.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ source_coverage_self_by_type.files[name_source + "coverage_self_by_type.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage by publication date - all time</td>
+    <td>coverage by publication type  - all time</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
 
 ## Metadata Coverage
 
