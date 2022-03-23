@@ -743,7 +743,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
                                        )
 
         # Modify the bar colors here
-        chart.processed_data(types=[
+        chart.process_data(doc_types=[
             'journal-article',
             'proceedings-article',
             'book-chapter',
