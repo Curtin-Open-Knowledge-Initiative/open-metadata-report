@@ -39,19 +39,19 @@ class BarLine(AbstractObservatoryChart):
             x=self.xdata,
             y=self.bardata,
             name=self.barname,
-            opacity = 0.65
-        ), secondary_y=True)
+            opacity=0.65
+        ), secondary_y=False)
 
         fig.add_trace(go.Scatter(
             x=self.xdata,
             y=self.linedata,
             mode='lines',
             name=self.linename
-        ), secondary_y=False)
+        ), secondary_y=True)
 
-        fig.update_yaxes(title_text=self.barname, secondary_y=True)
+        fig.update_yaxes(title_text=self.barname, secondary_y=False, position=1, side='right')
         fig.update_yaxes(title_text=self.linename,
-                         secondary_y=False,
+                         secondary_y=True, position=0, side='left',
                          range=[0, 100])
         # Update template
         fig.update_layout(template='simple_white')
