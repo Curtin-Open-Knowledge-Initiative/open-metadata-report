@@ -233,6 +233,7 @@ def source_category_query(af: AnalyticsFunction,
             store[STORE_ELEMENT[source]] = categories
 
         categories.to_csv(CSV_FILE[source])
+        af.add_existing_file(CSV_FILE[source])
 
         if verbose:
             print('...completed')
@@ -269,6 +270,7 @@ def dois_category_query(af: AnalyticsFunction,
         store[STORE_ELEMENT['crossref']] = categories
 
     categories.to_csv(CSV_FILE['crossref'])
+    af.add_existing_file(CSV_FILE['crossref'])
     if verbose:
         print('...completed')
 
