@@ -5,10 +5,6 @@ SELECT
     , COUNT(DISTINCT doi) as num_dois
     , COUNT(DISTINCT source_id) - COUNT(DISTINCT doi) as num_non_dois
 
-    , COUNT(DISTINCT IF(type is not null, source_id, null)) as objects_has_type
-    , COUNT(DISTINCT IF(type is not null, doi, null)) as dois_has_type
-    , COUNT(DISTINCT IF(type is not null, source_id, null)) - COUNT(DISTINCT IF(type is not null, doi, null)) as non_dois_has_type
-
     {% for item in data_items -%}
     , COUNT(DISTINCT IF(has_{{ item }}, source_id, null)) as objects_has_{{ item }}
     {% endfor %}
