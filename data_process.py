@@ -567,7 +567,10 @@ def calculate_overall_coverage(base_df: pd.DataFrame,
         source_dois_not_cr=source_dois_not_base,
         cr_in_source=dois_in_source,
         cr_not_in_source=base_total - dois_in_source,
-        cr_total=base_total
+        cr_total=base_total,
+        #Added for dois_in_source_by_pubdate
+        source_total=source_total,
+        source_dois=source_with_doi
     )
 
 
@@ -750,6 +753,48 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
         )
         fig = chart.plotly()
         filename = f'{source}_coverage_self_by_type'
+        filepath = GRAPH_DIR / filename
+        fig.write_image(filepath.with_suffix('.png'))
+        af.add_existing_file(filepath.with_suffix('.png'))
+
+
+def dois_in_source_by_pubdate(af,
+                              base_comparison: str = BASE_COMPARISON):
+    """
+       Graph the coverage of dois in source by year of publication
+       Adapted from source_in_base_by_pubdate
+       """
+
+    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    for source in SOURCES:
+        if source == base_comparison:
+            continue
+
+        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+            source_data = store[STORE_ELEMENT[source]]
+
+        year_range = SOURCE_IN_BASE_YEAR_RANGE
+
+        figdata = pd.DataFrame(index=year_range,
+                               data=[calculate_overall_coverage(
+                                   base_df=base_comparison_data[base_comparison_data.published_year == year],
+                                   source_df=source_data[source_data.published_year == year],
+                                   source=source
+                               )
+                                   for year in year_range])
+
+        figdata['pc_dois_in_source'] = figdata.source_dois / figdata.source_total * 100
+
+        chart = BarLine(xdata=figdata.index,
+                        bardata=figdata.source_total,
+                        barname=f'All {FORMATTED_SOURCE_NAMES[source]} records',
+                        linedata=figdata.pc_dois_in_source,
+                        linename=f'{FORMATTED_SOURCE_NAMES[source]} with DOIs (%)')
+
+        fig = chart.plotly()
+        filename = f'dois_in_{source}_by_pubdate'
         filepath = GRAPH_DIR / filename
         fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))

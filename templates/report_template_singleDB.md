@@ -233,14 +233,14 @@ presumably want to actually comment on the graphs themselves?
 
 # OpenAlex Coverage Beyond Crossref
 
-## Publication Types
+## DOIs vs non-DOIs
 
-The proportion of OpenAlex that has DOIs is stable/not stable* over time, around 75-80%.  
+The proportion of OpenAlex that has DOIs is stable/not stable* over time, around xx%.  
 Proportion of DOIs vs non-DOIs by publication type in OpenAlex [describe]
 
 <table>
   <tr>
-    <td valign="top"><img src="{{ source_in_base_by_pubdate.files[name_base + "in_" + name_source + "by_pubdate.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ dois_in_source_by_pubdate.files["dois_in_" + name_source + "by_pubdate.png"].cache_filepath }}"></td>
     <td valign="top"><img src="{{ source_coverage_self_by_type.files[name_source + "coverage_self_by_type.png"].cache_filepath }}"></td>
   </tr>
   <tr>

@@ -112,6 +112,15 @@
       }
     ],
     [
+      "dois_in_source_by_pubdate",
+      {
+        "depends": [
+          "dois_category_query",
+          "source_category_query"
+        ]
+      }
+    ],
+    [
       "generate_tables",
       {
         "depends": [
