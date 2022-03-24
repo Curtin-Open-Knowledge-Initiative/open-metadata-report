@@ -102,22 +102,29 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                 }
             }
 
-    def process_data(self):
+    def process_data(self,
+                     doc_types: Union[List[str], None] = None,
+                     type_column: str = 'type',
+                     ):
 
-        cr_types = ['journal-article',
-                    'proceedings-article',
-                    'book-chapter',
-                    'book',
-                    'posted-content',
-                    'report',
-                    'monograph']
+        if not doc_types:
+            doc_types = ['journal-article',
+                         'proceedings-article',
+                         'book-chapter',
+                         'book',
+                         'posted-content',
+                         'report',
+                         'monograph']
+        else:
+            assert type(doc_types) == list
+
         self.figdata = [
             go.Bar(name=category,
-                   x=cr_types,
-                   y=[self.df[self.df.type == t][
+                   x=doc_types,
+                   y=[self.df[self.df[type_column] == t][
                           self.ys.get(category).get(self.metadata_element)].values[0]
                       if self.ys.get(category).get(self.metadata_element) is not 'zeros' else 0
-                      for t in cr_types])
+                      for t in doc_types])
             for category in self.categories
         ]
         self.processed_data = True

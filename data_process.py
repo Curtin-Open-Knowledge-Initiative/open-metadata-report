@@ -230,7 +230,7 @@ def source_category_query(af: AnalyticsFunction,
                                  project_id=PROJECT_ID)
 
         with pd.HDFStore(LOCAL_DATA_PATH) as store:
-            store[STORE_ELEMENT[source]] = categories
+            store[STORE_ELEMENT[source]] = categoriesW
 
         if verbose:
             print('...completed')
