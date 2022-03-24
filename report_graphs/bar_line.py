@@ -38,7 +38,8 @@ class BarLine(AbstractObservatoryChart):
         fig.add_trace(go.Bar(
             x=self.xdata,
             y=self.bardata,
-            name=self.barname
+            name=self.barname,
+            opacity = 0.65
         ), secondary_y=True)
 
         fig.add_trace(go.Scatter(
