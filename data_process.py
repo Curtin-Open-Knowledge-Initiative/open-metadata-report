@@ -232,9 +232,6 @@ def source_category_query(af: AnalyticsFunction,
         with pd.HDFStore(LOCAL_DATA_PATH) as store:
             store[STORE_ELEMENT[source]] = categories
 
-        categories.to_csv(CSV_FILE[source])
-        af.add_existing_file(CSV_FILE[source])
-
         if verbose:
             print('...completed')
 
@@ -269,8 +266,6 @@ def dois_category_query(af: AnalyticsFunction,
     with pd.HDFStore(LOCAL_DATA_PATH) as store:
         store[STORE_ELEMENT['crossref']] = categories
 
-    categories.to_csv(CSV_FILE['crossref'])
-    af.add_existing_file(CSV_FILE['crossref'])
     if verbose:
         print('...completed')
 
@@ -354,6 +349,13 @@ def save_data_parameters(af):
         json.dump({item: getattr(params, item) for item in dir(params) if not item.startswith('__')},
                   f,
                   default=str)
+
+    for source in SOURCES:
+        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+            categories = store[STORE_ELEMENT[source]]
+
+        categories.to_csv(CSV_FILE[source])
+        af.add_existing_file(CSV_FILE[source])
 
 
 def git_status(af):
