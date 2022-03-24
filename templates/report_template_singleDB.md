@@ -8,8 +8,11 @@
 {% set tables = load_json(generate_tables.files["tables.json"].cache_filepath) %}
 {% set name_source = metadata.NON_BASE_SOURCES[0] + "_" %}
 {% set name_base = metadata.BASE_COMPARISON + "_" %}
+{% set name_source_full = graph_metadata.FORMATTED_SOURCE_NAMES[metadata.NON_BASE_SOURCES[0]] %}
+{% set name_base_full = graph_metadata.FORMATTED_SOURCE_NAMES[metadata.BASE_COMPARISON] %}
 {% set focus_year = graph_metadata.FOCUS_YEAR %}
 {% set tablenum = 1 %}
+{% set report_run = 20220324 %}
 
 <!-- Title Page -->
 <pdf:nexttemplate name="titlepage">
@@ -17,9 +20,13 @@
 
 <p class="subtitle">OPEN METADATA SOURCES</p>
 <p class="titlemeta">
-COMPARING OPENALEX TO CROSSREF <br>
+<br>
+COMPARING {{ name_source_full|upper }} TO {{ name_base_full|upper }} <br>
+<br>
 DATE: {{ helper.created_at()|upper }}</p>
-
+<br>
+<br>
+[PRELIMINARY VERSION] 
 <!-- switch page templates -->
 <pdf:nexttemplate name="report">
 
@@ -35,19 +42,15 @@ In this project, we assess and compare the value added by OpenAlex to Crossref m
 (with and without DOIs) as well as in coverage of metadata (including identifiers) for authors, institutions, publication venues 
 and disciplines. 
 
-This report was run using the following tables as source data:
+The report currently contains all the graphs comparing metadata coverage of {{ name_source_full }} compared to {{ name_base_full }}, and of DOIs vs non-DOIs in {{ name_source_full }}, as well as some basic tables. 
+More explanatory text and interpretation of findings will be added in a later version.
 
-* Crossref: {{ metadata.TABLES.crossref }}
-* Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date {{ metadata.CROSSREF_MEMBER_DATE }}
-* OpenAlex Native Format {{ metadata.TABLES.openalex_native.Work }}
+Complete data and code are available at:
+[https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report)  
+with all images and data belonging to this report located in [/reports/run_{{ report_run }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/run_{{ report_run }})
 
+<pdf:nextpage> 
 
-<pdf:nextpage>
-
-# Contents
-
-There is actually a way, I think of pulling in a table of contents, but I haven't done that previously. Or it can
-be done manually obviously.
 
 # Introduction and Background
 
@@ -64,7 +67,7 @@ landscape. Transparency and provenance allow identifying and addressing existing
 quality. 
 
 In this project, we assess and compare the value added by OpenAlex to Crossref metadata, both in coverage of publications and other research output 
-(with and without DOIs) as well as in coverage of metadata (inlcuding identifiers) for authors, institutions, publication venues 
+(with and without DOIs) as well as in coverage of metadata (including identifiers) for authors, institutions, publication venues 
 and disciplines. 
 
 
@@ -72,24 +75,23 @@ and disciplines.
 
 This report was run using the following tables as source data:
 
-* Crossref: {{ metadata.TABLES.crossref }}
-* Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date {{ metadata.CROSSREF_MEMBER_DATE }}
-* OpenAlex Native Format: {{ metadata.TABLES.openalex_native.Work }}
+* {{ name_base_full }}: {{ metadata.TABLES.crossref }} 
+* Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date 20220311
+* {{ name_source_full }}: {{ metadata.TABLES.openalex_native.Work }} with date 20220130
 
-### Crossref Metadata
 
-### OpenAlex
+Complete data and code are available at:
+[https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report)  
+with all images and data belonging to this report located in [/reports/run_{{ report_run }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/run_{{ report_run }})
 
-## Goals of this report
 
-## Limitations
+<pdf:nextpage> 
 
-# Coverage of OpenAlex vs Crossref
-
+# Coverage of {{ name_source_full }} vs {{ name_base_full }}
+<br>   
 ## Comparing coverage
 
-OpenAlex coverage all time: proportion with and without DOIs, overlap with Crossref.  
-OpenAlex coverage of {{ graph_metadata.FOCUS_YEAR }}: smaller proportion publications without DOI, same coverage of Crossref
+### Overview
 
 <table>
   <tr>
@@ -102,8 +104,8 @@ OpenAlex coverage of {{ graph_metadata.FOCUS_YEAR }}: smaller proportion publica
   </tr>
  </table>
 
-The proportion of Crossref that is covered in OpenAlex is stable over time, around 75-80%.  
-Coverage in OpenAlex of publication types in Crossref [describe]
+<br>
+### By year and publication type
 
 <table>
   <tr>
@@ -118,13 +120,11 @@ Coverage in OpenAlex of publication types in Crossref [describe]
 
 <pdf:nextpage>
 
-## Value Add of OpenAlex to Crossref
-
+## Value Add of {{ name_source_full }} to {{ name_base_full }}
 
 ### Overview
 
-Comparing coverage of metadata types in Crossref and OpenAlex (all time and {{ graph_metadata.FOCUS_YEAR }}) -> describe differences
-Added value of OpenAlex for different metadata types over all publications (all time and {{ graph_metadata.FOCUS_YEAR }}) -> describe differences
+Comparing coverage of metadata types in {{ name_base_full }} and {{ name_source_full }}
 
 <table>
   <tr>
@@ -149,8 +149,8 @@ Added value of OpenAlex for different metadata types over all publications (all 
 
 ### Details
 
-We can do loops eg over the data elements. But this might be better for a supplementary data section as we will 
-presumably want to actually comment on the graphs themselves?
+Metadata coverage in {{ name_source_full }} and {{ name_base_full }} by publication type
+<br>
 
 {% set data_element_array = graph_metadata.VALUE_ADD_META[metadata.BASE_COMPARISON][metadata.NON_BASE_SOURCES[0]]['xs'] %}
 
@@ -231,12 +231,11 @@ presumably want to actually comment on the graphs themselves?
 
 <pdf:nextpage>
 
-# OpenAlex Coverage Beyond Crossref
-
+# {{ name_source_full }} Coverage Beyond {{ name_base_full }}
+<br>
 ## DOIs vs non-DOIs
 
-The proportion of OpenAlex that has DOIs is stable/not stable* over time, around xx%.  
-Proportion of DOIs vs non-DOIs by publication type in OpenAlex [describe]
+### By year and publication type
 
 <table>
   <tr>
@@ -255,7 +254,7 @@ Proportion of DOIs vs non-DOIs by publication type in OpenAlex [describe]
 
 ### Overview
 
-Comparing coverage of metadata types for DOIs and non-DOIs in OpenAlex (all time and {{ graph_metadata.FOCUS_YEAR }}) -> describe differences
+Comparing coverage of metadata types for DOIs and non-DOIs in OpenAlex
 
 <table>
   <tr>
@@ -273,7 +272,7 @@ Comparing coverage of metadata types for DOIs and non-DOIs in OpenAlex (all time
 ### Details
 
 Metadata coverage for DOIs and non-DOIs by publication type
-
+<br>
 
 {% set data_element = data_element_array[0] %}
 ### {{ data_element }}
@@ -342,11 +341,11 @@ Metadata coverage for DOIs and non-DOIs by publication type
 
 <pdf:nextpage>
 
-# Methodology
 
-# Appendices
 
-## Appendix A - Complete Tables
+## Appendix A - Tables
+
+This section contains tables with summary counts. More tables will be added in a later version. 
 
 {% for source in metadata.SOURCES %}
 
@@ -360,13 +359,4 @@ Metadata coverage for DOIs and non-DOIs by publication type
 {% set tablenum = tablenum + metadata.SOURCES|length %}
 
 
-## Appendix B - Historical MAG Analysis??
-
-4. OpenAlex - non-Crossref coverage
-4a. Publication types - with and without (Crossref?) DOIs
-4b. Coverage of 6 main parameters - with /without (Crossref?) DOIs
-4c. Coverage of 6 main parameters per publication type 
- - with/without (Crossref?) DOIs
-5. Methodology
-6. Appendix - tables with AllTheThingsTM
 
