@@ -81,7 +81,7 @@ This report was run using the following tables as source data:
 
 * {{ name_base_full }}: {{ metadata.TABLES.crossref }} 
 * Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date 20220311
-* {{ name_source_full }}: {{ metadata.TABLES.openalex_native.Work }} with date 20220130
+* {{ name_source_full }}: {{ metadata.TABLES.openalex_native.Work }} with date 20220313
 
 
 Complete data and code are available at:
