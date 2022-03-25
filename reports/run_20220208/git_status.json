@@ -1,1 +1,0 @@
-{"sha": "57117a112f1101ba7ae3a23ad3ad91ba7e3f4ec0", "changedfiles": ["data/local_data.hd5", "data/mag_categories.csv", "data/openalex_categories.csv", "data_parameters.py", "data_process.py", "graphs.py", "report_data_processing/sql/intermediates_truthtable_query.sql", "report_graphs/value_add_bar.py"], "branch": "main"}
