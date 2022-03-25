@@ -1,8 +1,13 @@
 from pathlib import Path
+import os
+
 from data_parameters import ALL_DATA_ITEMS, SOURCES, SOURCES_SELF, CURRENT
 
 BASE_COMPARISON = 'crossref'
 GRAPH_DIR = Path('graphs')
+if not GRAPH_DIR.is_dir():
+    os.mkdir(GRAPH_DIR)
+
 FORMATTED_SOURCE_NAMES = dict(
     crossref='Crossref',
     mag='MAG',
