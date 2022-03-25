@@ -116,38 +116,38 @@ def openalex_native_to_truthtable(af: AnalyticsFunction,
                                   source: str = 'openalex_native',
                                   rerun: bool = RERUN,
                                   verbose: bool = VERBOSE):
-#    pass
+    pass
 
-    """
-    Convert OpenAlex Native Format Works Table to Truthtable
+#    """
+#    Convert OpenAlex Native Format Works Table to Truthtable
+#
+#    Note that OpenAlex uses the fully qualified URL form of the doi in lower case and needs conversion.
+#    See the query for details.
+#    """
+#
+#    query = load_sql_to_string('openalex_native_truthtable.sql',
+#                               parameters=dict(table=TABLES[source]['Work']),
+#                               directory=SQL_DIRECTORY)
+#
+#    if not report_utils.bigquery_rerun(af, rerun, verbose, source):
+#        print(f"""Query is:
+#+
+#    {query}
+#
+#    """)
+#        print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
+#        return
 
-    Note that OpenAlex uses the fully qualified URL form of the doi in lower case and needs conversion.
-    See the query for details.
-    """
+#    with bigquery.Client() as client:
+#        job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
+#                                             create_disposition='CREATE_IF_NEEDED',
+#                                             write_disposition=WRITE_DISPOSITION)
+#
+#        query_job = client.query(query, job_config=job_config)  # Make an API request.
+#        query_job.result()  # Wait for the job to complete.
 
-    query = load_sql_to_string('openalex_native_truthtable.sql',
-                               parameters=dict(table=TABLES[source]['Work']),
-                               directory=SQL_DIRECTORY)
-
-    if not report_utils.bigquery_rerun(af, rerun, verbose, source):
-        print(f"""Query is:
-+
-    {query}
-
-    """)
-        print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
-        return
-
-    with bigquery.Client() as client:
-        job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
-                                             create_disposition='CREATE_IF_NEEDED',
-                                             write_disposition=WRITE_DISPOSITION)
-
-        query_job = client.query(query, job_config=job_config)  # Make an API request.
-        query_job.result()  # Wait for the job to complete.
-
-    if verbose:
-        print('...completed')
+#    if verbose:
+#        print('...completed')
 
 
 def crossref_to_truthtable(af: AnalyticsFunction,
@@ -680,8 +680,8 @@ def value_add_self_graphs(af: AnalyticsFunction,
 
 
         # Replace None (which is not a string) values with string 'none' to include in aggregation
-        # base_comparison_data[['type']] = base_comparison_data[['type']].fillna(value='none')
-
+#        #base_comparison_data[['type']] = base_comparison_data[['type']].fillna(value='none')
+#
         for timeframe in TIME_FRAMES.keys():
             filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
             filtered_sum = filtered.sum(axis=0)
@@ -701,33 +701,33 @@ def value_add_self_graphs(af: AnalyticsFunction,
             filepath = GRAPH_DIR / filename
             fig.write_image(filepath.with_suffix('.png'))
             af.add_existing_file(filepath.with_suffix('.png'))
-
-           #Detailed graphs per metadata element
-
-            for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
-                sum_by_type = filtered.groupby('type').sum().reset_index()
-                collated_sum_by_type = collate_value_add_self_values(sum_by_type,
-                                                                PRESENCE_COLUMNS_SELF)
-
-                # Side by side bar
-                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
-                                                  metadata_element=metadata_element,
-                                               ys=VALUE_ADD_META[base_comparison][source]['ys'],
-                                               categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
-                                                           f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
-                                               stackedbar=False
-                                               )
-
-                #Modify chart parameters here
-                chart.process_data(
-                    doc_types=CROSSREF_TYPES,
-                )
-
-                fig = chart.plotly()
-                filename = f'value_add_self_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_type'
-                filepath = GRAPH_DIR / filename
-                fig.write_image(filepath.with_suffix('.png'))
-                af.add_existing_file(filepath.with_suffix('.png'))
+#
+#           #Detailed graphs per metadata element
+#
+#            for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
+#                sum_by_type = filtered.groupby('type').sum().reset_index()
+#                collated_sum_by_type = collate_value_add_self_values(sum_by_type,
+#                                                                PRESENCE_COLUMNS_SELF)
+#
+#                # Side by side bar
+#                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+#                                                  metadata_element=metadata_element,
+#                                               ys=VALUE_ADD_META[base_comparison][source]['ys'],
+#                                               categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
+#                                                           f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
+#                                               stackedbar=False
+#                                               )
+#
+#                #Modify chart parameters here
+#                chart.process_data(
+#                    doc_types=MAG_TYPES,
+#                )
+#
+#                fig = chart.plotly()
+#                filename = f'value_add_self_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_type'
+#                filepath = GRAPH_DIR / filename
+#                fig.write_image(filepath.with_suffix('.png'))
+#                af.add_existing_file(filepath.with_suffix('.png'))
 
 
 def source_coverage_self_by_type(af: AnalyticsFunction,
@@ -773,7 +773,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
                                        )
         # Modify chart parameters here
         chart.process_data(
-            doc_types = OPENALEX_NATIVE_TYPES,
+            doc_types = MAG_TYPES_SELF,
             palette = ['#F6671E', '#CCCCCC']
         )
         fig = chart.plotly()
