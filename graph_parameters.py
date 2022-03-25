@@ -1,12 +1,8 @@
 from pathlib import Path
-import os
-from data_parameters import ALL_DATA_ITEMS, SOURCES, SOURCES_SELF
+from data_parameters import ALL_DATA_ITEMS, SOURCES, SOURCES_SELF, CURRENT
 
 BASE_COMPARISON = 'crossref'
 GRAPH_DIR = Path('graphs')
-if not GRAPH_DIR.is_dir():
-    os.mkdir(GRAPH_DIR)
-
 FORMATTED_SOURCE_NAMES = dict(
     crossref='Crossref',
     mag='MAG',
@@ -16,8 +12,8 @@ FORMATTED_SOURCE_NAMES = dict(
 
 # Time Frames
 
-CROSSREF_CURRENT = [2019, 2020, 2021]
-FOCUS_YEAR = 2020
+CROSSREF_CURRENT = CURRENT
+FOCUS_YEAR = 2022
 
 TIME_FRAMES = {
     'All Time': range(1900, 2100),
@@ -303,6 +299,21 @@ OPENALEX_NATIVE_TYPES = ['journal-article',
                          'report',
                          'monograph',
                          'none']
+
+MAG_TYPES = ['Journal',
+             'Conference',
+             'BookChapter',
+             'Book',
+             'Repository',
+             'Thesis']
+
+MAG_TYPES_SELF = ['Journal',
+             'Conference',
+             'BookChapter',
+             'Book',
+             'Repository',
+             'Thesis',
+             'none']
 
 # Sources in Base Crossref Over Time
 

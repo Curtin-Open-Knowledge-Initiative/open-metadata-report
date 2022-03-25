@@ -11,8 +11,12 @@
 {% set name_source_full = graph_metadata.FORMATTED_SOURCE_NAMES[metadata.NON_BASE_SOURCES[0]] %}
 {% set name_base_full = graph_metadata.FORMATTED_SOURCE_NAMES[metadata.BASE_COMPARISON] %}
 {% set focus_year = graph_metadata.FOCUS_YEAR %}
+{% set crossref_current = graph_metadata.CROSSREF_CURRENT %}
 {% set tablenum = 1 %}
-{% set report_run = 20220324 %}
+
+<!-- This is a stopgap measure as will not correctly display for first run w/o suffix -->
+{% set report_run_date = metadata.TODAY_STR %}
+{% set report_run_n = 1 %}
 
 <!-- Title Page -->
 <pdf:nexttemplate name="titlepage">
@@ -47,7 +51,7 @@ More explanatory text and interpretation of findings will be added in a later ve
 
 Complete data and code are available at:
 [https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report)  
-with all images and data belonging to this report located in [/reports/run_{{ report_run }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/run_{{ report_run }})
+with all images and data belonging to this report located in [/reports/run_{{ report_run_date }}_{{ report_run_n }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/run_{{ report_run_date }}_{{ report_run_n }})
 
 <pdf:nextpage> 
 
@@ -77,13 +81,12 @@ This report was run using the following tables as source data:
 
 * {{ name_base_full }}: {{ metadata.TABLES.crossref }} 
 * Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date 20220311
-* {{ name_source_full }}: {{ metadata.TABLES.openalex_native.Work }} with date 20220130
+* {{ name_source_full }}: {{ metadata.TABLES.openalex_native.Work }} with date 20220313
 
 
 Complete data and code are available at:
 [https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report)  
-with all images and data belonging to this report located in [/reports/run_{{ report_run }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/run_{{ report_run }})
-
+with all images and data belonging to this report located in [/reports/run_{{ report_run_date }}_{{ report_run_n }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/run_{{ report_run_date }}_{{ report_run_n }})
 
 <pdf:nextpage> 
 
@@ -346,6 +349,9 @@ Metadata coverage for DOIs and non-DOIs by publication type
 ## Appendix A - Tables
 
 This section contains tables with summary counts. More tables will be added in a later version. 
+
+Crossref Current = {{ crossref_current[0] }}-{{ crossref_current[2] }}  
+Focus Year = {{ focus_year }}
 
 {% for source in metadata.SOURCES %}
 
