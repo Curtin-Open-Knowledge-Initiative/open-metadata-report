@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 
-from data_parameters import ALL_DATA_ITEMS, SOURCES, SOURCES_SELF, CURRENT
+from data_parameters import ALL_DATA_ITEMS, SOURCES, SOURCES_SELF, CURRENT, FOCUS
 
 BASE_COMPARISON = 'crossref'
 GRAPH_DIR = Path('graphs')
@@ -18,7 +18,7 @@ FORMATTED_SOURCE_NAMES = dict(
 # Time Frames
 
 CROSSREF_CURRENT = CURRENT
-FOCUS_YEAR = 2022
+FOCUS_YEAR = FOCUS
 
 TIME_FRAMES = {
     'All Time': range(1900, 2100),
