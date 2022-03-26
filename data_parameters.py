@@ -9,7 +9,7 @@ RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
-SOURCES = ['openalex_native', 'crossref']
+SOURCES = ['openalex', 'crossref']
 MAG_FORMAT_SOURCES = [s  for s in ['mag', 'openalex'] if s in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
@@ -29,10 +29,10 @@ CSV_FILE = {source: DATA_DIR / f'{source}_categories.csv' for source in SOURCES}
 PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
-MAG_DATE = "20211206"
+MAG_DATE = ""
 OPENALEX_DATE = "20220130"
 OPENALEX_NATIVE_DATE = ""
-CROSSREF_DATE = "20220207"
+CROSSREF_DATE = "20220107"
 # By default the most recent Crossref member data collection will be used. Change this to rerun or compare
 # to a previous run
 CROSSREF_MEMBER_DATE = 'recent'
