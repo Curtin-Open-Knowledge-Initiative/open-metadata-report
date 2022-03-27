@@ -9,7 +9,7 @@ RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
-SOURCES = ['openalex_native', 'crossref']
+SOURCES = ['openalex', 'crossref']
 MAG_FORMAT_SOURCES = [s  for s in ['mag', 'openalex'] if s in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
@@ -30,7 +30,7 @@ PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 MAG_DATE = "" #add date when mag is source
-OPENALEX_DATE = "" #add date when openalex is source
+OPENALEX_DATE = "20220130" #add date when openalex is source
 OPENALEX_NATIVE_DATE = "" #no dated version used for openalex_native
 CROSSREF_DATE = "20220107"
 # By default the most recent Crossref member data collection will be used. Change this to rerun or compare
