@@ -3,11 +3,11 @@ import json
 from pathlib import Path
 from precipy.main import render_file
 
-import data_process_mag
+import data_process
 import data_parameters
 
 # Run precipy
-render_file('config.json', [data_process_mag], storages=[])
+render_file('config.json', [data_process], storages=[])
 
 # Make a dated archive of the output files
 output_store_path = Path('reports') / f'run_{data_parameters.TODAY_STR}'
