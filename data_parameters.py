@@ -28,6 +28,7 @@ ARCHIVE_DIR = Path('reports')
 
 n = 1
 output_store_path = ARCHIVE_DIR / f'run_{TODAY_STR}_1'
+output_store_dir = f'run_{TODAY_STR}_{str(n)}'
 while output_store_path.exists():
     output_store_dir = f'run_{TODAY_STR}_{str(n)}'
     output_store_path = ARCHIVE_DIR / output_store_dir
@@ -41,16 +42,16 @@ WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 MAG_DATE = "" #add date when mag is source
 OPENALEX_DATE = "" #add date when openalex is source
-OPENALEX_NATIVE_DATE = "20220130" #no dated version used for openalex_native
-CROSSREF_DATE = "20220107"
+OPENALEX_NATIVE_DATE = "20220313" #no dated version used for openalex_native
+CROSSREF_DATE = "20220207"
 # By default the most recent Crossref member data collection will be used. Change this to rerun or compare
 # to a previous run
 CROSSREF_MEMBER_DATE = 'recent'
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
-OPENALEX_NATIVE_TABLE_LOCATION = 'utrecht-university.OpenAlex_native'
-#OPENALEX_NATIVE_TABLE_LOCATION = 'academic-observatory.openalex'
+#OPENALEX_NATIVE_TABLE_LOCATION = 'utrecht-university.OpenAlex_native' # if needed rerun openalex_native_to_truthtable with date 20220130
+OPENALEX_NATIVE_TABLE_LOCATION = 'academic-observatory.openalex' #only rerun openalex_native_to_truthtable for latest version
 DOI_TABLE_LOCATION = 'academic-observatory.crossref.crossref_metadata'
 
 TABLE_NAMES = ['Papers',
