@@ -17,7 +17,8 @@
 <!-- This is a stopgap measure as will not correctly display for first run w/o suffix -->
 {% set report_run_date = metadata.TODAY_STR %}
 {% set report_run_n = 1 %}
-
+TEST PATH TO ARCHIVE: {{ metadata.ARCHIVE_REPORT_DIR }}
+TEST NAME OF ARCHIVE DIR: {{ metadata.ARCHIVE_REPORT_NAME }}
 <!-- Title Page -->
 <pdf:nexttemplate name="titlepage">
 <pdf:nextpage>
