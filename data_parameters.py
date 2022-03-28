@@ -171,6 +171,11 @@ SOURCE_TRUTH_TABLES = {
     for source in SOURCES
 }
 
+if OPENALEX_NATIVE_DATE == "":
+    SOURCE_TRUTH_TABLES.update(
+        {'openalex_native': f'{PROJECT_ID}.openalex_native.openalex_native_truthtable{TODAY_STR}'}
+    )
+
 ## Crossref Member Data Table
 
 CROSSREF_MEMBER_DATA_TABLE = f'{PROJECT_ID}.crossref.member_data'
