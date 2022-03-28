@@ -165,12 +165,17 @@ TABLES = {
         {
                 table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}'
                 for table_name in TABLE_NAMES
-                if source == 'openalex_native'
+            }
 
-                else
+        if source == 'openalex_native'
+
+        else
+        {
                 table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}{TABLE_DATES.get(source)}'
-             }
+                for table_name in TABLE_NAMES
+            }
     for source in SOURCES
+
 }
 
 for source in SOURCES:
