@@ -9,7 +9,7 @@ RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
-SOURCES = ['openalex', 'crossref']
+SOURCES = ['openalex_native', 'crossref']
 MAG_FORMAT_SOURCES = [s  for s in ['mag', 'openalex'] if s in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
@@ -30,8 +30,8 @@ PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 MAG_DATE = "" #add date when mag is source
-OPENALEX_DATE = "20220130" #add date when openalex is source
-OPENALEX_NATIVE_DATE = "" #no dated version used for openalex_native
+OPENALEX_DATE = "" #add date when openalex is source
+OPENALEX_NATIVE_DATE = "20220130" #no dated version used for openalex_native
 CROSSREF_DATE = "20220107"
 # By default the most recent Crossref member data collection will be used. Change this to rerun or compare
 # to a previous run
@@ -39,8 +39,8 @@ CROSSREF_MEMBER_DATE = 'recent'
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
-#OPENALEX_NATIVE_TABLE_LOCATION = 'utrecht-university.OpenAlex_native'
-OPENALEX_NATIVE_TABLE_LOCATION = 'academic-observatory.openalex'
+OPENALEX_NATIVE_TABLE_LOCATION = 'utrecht-university.OpenAlex_native'
+#OPENALEX_NATIVE_TABLE_LOCATION = 'academic-observatory.openalex'
 DOI_TABLE_LOCATION = 'academic-observatory.crossref.crossref_metadata'
 
 TABLE_NAMES = ['Papers',
@@ -141,12 +141,25 @@ ADDITIONAL_TRUTHTABLE_FIELDS = dict(
     openalex_native=None
 )
 
+#TABLES = {
+#    source:
+#        {
+#                table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}{TABLE_DATES.get(source)}'
+#                for table_name in TABLE_NAMES
+#        }
+#    for source in SOURCES
+#}
+
 TABLES = {
     source:
         {
-            table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}{TABLE_DATES.get(source)}'
-            for table_name in TABLE_NAMES
-        }
+                table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}'
+                for table_name in TABLE_NAMES
+                if source == 'openalex_native'
+
+                else
+                table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}{TABLE_DATES.get(source)}'
+             }
     for source in SOURCES
 }
 
@@ -172,10 +185,6 @@ SOURCE_TRUTH_TABLES = {
     for source in SOURCES
 }
 
-if OPENALEX_NATIVE_DATE == "":
-    SOURCE_TRUTH_TABLES.update(
-        {'openalex_native': f'{PROJECT_ID}.openalex_native.openalex_native_truthtable{TODAY_STR}'}
-    )
 
 ## Crossref Member Data Table
 
