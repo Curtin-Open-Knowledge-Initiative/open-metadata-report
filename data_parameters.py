@@ -151,6 +151,9 @@ ADDITIONAL_TRUTHTABLE_FIELDS = dict(
     openalex_native=None
 )
 
+#Replace TABLES definition with version to exclude date from source table for openalex_native.
+#TODO: Reverse when openalex_native source gets sharded in future
+
 #TABLES = {
 #    source:
 #        {
