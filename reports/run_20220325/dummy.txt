@@ -1,1 +1,0 @@
-Dummy file to allow creation of a dated report folder without suffix
