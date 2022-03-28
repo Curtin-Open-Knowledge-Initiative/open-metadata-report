@@ -14,9 +14,13 @@
 {% set crossref_current = graph_metadata.CROSSREF_CURRENT %}
 {% set tablenum = 1 %}
 
-<!-- This is a stopgap measure as will not correctly display for first run w/o suffix -->
-{% set report_run_date = metadata.TODAY_STR %}
-{% set report_run_n = 1 %}
+
+TEST PATH TO ARCHIVE: {{ metadata.ARCHIVE_REPORT_DIR }}
+TEST NAME OF ARCHIVE DIR: {{ metadata.ARCHIVE_REPORT_NAME }}
+
+all images and data belonging to this report located in 
+[{{ metadata.ARCHIVE_REPORT_DIR }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/{{ metadata.ARCHIVE_REPORT_NAME }})
+
 
 
 <!-- Title Page -->
@@ -52,7 +56,7 @@ More explanatory text and interpretation of findings will be added in a later ve
 
 Complete data and code are available at:
 [https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report)  
-with all images and data belonging to this report located in [/reports/run_{{ report_run_date }}_{{ report_run_n }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/run_{{ report_run_date }}_{{ report_run_n }})
+with all images and data belonging to this report located in [{{ metadata.ARCHIVE_REPORT_DIR }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/{{ metadata.ARCHIVE_REPORT_NAME }})
 
 <pdf:nextpage> 
 
@@ -87,7 +91,7 @@ This report was run using the following tables as source data:
 
 Complete data and code are available at:
 [https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report)  
-with all images and data belonging to this report located in [/reports/run_{{ report_run_date }}_{{ report_run_n }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/run_{{ report_run_date }}_{{ report_run_n }})
+with all images and data belonging to this report located in [{{ metadata.ARCHIVE_REPORT_DIR }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/{{ metadata.ARCHIVE_REPORT_NAME }})
 
 
 <pdf:nextpage> 
