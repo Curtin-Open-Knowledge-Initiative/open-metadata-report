@@ -24,6 +24,16 @@ LOCAL_DATA_FILE = 'local_data.hd5'
 LOCAL_DATA_PATH = DATA_DIR / LOCAL_DATA_FILE
 STORE_ELEMENT = {source: f'{source}_categories' for source in SOURCES}
 CSV_FILE = {source: DATA_DIR / f'{source}_categories.csv' for source in SOURCES}
+ARCHIVE_DIR = Path('reports')
+
+n = 1
+output_store_path = ARCHIVE_DIR / f'run_{TODAY_STR}_1'
+while output_store_path.exists():
+    output_store_dir = f'run_{TODAY_STR}_{str(n)}'
+    output_store_path = ARCHIVE_DIR / output_store_dir
+    n = n + 1
+ARCHIVE_REPORT_DIR = output_store_path
+ARCHIVE_REPORT_NAME = output_store_dir
 
 # BigQuery Tables
 PROJECT_ID = 'utrecht-university'
