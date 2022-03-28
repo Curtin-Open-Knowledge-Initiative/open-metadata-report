@@ -16,7 +16,8 @@ precipy_output_path = Path('output_files')
 with open(precipy_output_path / 'data_parameters.json') as f:
     params = json.load(f)
 
-output_store_path = params.get('ARCHIVE_REPORT_DIR')
+output_store_path = Path(params.get('ARCHIVE_REPORT_DIR'))
+
 if output_store_path.exists():
     print(
 f"""
