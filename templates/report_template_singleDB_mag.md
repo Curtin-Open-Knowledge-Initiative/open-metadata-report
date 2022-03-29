@@ -15,14 +15,6 @@
 {% set tablenum = 1 %}
 
 
-TEST PATH TO ARCHIVE: {{ metadata.ARCHIVE_REPORT_DIR }}
-TEST NAME OF ARCHIVE DIR: {{ metadata.ARCHIVE_REPORT_NAME }}
-
-all images and data belonging to this report located in 
-[{{ metadata.ARCHIVE_REPORT_DIR }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/{{ metadata.ARCHIVE_REPORT_NAME }})
-
-
-
 <!-- Title Page -->
 <pdf:nexttemplate name="titlepage">
 <pdf:nextpage>
