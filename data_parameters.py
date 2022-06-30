@@ -14,7 +14,7 @@ MAG_FORMAT_SOURCES = [s  for s in ['mag', 'openalex'] if s in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
-CURRENT = [2019, 2020, 2021]
+CURRENT = [2020, 2021, 2022]
 FOCUS = 2021
 
 # Files and Directories
@@ -42,11 +42,12 @@ WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 MAG_DATE = "" #add date when mag is source
 OPENALEX_DATE = "" #add date when openalex is source
-OPENALEX_NATIVE_DATE = "20220313" #no dated version used for openalex_native
-CROSSREF_DATE = "20220207"
+OPENALEX_NATIVE_DATE = "20220612" #no dated version used for openalex_native
+CROSSREF_DATE = "20220507"
 # By default the most recent Crossref member data collection will be used. Change this to rerun or compare
 # to a previous run
-CROSSREF_MEMBER_DATE = 'recent'
+#CROSSREF_MEMBER_DATE = 'recent'
+CROSSREF_MEMBER_DATE = TODAY
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
