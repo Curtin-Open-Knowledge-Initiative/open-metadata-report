@@ -46,9 +46,9 @@ and disciplines.
 The report currently contains all the graphs comparing metadata coverage of {{ name_source_full }} compared to {{ name_base_full }}, and of DOIs vs non-DOIs in {{ name_source_full }}, as well as some basic tables. 
 More explanatory text and interpretation of findings will be added in a later version.
 
-Complete data and code are available at:
+Complete data and code are available on Github:
 [https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report)  
-with all images and data belonging to this report located in [{{ metadata.ARCHIVE_REPORT_DIR }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/{{ metadata.ARCHIVE_REPORT_NAME }})
+All images and data belonging to this report are located in the directory [{{ metadata.ARCHIVE_REPORT_DIR }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/{{ metadata.ARCHIVE_REPORT_NAME }}) in this repository. 
 
 <pdf:nextpage> 
 
@@ -81,9 +81,9 @@ This report was run using the following tables as source data:
 * {{ name_source_full }}: {{ metadata.TABLES.mag }} 
 
 
-Complete data and code are available at:
+Complete data and code are available on Github:
 [https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report)  
-with all images and data belonging to this report located in [{{ metadata.ARCHIVE_REPORT_DIR }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/{{ metadata.ARCHIVE_REPORT_NAME }})
+All images and data belonging to this report are located in the directory [{{ metadata.ARCHIVE_REPORT_DIR }}](https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/{{ metadata.ARCHIVE_REPORT_NAME }}) in this repository. 
 
 
 <pdf:nextpage> 
