@@ -158,26 +158,8 @@ def crossref_to_truthtable(af: AnalyticsFunction,
     Calculate truthtable for Crossref
     """
 
-
-    if CROSSREF_MEMBER_DATE == 'recent':
-        # Identify the most recent update to Crossref Member Data Table
-        cmt = pd.read_gbq(
-            query=f"""
-SELECT collection_date 
-FROM `{CROSSREF_MEMBER_DATA_TABLE}`
-GROUP BY collection_date
-ORDER BY collection_date DESC
-""",
-            project_id=PROJECT_ID)
-        crossref_member_date = cmt.collection_date.dt.date.values[0]
-
-    else:
-        crossref_member_date = CROSSREF_MEMBER_DATE
-
     query = load_sql_to_string('crossref_truthtable_query.sql',
-                               parameters=dict(table=TABLES[source],
-                                               crossref_member_table=CROSSREF_MEMBER_DATA_TABLE,
-                                               crossref_member_date=crossref_member_date),
+                               parameters=dict(table=TABLES[source]),
                                directory=SQL_DIRECTORY)
 
     if not report_utils.bigquery_rerun(af, rerun, verbose):
@@ -270,69 +252,6 @@ def dois_category_query(af: AnalyticsFunction,
 
     if verbose:
         print('...completed')
-
-
-def crossref_member_status(af: AnalyticsFunction,
-                           push_to_gbq: bool = True,
-                           if_exists: str = 'fail',
-                           rerun=RERUN):
-    """
-    Poll the Crossref Member API for data on the abstracts and citations status of a member
-    """
-
-    print('Running crossref memberdata collection...')
-
-    # Skip running the Crossref API if directed not to
-    if rerun is False:
-        print('Skipping poking the Crossref Member API')
-        return
-
-    cursor = '*'
-    total_results = 500
-    results_received = 0
-    l = []
-    while results_received < total_results:
-        r = requests.get('http://api.crossref.org/members/',
-                         params=dict(cursor=cursor,
-                                     rows=500,
-                                     mailto='cn@cameronneylon.net'))
-        r.raise_for_status()
-        j = r.json()
-        total_results = j['message']['total-results']
-        results_received = results_received + len(j['message']['items'])
-        cursor = j['message']['next-cursor']
-
-        l.extend([
-            dict(
-                id=item['id'],
-                primary_name=item['primary-name'],
-                prefix=prefix_data['value'],
-                name=prefix_data['name'],
-                public_references=prefix_data['public-references'],
-                collection_date=TODAY
-            )
-            for item in j['message']['items']
-            for prefix_data in item['prefix']
-        ])
-        print(f'{results_received} results so far...')
-
-    df = pd.DataFrame(columns=['id', 'primary_name', 'prefix', 'name', 'public_references', 'collection_date'],
-                      data=l)
-    df.drop_duplicates(inplace=True)
-
-    if push_to_gbq:
-        client = bigquery.Client(project=PROJECT_ID)
-
-        # Table needs to exist to be able to do this partitioned load
-        job_config = bigquery.LoadJobConfig(
-            write_disposition="WRITE_APPEND",
-        )
-
-        # Include target partition in the table id:
-        job = client.load_table_from_dataframe(df,
-                                               destination=CROSSREF_MEMBER_DATA_TABLE,
-                                               job_config=job_config)  # Make an API request
-        job.result()  # Wait for job to finish
 
 
 def save_data_parameters(af):
@@ -900,12 +819,12 @@ def generate_tables(af,
 
 
 if __name__ == '__main__':
-    # source_to_intermediate(af="test",
+    #source_to_intermediate(af="test",
     #                       rerun=False,
     #                       verbose=True)
     # crossref_to_truthtable(af='test',
-    #                      rerun=False,
-    #                     verbose=True)
+    #                        rerun=False,
+    #                        verbose=True)
     # intermediate_to_source_truthtable(af="test",
     #                       rerun=False,
     #                      verbose=True)
@@ -914,8 +833,8 @@ if __name__ == '__main__':
     #                    verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
-    #                      verbose=True)
+    #                    verbose=True)
     # openalex_native_to_truthtable(af='test',
     #                              rerun=False,
-    #                              verbose=True)
-    pass
+    #                             verbose=True)
+     pass

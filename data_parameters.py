@@ -15,7 +15,7 @@ BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
 CURRENT = [2020, 2021, 2022]
-FOCUS = 2021
+FOCUS = 2022
 
 # Files and Directories
 SQL_DIRECTORY = Path('report_data_processing/sql')
@@ -44,10 +44,6 @@ MAG_DATE = "" #add date when mag is source
 OPENALEX_DATE = "" #add date when openalex is source
 OPENALEX_NATIVE_DATE = "20220612" #no dated version used for openalex_native
 CROSSREF_DATE = "20220507"
-# By default the most recent Crossref member data collection will be used. Change this to rerun or compare
-# to a previous run
-#CROSSREF_MEMBER_DATE = 'recent'
-CROSSREF_MEMBER_DATE = TODAY
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
@@ -235,7 +231,6 @@ CROSSREF_DATA_ITEMS = [
     'authors_string',
     'authors_sequence',
     'affiliations_string',
-    'references_open',
     'venue_issn',
     'venue_string'
 ]

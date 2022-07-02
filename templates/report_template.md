@@ -47,7 +47,6 @@ of metadata for authors, institutions and publication venues and disciplines.
 This report was run using the following tables as source data:
 
 * Crossref: {{ metadata.TABLES.crossref }}
-* Crossref Member Data: {{ metadata.CROSSREF_MEMBER_DATA_TABLE }} with date {{ metadata.CROSSREF_MEMBER_DATE }}
 * OpenAlex Native Format {{ metadata.TABLES.openalex_native.Work }}
 * Microsoft Academic:
     * Papers: {{ metadata.TABLES.mag.Papers }}
