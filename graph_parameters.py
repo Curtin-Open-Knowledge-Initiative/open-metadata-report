@@ -47,8 +47,7 @@ VALUE_ADD_META = {
     'crossref': {
         'mag': {
             'xs': ['Affiliations', 'Authors', 'Abstracts', 'Citations to',
-                   'References from', 'Open References from',
-                   'Journals', 'Journals ISSN', 'Fields'],
+                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'Crossref': {
                     'Affiliations': 'pc_crossref_has_affiliations_string',
@@ -56,7 +55,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_crossref_has_abstract',
                     'Citations to': 'pc_crossref_has_citations',
                     'References from': 'pc_crossref_has_references',
-                    'Open References from': 'pc_crossref_has_references_open',
                     'Journals': 'pc_crossref_has_venue',
                     'Journals ISSN': 'pc_crossref_has_venue_issn',
                     'Fields': 'pc_crossref_has_fields'
@@ -67,7 +65,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_mag_has_abstract',
                     'Citations to': 'pc_mag_has_citations',
                     'References from': 'pc_mag_has_references',
-                    'Open References from': 'pc_mag_has_references',
                     'Journals': 'pc_mag_has_venue',
                     'Journals ISSN': 'pc_mag_has_venue_issn',
                     'Fields': 'pc_mag_has_fields'
@@ -78,7 +75,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_mag_abstract_adds_presence',
                     'Citations to': 'pc_mag_citations_adds_presence',
                     'References from': 'pc_mag_references_adds_presence',
-                    'Open References from': 'pc_mag_references_adds_presence',
                     'Journals': 'pc_mag_venue_adds_presence',
                     'Journals ISSN': 'pc_mag_venue_issn_adds_presence',
                     'Fields': 'pc_mag_fields_adds_presence'
@@ -87,8 +83,7 @@ VALUE_ADD_META = {
         },
         'openalex': {
             'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Open References from',
-                   'Journals', 'Journals ISSN', 'Fields'],
+                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'Crossref': {
                     'Affiliations': 'pc_crossref_has_affiliations_string',
@@ -97,7 +92,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_crossref_has_abstract',
                     'Citations to': 'pc_crossref_has_citations',
                     'References from': 'pc_crossref_has_references',
-                    'Open References from': 'pc_crossref_has_references_open',
                     'Journals': 'pc_crossref_has_venue',
                     'Journals ISSN': 'pc_crossref_has_venue_issn',
                     'Fields': 'pc_crossref_has_fields'
@@ -109,7 +103,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_openalex_has_abstract',
                     'Citations to': 'pc_openalex_has_citations',
                     'References from': 'pc_openalex_has_references',
-                    'Open References from': 'pc_openalex_has_references',
                     'Journals': 'pc_openalex_has_venue',
                     'Journals ISSN': 'pc_openalex_has_venue_issn',
                     'Fields': 'pc_openalex_has_fields'
@@ -121,7 +114,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_openalex_abstract_adds_presence',
                     'Citations to': 'pc_openalex_citations_adds_presence',
                     'References from': 'pc_openalex_references_adds_presence',
-                    'Open References from': 'pc_openalex_references_adds_presence',
                     'Journals': 'pc_openalex_venue_adds_presence',
                     'Journals ISSN': 'pc_openalex_venue_issn_adds_presence',
                     'Fields': 'pc_openalex_fields_adds_presence'
@@ -130,8 +122,7 @@ VALUE_ADD_META = {
         },
         'openalex_native': {
             'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Open References from',
-                   'Journals', 'Journals ISSN', 'Fields'],
+                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'Crossref': {
                     'Affiliations': 'pc_crossref_has_affiliations_string',
@@ -141,7 +132,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_crossref_has_abstract',
                     'Citations to': 'pc_crossref_has_citations',
                     'References from': 'pc_crossref_has_references',
-                    'Open References from': 'pc_crossref_has_references_open',
                     'Journals': 'pc_crossref_has_venue',
                     'Journals ISSN': 'pc_crossref_has_venue_issn',
                     'Fields': 'pc_crossref_has_fields'
@@ -154,7 +144,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_openalex_native_has_abstract',
                     'Citations to': 'pc_openalex_native_has_citations',
                     'References from': 'pc_openalex_native_has_references',
-                    'Open References from': 'pc_openalex_native_has_references',
                     'Journals': 'pc_openalex_native_has_venue',
                     'Journals ISSN': 'pc_openalex_native_has_venue_issn',
                     'Fields': 'pc_openalex_native_has_fields'
@@ -171,7 +160,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_openalex_native_abstract_adds_presence',
                     'Citations to': 'pc_openalex_native_citations_adds_presence',
                     'References from': 'pc_openalex_native_references_adds_presence',
-                    'Open References from': 'pc_openalex_native_references_adds_presence',
                     'Journals': 'pc_openalex_native_venue_adds_presence',
                     'Journals ISSN': 'pc_openalex_native_has_venue_issn',
                     'Fields': 'pc_openalex_native_fields_adds_presence'
@@ -182,8 +170,7 @@ VALUE_ADD_META = {
     'mag': {
         'mag': {
             'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Open References from',
-                   'Journals', 'Journals ISSN', 'Fields'],
+                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'MAG DOIs': {
                     'Affiliations': 'pc_dois_has_affiliations_string',
@@ -192,7 +179,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_dois_has_abstract',
                     'Citations to': 'pc_dois_has_citations',
                     'References from': 'pc_dois_has_references',
-                    'Open References from': 'pc_dois_has_references',
                     'Journals': 'pc_dois_has_venue',
                     'Journals ISSN': 'pc_dois_has_venue_issn',
                     'Fields': 'pc_dois_has_fields'
@@ -204,7 +190,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_non_dois_has_abstract',
                     'Citations to': 'pc_non_dois_has_citations',
                     'References from': 'pc_non_dois_has_references',
-                    'Open References from': 'pc_non_dois_has_references',
                     'Journals': 'pc_non_dois_has_venue',
                     'Journals ISSN': 'pc_non_dois_has_venue_issn',
                     'Fields': 'pc_non_dois_has_fields'
@@ -215,8 +200,7 @@ VALUE_ADD_META = {
     'openalex': {
         'openalex': {
             'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Open References from',
-                   'Journals', 'Journals ISSN', 'Fields'],
+                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'OpenAlex (MAG format) DOIs': {
                     'Affiliations': 'pc_dois_has_affiliations_string',
@@ -225,7 +209,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_dois_has_abstract',
                     'Citations to': 'pc_dois_has_citations',
                     'References from': 'pc_dois_has_references',
-                    'Open References from': 'pc_dois_has_references',
                     'Journals': 'pc_dois_has_venue',
                     'Journals ISSN': 'pc_dois_has_venue_issn',
                     'Fields': 'pc_dois_has_fields'
@@ -237,7 +220,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_non_dois_has_abstract',
                     'Citations to': 'pc_non_dois_has_citations',
                     'References from': 'pc_non_dois_has_references',
-                    'Open References from': 'pc_non_dois_has_references',
                     'Journals': 'pc_non_dois_has_venue',
                     'Journals ISSN': 'pc_non_dois_has_venue_issn',
                     'Fields': 'pc_non_dois_has_fields'
@@ -248,8 +230,7 @@ VALUE_ADD_META = {
     'openalex_native': {
         'openalex_native': {
             'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Open References from',
-                   'Journals', 'Journals ISSN', 'Fields'],
+                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
                 'OpenAlex DOIs': {
                     'Affiliations': 'pc_dois_has_affiliations_string',
@@ -259,7 +240,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_dois_has_abstract',
                     'Citations to': 'pc_dois_has_citations',
                     'References from': 'pc_dois_has_references',
-                    'Open References from': 'pc_dois_has_references',
                     'Journals': 'pc_dois_has_venue',
                     'Journals ISSN': 'pc_dois_has_venue_issn',
                     'Fields': 'pc_dois_has_fields'
@@ -272,7 +252,6 @@ VALUE_ADD_META = {
                     'Abstracts': 'pc_non_dois_has_abstract',
                     'Citations to': 'pc_non_dois_has_citations',
                     'References from': 'pc_non_dois_has_references',
-                    'Open References from': 'pc_non_dois_has_references',
                     'Journals': 'pc_non_dois_has_venue',
                     'Journals ISSN': 'pc_non_dois_has_venue_issn',
                     'Fields': 'pc_non_dois_has_fields'
@@ -335,7 +314,6 @@ SUMMARY_TABLE_COLUMNS = {
             'crossref_has_authors_orcid',
             'crossref_has_affiliations',
             'crossref_has_abstract',
-            'crossref_has_references_open',
             'crossref_has_fields',
             'crossref_has_venue',
             'crossref_has_venue_issn'],
@@ -346,7 +324,7 @@ SUMMARY_TABLE_COLUMNS = {
             'Author ORCIDs',
             'Affiliation Strings',
             'Abstracts',
-            'Open Abstracts',
+            'Open Abstracts', #?? not sure about this one 20220702
             'Field Classification',
             'Venue Names',
             'ISSNs']

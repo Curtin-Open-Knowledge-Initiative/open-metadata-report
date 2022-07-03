@@ -1,12 +1,3 @@
-WITH
-combined AS (
-    SELECT *
-    FROM `{table}` as crossref
-    LEFT JOIN (SELECT * FROM `{crossref_member_table}` WHERE collection_date="{crossref_member_date}") as member
-    ON crossref.member = member.id
-    AND crossref.prefix = member.prefix
-)
-
 SELECT
     UPPER(TRIM(doi)) as source_id,
     UPPER(TRIM(doi)) as doi,
@@ -71,16 +62,6 @@ SELECT
     END
     as has_references,
     references_count as count_references,
-    CASE
-        WHEN (references_count > 0) AND public_references THEN TRUE
-        ELSE FALSE
-    END
-    as has_references_open,
-    CASE
-        WHEN public_references THEN references_count
-        ELSE 0
-    END
-    as count_references_open,
 
     -- Fields
     CASE
@@ -116,5 +97,5 @@ SELECT
     as has_venue_issn,
     ARRAY_LENGTH(ISSN) as count_venue_issn,
 
-FROM combined
+FROM `{table}`
 
