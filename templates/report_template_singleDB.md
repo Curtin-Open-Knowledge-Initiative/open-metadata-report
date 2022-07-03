@@ -223,13 +223,6 @@ Metadata coverage in {{ name_source_full }} and {{ name_base_full }} by publicat
 
 <pdf:nextpage>
 
-{% set data_element = data_element_array[10] %}
-### {{ data_element }}
-
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
-
-<pdf:nextpage>
-
 # {{ name_source_full }} Coverage Beyond {{ name_base_full }}
 <br>
 ## DOIs vs non-DOIs
@@ -326,13 +319,6 @@ Metadata coverage for DOIs and non-DOIs by publication type
 
 
 {% set data_element = data_element_array[9] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[10] %}
 ### {{ data_element }}
 
 {{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
