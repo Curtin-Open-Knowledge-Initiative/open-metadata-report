@@ -201,11 +201,6 @@ SOURCE_TRUTH_TABLES = {
     for source in SOURCES
 }
 
-
-## Crossref Member Data Table
-
-CROSSREF_MEMBER_DATA_TABLE = f'{PROJECT_ID}.crossref.member_data'
-
 ## Category Queries Metadata
 
 # CATEGORY_DATA_ITEMS are required to be present as both has_ and count_ items in all truth tables
