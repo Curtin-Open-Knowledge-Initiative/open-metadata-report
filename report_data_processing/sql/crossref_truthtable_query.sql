@@ -39,6 +39,12 @@ SELECT
     END
     as has_affiliations_string,
     (SELECT COUNT(1) FROM UNNEST(author) AS authors, UNNEST(authors.affiliation) AS affiliation WHERE affiliation.name is not null) as count_affiliations_string,
+     CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors, UNNEST(authors.affiliation) AS affiliation, UNNEST (affiliation.id) AS affiliation_id WHERE (affiliation_id.id is not null AND affiliation_id.id_type = 'ROR')) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_affiliations_ror,
+    (SELECT COUNT(1) FROM UNNEST(author) AS authors, UNNEST(authors.affiliation) AS affiliation, UNNEST (affiliation.id) AS affiliation_id WHERE (affiliation_id.id is not null AND affiliation_id.id_type = 'ROR')) as count_affiliations_ror,
 
     CASE
         WHEN (abstract is not null) THEN TRUE
