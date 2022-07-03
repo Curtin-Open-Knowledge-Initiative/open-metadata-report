@@ -2,6 +2,8 @@
 /shelf/
 /workspace.xml
 /output_files/*
+/data/*
+/graphs/*
 *.xml
 *.iml
 *.log
