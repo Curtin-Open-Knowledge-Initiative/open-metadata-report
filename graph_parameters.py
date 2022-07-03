@@ -309,6 +309,7 @@ SUMMARY_TABLE_COLUMNS = {
             'crossref_has_authors',
             'crossref_has_authors_orcid',
             'crossref_has_affiliations',
+            'crossref_has_affiliations'
             'crossref_has_abstract',
             'crossref_has_fields',
             'crossref_has_venue',
@@ -319,8 +320,9 @@ SUMMARY_TABLE_COLUMNS = {
             'Author Strings',
             'Author ORCIDs',
             'Affiliation Strings',
+            'Affiliation RORs',
             'Abstracts',
-            'Open Abstracts', #?? not sure about this one 20220702
+            #'Open Abstracts', #?? not sure about this one 20220702
             'Field Classification',
             'Venue Names',
             'ISSNs']

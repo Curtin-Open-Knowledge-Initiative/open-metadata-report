@@ -15,7 +15,7 @@ BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
 CURRENT = [2020, 2021, 2022]
-FOCUS = 2022
+FOCUS = 2021
 
 # Files and Directories
 SQL_DIRECTORY = Path('report_data_processing/sql')
@@ -231,6 +231,7 @@ CROSSREF_DATA_ITEMS = [
     'authors_string',
     'authors_sequence',
     'affiliations_string',
+    'affiliations_ror',
     'venue_issn',
     'venue_string'
 ]
