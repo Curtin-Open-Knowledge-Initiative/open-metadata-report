@@ -309,7 +309,7 @@ SUMMARY_TABLE_COLUMNS = {
             'crossref_has_authors',
             'crossref_has_authors_orcid',
             'crossref_has_affiliations',
-            'crossref_has_affiliations'
+            'crossref_has_affiliations_ror',
             'crossref_has_abstract',
             'crossref_has_fields',
             'crossref_has_venue',
