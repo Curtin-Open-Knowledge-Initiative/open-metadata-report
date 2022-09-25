@@ -1,0 +1,848 @@
+<style>
+
+    @page {
+        size: a4 portrait;
+        @frame null {
+        left: 1cm;
+        width: 18cm;
+        top: 7cm;
+        height: 20cm;
+    }}
+
+    @page titlepage {
+        size: a4 portrait;
+        background-image: url("/Users/266883j/PycharmProjects/es_reports/assets/title_image.png");
+        @frame title {
+        left: 2cm;
+        width: 16cm;
+        top: 8.9cm;
+        height: 19cm;
+    }}
+
+    @page report {
+        size: a4 portrait;
+        @frame content_frame {
+        left: 2cm;
+        width: 17cm;
+        top: 2.5cm;
+        height: 24.2cm;
+    }}
+
+     @page landscape-report {
+        size: a4 landscape;
+        @frame content_frame {
+        left: 2cm;
+        width: 24.7cm;
+        top: 2cm;
+        height: 17.5cm;
+    }}
+
+        @page lastpage {
+        size: a4 portrait;
+        background-image: url("/Users/266883j/PycharmProjects/es_reports/assets/final_page.png");
+        @frame content_frame {
+        left: 2cm;
+        width: 17cm;
+        top: 2.5cm;
+        height: 24.2cm;
+    }}
+
+    body {
+        font-family: brandon-grotesque, sans-serif;
+        font-size: 10pt;
+        font-weight: 300;
+        font-style: normal;
+        line-height: 140%;
+    }
+
+    .titleface {
+        text-transform: uppercase;
+        font-family: brandon-grotesque, sans-serif;
+        font-weight: 900;
+        font-style: normal;
+        font-size: 53pt;
+        color: black;
+        margin: 0;
+        padding-top: 0pt;
+        line-height: 100%;
+    }
+
+    .subtitle {
+        text-transform: uppercase;
+        font-family: brandon-grotesque, sans-serif;
+        font-weight: 900;
+        font-style: normal;
+        font-size: 53pt;
+        color: #F26E3B;
+        margin: 0;
+        padding-top: 0pt;
+        line-height: 100%;
+    }
+
+    .titlemeta {
+        text-transform: uppercase;
+        font-family: brandon-grotesque, sans-serif;
+        font-weight: 300;
+        font-style: normal;
+        font-size: 24pt;
+        color: black;
+        margin: 0;
+        padding-top: 0pt;
+        line-height: 100%;
+    }
+
+    h1 {
+        text-transform: uppercase;
+        font-family: brandon-grotesque, sans-serif;
+        font-weight: 900;
+        font-style: normal;
+        font-size: 24pt;
+        color: #F26E3B;
+        margin: 0;
+        padding-top: 0pt;
+        line-height: 120%;
+    }
+
+    h2 {
+        text-transform: uppercase;
+        font-family: brandon-grotesque, sans-serif;
+        font-weight: 300;
+        font-style: normal;
+        font-size: 24pt;
+        color: #F26E3B;
+        margin: 0;
+        padding-top: 0pt;
+        line-height: 120%;
+    }
+
+    p {
+        font-family: brandon-grotesque, sans-serif;
+        font-size: 10pt;
+        font-weight: 300;
+        font-style: normal;
+    }
+
+    table {
+        font-size: 9pt;
+
+    }
+
+    th {
+        table-layout: auto;
+        padding-top: 4pt;
+        padding-left: 2pt;
+        padding-right: 0pt;
+        text-align: center;
+        font-weight: bold;
+        border-bottom-color: black;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-top-color: black;
+        border-top-width: 1px;
+        border-top-style: black;
+        word-wrap: break-word;
+    }
+
+    td {
+        padding-top: 4pt;
+        padding-left: 2pt;
+        padding-right: 0pt;
+        text-align: center;
+    }
+
+    img {
+        vertical-align: top;
+    }
+
+    ul {
+        list-style-position: outside;
+        font-size: 11pt;
+        padding-left: 5pt;
+        padding-top: 0;
+    }
+
+    figcaption {
+        font-size: 9pt;
+    }
+
+    caption {
+        font-size: 9pt;
+    }
+
+    .footer {
+        font-size: 10pt;
+    }
+
+    .vt_header {
+        writing-mode: sideways-rl;
+        }
+
+    .tiny_header {
+        font-size: 7px;
+        }
+
+</style>
+
+<!-- Loading JSON data files for access -->
+<!-- TODO - these will currently break because they need to be created/added to the precipy index -->
+
+<!-- Title Page -->
+<p><pdf:nexttemplate name="titlepage">
+<pdf:nextpage></p>
+<p class="subtitle">OPEN METADATA SOURCES</p>
+<p class="titlemeta">
+<br>
+COMPARING OPENALEX TO CROSSREF <br>
+<br>
+DATE: 26 SEPTEMBER 2022
+</p>
+<p><br>
+<br>
+[PRELIMINARY VERSION] </p>
+<!-- switch page templates -->
+<p><pdf:nexttemplate name="report"></p>
+<p><pdf:nextpage></p>
+<h1>Executive Summary</h1>
+<p>In January 2022, OpenAlex was launched as a source of open bibliographic metadata. Intended both as a replacement of 
+and improvement on Microsoft Academic, it provides structured data on publications, authors, institutions and 
+publication venues.</p>
+<p>In this project, we assess and compare the value added by OpenAlex to Crossref metadata, both in coverage of publications and other research output 
+(with and without DOIs) as well as in coverage of metadata (including identifiers) for authors, institutions, publication venues 
+and disciplines. </p>
+<p>The report currently contains all the graphs comparing metadata coverage of OpenAlex compared to Crossref, and of DOIs vs non-DOIs in OpenAlex, as well as some basic tables. 
+More explanatory text and interpretation of findings will be added in a later version.</p>
+<p>Complete data and code are available on Github:
+<a href="https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report">https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report</a><br />
+All images and data belonging to this report are located in the directory <a href="https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/run_20220926_1">reports\run_20220926_1</a> in this repository.</p>
+<p><pdf:nextpage> </p>
+<h1>Introduction and Background</h1>
+<p>In January 2022, OpenAlex was launched as a source of open bibliographic metadata. Intended both as a replacement of 
+and improvement on Microsoft Academic, it provides structured data on publications, authors, institutions and 
+publication venues.</p>
+<p>Many tools, projects and services relied on Microsoft Academic as source of largely open metadata, and might consider 
+switching to OpenAlex. More broadly, the launch of OpenAlex has increased interest in the potential of open metadata 
+to enable discovery, linking and integration of data on research processes and outputs.</p>
+<p>Unlike metadata from closed sources, open metadata can be combined and enriched to provide a rich open metadata 
+landscape. Transparency and provenance allow identifying and addressing existing gaps and biases in coverage and 
+quality. </p>
+<p>In this project, we assess and compare the value added by OpenAlex to Crossref metadata, both in coverage of publications and other research output 
+(with and without DOIs) as well as in coverage of metadata (including identifiers) for authors, institutions, publication venues 
+and disciplines. </p>
+<h2>Data sources</h2>
+<p>This report was run using the following tables as source data:</p>
+<ul>
+<li>Crossref: academic-observatory.crossref.crossref_metadata20220807</li>
+<li>OpenAlex: academic-observatory.openalex.Work with date 20220829</li>
+</ul>
+<p>Complete data and code are available on Github:
+<a href="https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report">https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report</a><br />
+All images and data belonging to this report are located in the directory <a href="https://github.com/Curtin-Open-Knowledge-Initiative/open-metadata-report/tree/main/reports/run_20220926_1">reports\run_20220926_1</a> in this repository. </p>
+<p><pdf:nextpage> </p>
+<h1>Coverage of OpenAlex vs Crossref</h1>
+<p><br>   </p>
+<h2>Comparing coverage</h2>
+<h3>Overview</h3>
+<table>
+  <tr>
+    <td valign="top"><img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\be\be39d8271803480c270ce4774bd3c09b84bc34b80e751e9c87435ea86254c1d4.png"></td>
+    <td valign="top">  <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\ac\acb8ead394e2e7b987abf00470a1f476b4400ab464d46c5ce9ae43b8732e780d.png"></td>
+  </tr>
+  <tr>
+    <td>overall comparison - all time</td>
+    <td>overall comparison - 2021</td>
+  </tr>
+ </table>
+
+<p><br></p>
+<h3>By year and publication type</h3>
+<table>
+  <tr>
+    <td valign="top"><img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\d6\d666df6376e86d4663d7a39ad717399117deb38a49fdb04f340d6b051b633c0b.png"></td>
+    <td valign="top"><img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\fe\fe8b4ac6276c87a7b3459c8ce3247383b6ecf1566914b74a52a6e34181c11061.png"></td>
+  </tr>
+  <tr>
+    <td>coverage by publication date - all time</td>
+    <td>coverage by publication type  - all time</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h2>Value Add of OpenAlex to Crossref</h2>
+<h3>Overview</h3>
+<p>Comparing coverage of metadata types in Crossref and OpenAlex</p>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\04\04b423e06da14d441932117c596aee9defe9bc05c068040082f89bd7709130de.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\ee\ee2d29a0d08af0005f1355008a15cd878efdd917d9b1f17b952f0856651d5b03.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"><img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\a4\a400713be69483a1832e31a4769790a6484f925e4a6ef773f9ba6594d60f1b76.png"></td>
+    <td valign="top">  <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\73\73f0f87e7b7e9ecdfb947f32cd8307c6b73fd4ffab55455e490a9f1b369f12b2.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Details</h3>
+<p>Metadata coverage in OpenAlex and Crossref by publication type
+<br></p>
+<h3>Affiliations</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\94\943ca6b03c86c1fd6d7e22a85f83d0c36a256ac7e7760d68f7f0867912beb928.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\99\995f194cecb7fdee95adefd0ae1fe6e04f3a62f673c57f3c438c4a9ae429434a.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\e0\e0adce50412b35d9d914c2f4d8e63697b994f9d86a97bd8362454602e8045cba.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\56\564880eebf1382b6a788e7ae96cee32075f0b7bf393c1891eafc5e1c9edd2dcb.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Affiliations ROR</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\e2\e2d9418eef0fab04b9d7f3372d38403c2085aacd681ca15a052c3481c3945987.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\b7\b72a20627b79e6518c3428224927d0bc756e80d3f7936d4f265e4e85a399c1c3.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\f4\f4bbfec087ba617a455836eb6d38c4e2e67e2bf1ee1263fe82c30c0e79be5ffb.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\c0\c025fc1e3569f20a481e71d43c901fba98d4dbc46879d1a5959418df061cf665.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Authors</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\50\500deb35d8a36fb3cb66835c4aa03b7af465865c7d218dbe128f5a6866f4cc43.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\d9\d994b893ecb972c3c35584382ad901951ee14055038afe3c664e29869d75f598.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\0a\0a5ed802899f544ca7d1474257bf8a34d3eb92ef4d449827a5c97b7d8dbcea1b.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\6e\6e2bef9f00ac922b6aaf675bfc1faa88b580632447e07a13b8e7e17e8e68c79e.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Authors ORCIDs</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\ea\eae9dcd2a2d1034b7051768ce00be0deb69b8537ef8b0830fb4cc23c499e0561.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\aa\aab7641b4d92f14fa21e2ff946e40530e83094925a4c899c1c5764a50bf5a359.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\4c\4caca34afadaa833930942e52810842a47f81bf536a7b4d1f8ca6717b11da2f5.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\4a\4a33df7aa49256e7f65bc9c0778311bac41e9a4f777cc9bc509051b366a8c266.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Abstracts</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\b1\b10e0491f400671677bef33e4e69d0d63f355705f45201100188abb91247831f.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\3f\3ff1c32ee04c13db505f39ae1c764623f551c52952745fce33a5224ca505e2b7.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\3e\3e56c9ea2147b2ea0a9e940551ace3204c231ea9bba3ba80d42e9be8b720ce8b.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\5d\5ddc81a57746f3e97086569ed2e5e7ec6e2e20296e4df4dd0995711ca2d11bd6.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Citations to</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\94\94fdbc244a55a811cc1edfea7b28c6853952d99f56e30423b482031e6082e556.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\38\38a15ec7f505ca9d84de983925281126fd146b09766d4b3f731a6d0b502bec4e.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\24\24169a5fc2b4017a903c10c0292cbdb1e8f213f0426ca1976611898774fd2514.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\1a\1a69869e701495f7c913587b033ddb42e1ea68b4724cd8f435f556b2cc7ecc60.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>References from</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\3a\3ab910de6859c83bc3744a71fb16f9d0f6863f45df391f36fdaca823327f8f22.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\de\deb91ea1a5d16c4846adfcf6538bae0a32f973bc14559503fc7bf17ff620ed51.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\b9\b95d5a1c16ad1ea8a9a6980b947ac7fca643cd1fb2bb5378dabfc88dacc7d068.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\ff\ffae1ea51abaac3d9710e2614fe85be3132c467ba39b706e00b162dec0a39791.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Journals</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\8e\8e35c418833a99d794a320e9315e63afc3963e51755c429cc8d15e476765be42.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\87\87436273c3f04800910b96450efaa51425205bf92be84d2a96c34cfe7b26f560.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\0f\0f811bec728f035d625652e7396ffefd2327ddcdba8313c5035cd96a71a4b4ef.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\7d\7d335ba51c9054b3e89e9db13f5c70d41631e7471813044e83f8ca74d37fb4ac.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Journals ISSN</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\bb\bb385ee85e6013bf5e134228a8dc8a2378c305d84da6ffbf83884da2cc87a7d9.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\f7\f7711a3567000c6b4c2e57617c1271ce774142d70b123e4a6ce861ac69e37548.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\31\31b72830f33f0309a855368ac0f5f5dc8e2e856e3b870e37565b201059e3a37a.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\a3\a3b3bf48af9478350ea295d98304dcd8b9f4ba3a5e0eb00edceec7b907e956b1.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Fields</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\39\3900fe8a1b307fa020bdd14d79c938aa6273d5e71b80d430a0b9f1c4de541c29.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\e1\e1bcc718cc1107fea6269c7b35ac5aca776fbd89becf6a13b7c5231970fa2f0d.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\ca\ca09db1c4b1b527c64a2892bd48a0fae7457ffa8093adbbf316cb5b82d47dd08.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\bc\bced26c7e8af8d9bfb915838b6568a1f8376d8a45d68e2ed3b5d3d4632594149.png"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h1>OpenAlex Coverage Beyond Crossref</h1>
+<p><br></p>
+<h2>DOIs vs non-DOIs</h2>
+<h3>By year and publication type</h3>
+<table>
+  <tr>
+    <td valign="top"><img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\d7\d75deadeab987126767e10264ffc878e2c50cf9186783bfec768f490b72dffb9.png"></td>
+    <td valign="top"><img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\53\535c795e4a7e3c5bd2af546dbc8f2c60d1e8906068591eaf942976aa4bacc657.png"></td>
+  </tr>
+  <tr>
+    <td>coverage by publication date - all time</td>
+    <td>coverage by publication type  - all time</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h2>Metadata Coverage</h2>
+<h3>Overview</h3>
+<p>Comparing coverage of metadata types for DOIs and non-DOIs in OpenAlex</p>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\51\51fb6de77cfc686f320d729c3946d249bd80d9ce8480453a471849da92bbb2ea.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\83\837617e85a1b68ad962d50b218f16fcca365cdcb7647554bd6c2347629d04713.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Details</h3>
+<p>Metadata coverage for DOIs and non-DOIs by publication type
+<br></p>
+<h3>Affiliations</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\4a\4a5013b372972227dc047d71afd2072af2d23c181206a5e383cda8b113dee9b2.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\95\95522dc16fe480aa144fd665ece9962c4881ddf95b7a77e05239aa90d43d8814.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+ </table>
+
+<h3>Affiliations ROR</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\a4\a44bf838279fc94f62f94a4c32ace1e3f3e84b72d69e23fef262764484773fbe.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\d7\d7f9662586b00334f6a7ff40f4d8671ce428bedf04482c23cb8c1999ba369c52.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Authors</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\47\47f46441fe7a2ef05467604a7272e69b18ca3583017368ec010568672f2f02de.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\50\505229381a7071e3406fc812ed32041fa2eb2d44d5bd272c523693fc9bee1cd5.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+ </table>
+
+<h3>Authors ORCIDs</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\fb\fb2369d58147c5cd688a4e4c4edfee651c6856d56452a3b87e3d99d9723e5a66.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\9c\9cc06eac3e52805ffbb760199a5eb86e97f3d483ae441fc59a0ff19422815dee.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Abstracts</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\12\121aca85cd2ee2295ab8ef4f06cc7681c0ffdfe5412ac376a50f7e6d2d3322e5.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\8c\8c1fd49f9a37cbdba67a8999c3c4c7d42dc8314ea8dfe3830ae9c73d611d1a48.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Citations to</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\d1\d198f37f5c6c443bf165c56ceb01e15c5a2e5a35c0971100b9ba5122a78db860.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\3b\3b95002cf7e7030ab11ee6a421ca24e9ed2f8954047911387f1d124f547ac948.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+ </table>
+
+<h3>References from</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\f1\f18f6f0ec1c299d551cdbc7256bf4b75c275989243b4c55c9cdb42e94b7d80d4.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\ca\cad1a567a48f0a492dd65f7799eaab7d76afa32fee381e75725781f89558ebb2.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h3>Journals ISSN</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\10\10c38d3ee63925d5659b1c47c053db429b2a5db704b6f478f5aee1801b133353.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\af\af0cc7f102ad4f7632099027232557465419c4bfb1675ceaa38149051c45d31c.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+ </table>
+
+<h3>Fields</h3>
+<table>
+  <tr>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\18\182d24483c00d857adf7d2d8b06c4760ea040bffb44da5d2aede0509e2766ed7.png"></td>
+    <td valign="top"> <img src="C:\Users\Bianca\AppData\Local\Temp\precipy\output_cache\2b\2b2b0f3390de7945a0cc78989414bc52ee070261650241b740e4d64b66d10ff7.png"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - 2021</td>
+  </tr>
+ </table>
+
+<p><pdf:nextpage></p>
+<h2>Appendix A - Tables</h2>
+<p>This section contains tables with summary counts. More tables will be added in a later version. </p>
+<p>Crossref Current = 2020-2022<br />
+Focus Year = 2021</p>
+<h3>OpenAlex Coverage</h3>
+<table>
+    <caption><strong>Table 1.</strong> OpenAlex Metadata Coverage of Crossref DOIs</caption>
+    <thead>
+        <tr>
+
+                <th 
+
+                    text-align=center>Time Frame
+                </th>
+
+                <th 
+
+                    text-align=center>Crossref DOIs
+                </th>
+
+                <th 
+
+                    text-align=center>OpenAlex Coverage of DOIs
+                </th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+            <tr style="background-color: white;">
+
+                    <td text-align=center>All Time</td>
+
+                    <td text-align=center>126195148</td>
+
+                    <td text-align=center>123523915</td>
+
+            </tr>
+
+            <tr style="background-color: Gainsboro;">
+
+                    <td text-align=center>Crossref Current</td>
+
+                    <td text-align=center>19167370</td>
+
+                    <td text-align=center>17775131</td>
+
+            </tr>
+
+            <tr style="background-color: white;">
+
+                    <td text-align=center>Focus Year</td>
+
+                    <td text-align=center>7180913</td>
+
+                    <td text-align=center>6985335</td>
+
+            </tr>
+
+    </tbody>
+</table>
+
+<h3>Crossref Coverage</h3>
+<table>
+    <caption><strong>Table 2.</strong> Crossref Metadata Coverage of Crossref DOIs</caption>
+    <thead>
+        <tr>
+
+                <th 
+
+                    text-align=center>Time Frame
+                </th>
+
+                <th 
+
+                    text-align=center>Crossref DOIs
+                </th>
+
+                <th 
+
+                    text-align=center>Author Strings
+                </th>
+
+                <th 
+
+                    text-align=center>Author ORCIDs
+                </th>
+
+                <th 
+
+                    text-align=center>Affiliation Strings
+                </th>
+
+                <th 
+
+                    text-align=center>Affiliation RORs
+                </th>
+
+                <th 
+
+                    text-align=center>Abstracts
+                </th>
+
+                <th 
+
+                    text-align=center>Field Classification
+                </th>
+
+                <th 
+
+                    text-align=center>Venue Names
+                </th>
+
+                <th 
+
+                    text-align=center>ISSNs
+                </th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+            <tr style="background-color: white;">
+
+                    <td text-align=center>All Time</td>
+
+                    <td text-align=center>126195148</td>
+
+                    <td text-align=center>106418102</td>
+
+                    <td text-align=center>8956313</td>
+
+                    <td text-align=center>17939433</td>
+
+                    <td text-align=center>8728</td>
+
+                    <td text-align=center>16710024</td>
+
+                    <td text-align=center>81738305</td>
+
+                    <td text-align=center>122254962</td>
+
+                    <td text-align=center>99454053</td>
+
+            </tr>
+
+            <tr style="background-color: Gainsboro;">
+
+                    <td text-align=center>Crossref Current</td>
+
+                    <td text-align=center>19167370</td>
+
+                    <td text-align=center>16867676</td>
+
+                    <td text-align=center>5352151</td>
+
+                    <td text-align=center>4329959</td>
+
+                    <td text-align=center>7038</td>
+
+                    <td text-align=center>5957525</td>
+
+                    <td text-align=center>10046004</td>
+
+                    <td text-align=center>17898609</td>
+
+                    <td text-align=center>13789738</td>
+
+            </tr>
+
+            <tr style="background-color: white;">
+
+                    <td text-align=center>Focus Year</td>
+
+                    <td text-align=center>7180913</td>
+
+                    <td text-align=center>6353115</td>
+
+                    <td text-align=center>2098567</td>
+
+                    <td text-align=center>1490653</td>
+
+                    <td text-align=center>1785</td>
+
+                    <td text-align=center>2437399</td>
+
+                    <td text-align=center>3781734</td>
+
+                    <td text-align=center>6680290</td>
+
+                    <td text-align=center>5301604</td>
+
+            </tr>
+
+    </tbody>
+</table>
