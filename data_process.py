@@ -213,8 +213,11 @@ def source_category_query(af: AnalyticsFunction,
         categories = pd.read_gbq(query=query,
                                  project_id=PROJECT_ID)
 
-        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-            store[STORE_ELEMENT[source]] = categories
+#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        store[STORE_ELEMENT[source]] = categories
+
+        categories.to_csv(CSV_FILE[source])
+        af.add_existing_file(CSV_FILE[source])
 
         if verbose:
             print('...completed')
@@ -247,8 +250,11 @@ def dois_category_query(af: AnalyticsFunction,
     categories = pd.read_gbq(query=query,
                              project_id=PROJECT_ID)
 
-    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        store[STORE_ELEMENT['crossref']] = categories
+#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        store[STORE_ELEMENT['crossref']] = categories
+
+    categories.to_csv(CSV_FILE['crossref'])
+    af.add_existing_file(CSV_FILE['crossref'])
 
     if verbose:
         print('...completed')
@@ -271,12 +277,12 @@ def save_data_parameters(af):
                   f,
                   default=str)
 
-    for source in SOURCES:
-        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-            categories = store[STORE_ELEMENT[source]]
+#   for source in SOURCES:
+#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#            categories = store[STORE_ELEMENT[source]]
 
-        categories.to_csv(CSV_FILE[source])
-        af.add_existing_file(CSV_FILE[source])
+#        categories.to_csv(CSV_FILE[source])
+#        af.add_existing_file(CSV_FILE[source])
 
 
 def git_status(af):
@@ -314,8 +320,10 @@ def value_add_graphs(af: AnalyticsFunction,
     """
 
     print('Generating value add graphs...')
-    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source in NON_BASE_SOURCES:
 
@@ -400,8 +408,10 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
     Graph the coverage of the source compared to the base comparison by crossref-type
     """
 
-    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source in NON_BASE_SOURCES:
 
@@ -506,15 +516,19 @@ def calculate_overall_coverage(base_df: pd.DataFrame,
 
 def overall_comparison(af: AnalyticsFunction,
                        base_comparison: str = BASE_COMPARISON):
-    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source in SOURCES:
         if source == base_comparison:
             continue
 
-        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-            source_data = store[STORE_ELEMENT[source]]
+#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#            source_data = store[STORE_ELEMENT[source]]
+
+        source_data = pd.read_csv(CSV_FILE[source])
 
         for timeframe in TIME_FRAMES.keys():
             filtered_base = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
@@ -536,15 +550,19 @@ def overall_comparison(af: AnalyticsFunction,
 
 def source_in_base_by_pubdate(af,
                               base_comparison: str = BASE_COMPARISON):
-    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source in SOURCES:
         if source == base_comparison:
             continue
 
-        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-            source_data = store[STORE_ELEMENT[source]]
+#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#            source_data = store[STORE_ELEMENT[source]]
+
+        source_data = pd.read_csv(CSV_FILE[source])
 
         year_range = SOURCE_IN_BASE_YEAR_RANGE
 
@@ -591,8 +609,10 @@ def value_add_self_graphs(af: AnalyticsFunction,
     # TODO Dynamically set base_comparison when looping over multiple sources?
 
     print('Generating value add graphs...')
-    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source in NON_BASE_SOURCES:
 
@@ -658,8 +678,10 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
     """
     # TODO Dynamically set base_comparison when looping over multiple sources?
 
-    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source in NON_BASE_SOURCES:
 
@@ -709,15 +731,19 @@ def dois_in_source_by_pubdate(af,
        Adapted from source_in_base_by_pubdate
        """
 
-    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source in SOURCES:
         if source == base_comparison:
             continue
 
-        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-            source_data = store[STORE_ELEMENT[source]]
+#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#            source_data = store[STORE_ELEMENT[source]]
+
+        source_data = pd.read_csv(CSV_FILE[source])
 
         year_range = SOURCE_IN_BASE_YEAR_RANGE
 
@@ -780,8 +806,9 @@ def generate_tables(af,
                     base_comparison: str = BASE_COMPARISON):
 
     table_json = {}
-    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
     summary_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
     summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
 
@@ -792,8 +819,10 @@ def generate_tables(af,
         summary_table_df = summary_table_df.append(filtered_comparison_sum, ignore_index=True)
 
     for source in SOURCES:
-        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-            source_data = store[STORE_ELEMENT[source]]
+#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#            source_data = store[STORE_ELEMENT[source]]
+
+        source_data = pd.read_csv(CSV_FILE[source])
 
         for timeframe in TIME_FRAMES.keys():
             filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
@@ -819,22 +848,22 @@ def generate_tables(af,
 
 
 if __name__ == '__main__':
-    #source_to_intermediate(af="test",
+    # source_to_intermediate(af="test",
+    #                       rerun=False,
+    #                      verbose=True)
+    # crossref_to_truthtable(af='test',
     #                       rerun=False,
     #                       verbose=True)
-    # crossref_to_truthtable(af='test',
-    #                        rerun=False,
-    #                        verbose=True)
     # intermediate_to_source_truthtable(af="test",
     #                       rerun=False,
     #                      verbose=True)
     # dois_category_query(af='test',
-    #                    rerun=False,
+    #                   rerun=False,
     #                    verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
     # openalex_native_to_truthtable(af='test',
-    #                              rerun=False,
+    #                             rerun=False,
     #                             verbose=True)
-     pass
+    pass
