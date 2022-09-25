@@ -42,8 +42,8 @@ WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 MAG_DATE = "" #add date when mag is source
 OPENALEX_DATE = "" #add date when openalex is source
-OPENALEX_NATIVE_DATE = "20220612" #no dated version used for openalex_native
-CROSSREF_DATE = "20220507"
+OPENALEX_NATIVE_DATE = "20220829" #no dated version used for openalex_native
+CROSSREF_DATE = "20220807"
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
 OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
