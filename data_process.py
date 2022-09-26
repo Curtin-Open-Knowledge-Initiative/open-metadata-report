@@ -660,6 +660,8 @@ def value_add_self_graphs(af: AnalyticsFunction,
                 #Modify chart parameters here
                 chart.process_data(
                     doc_types=CROSSREF_TYPES,
+                    #Why does the line below not work (cf line 451, 720)?
+                    #palette=['#F6671E', '#FAA77C']
                 )
 
                 fig = chart.plotly()
