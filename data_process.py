@@ -448,7 +448,7 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
 
         chart.process_data(
             doc_types=CROSSREF_TYPES,
-            palette=['#F6671E', '#FAA77C', '#CCCCCC']
+            palette=['#FF7F0E', '#FAA77C', '#C0C0C0']
         )
         fig = chart.plotly()
 
@@ -635,6 +635,11 @@ def value_add_self_graphs(af: AnalyticsFunction,
                                 ys=VALUE_ADD_META[base_comparison][source]['ys'],
                                 stackedbar=False)
 
+            # Modify chart parameters here
+            chart.process_data(
+                palette=['#FF7F0E', '#C0C0C0']
+            )
+
             fig = chart.plotly()
             filename = f'value_add_self_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}'
             filepath = GRAPH_DIR / filename
@@ -660,8 +665,7 @@ def value_add_self_graphs(af: AnalyticsFunction,
                 #Modify chart parameters here
                 chart.process_data(
                     doc_types=CROSSREF_TYPES,
-                    #Why does the line below not work (cf line 451, 720)?
-                    #palette=['#F6671E', '#FAA77C']
+                    palette=['#FF7F0E', '#C0C0C0']
                 )
 
                 fig = chart.plotly()
@@ -717,7 +721,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
         # Modify chart parameters here
         chart.process_data(
             doc_types = OPENALEX_NATIVE_TYPES,
-            palette = ['#F6671E', '#CCCCCC']
+            palette = ['#FF7F0E', '#C0C0C0']
         )
         fig = chart.plotly()
         filename = f'{source}_coverage_self_by_type'

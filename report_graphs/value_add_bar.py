@@ -41,11 +41,20 @@ class ValueAddBar(AbstractObservatoryChart):
                 }
             }
 
-    def process_data(self):
+    def process_data(self,
+                     **kwargs):
+
+        palette = kwargs.get('palette')
+        if palette:
+            [self.ys[category].update({'marker_color': palette[i]}) for i, category
+             in enumerate(self.ys.keys())]
+
         self.figdata = [
             go.Bar(name=category,
                    x=self.xs,
-                   y=[self.df[self.ys.get(category).get(xi)].values[0] for xi in self.xs])
+                   y=[self.df[self.ys.get(category).get(xi)].values[0] for xi in self.xs],
+                   marker_color=self.ys.get(category).get('marker_color')
+                   )
             for category in self.categories
         ]
         self.processed_data = True
@@ -106,8 +115,13 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
     def process_data(self,
                      doc_types: Union[List[str], None] = None,
                      type_column: str = 'type',
+                     **kwargs
                      ):
 
+        palette = kwargs.get('palette')
+        if palette:
+            [self.ys[category].update({'marker_color': palette[i]}) for i, category
+             in enumerate(self.ys.keys())]
         if not doc_types:
             doc_types = ['journal-article',
                         'proceedings-article',
@@ -137,7 +151,8 @@ class ValueAddByCrossrefType(AbstractObservatoryChart):
                           self.ys.get(category).get(self.metadata_element)].values[0]
                       if self.ys.get(category).get(self.metadata_element) is not 'zeros' else 0
 #                      for t in cr_types])
-                      for t in doc_types])
+                      for t in doc_types],
+                   marker_color=self.ys.get(category).get('marker_color'))
             for category in self.categories
         ]
         self.processed_data = True
