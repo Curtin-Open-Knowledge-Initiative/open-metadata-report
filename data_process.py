@@ -77,7 +77,7 @@ def source_to_intermediate(af: AnalyticsFunction,
             print('...completed')
 
 
-def intermediate_to_source_truthtable(af: AnalyticsFunction,
+def intermediate_to_truthtable(af: AnalyticsFunction,
                                       rerun: bool = RERUN,
                                       verbose: bool = VERBOSE):
     """
@@ -112,21 +112,21 @@ def intermediate_to_source_truthtable(af: AnalyticsFunction,
             print('...completed')
 
 
-def openalex_native_to_truthtable(af: AnalyticsFunction,
-                                  source: str = 'openalex_native',
+def openalex_to_truthtable(af: AnalyticsFunction,
+                                  source: str = 'openalex',
                                   rerun: bool = RERUN,
                                   verbose: bool = VERBOSE):
 #    pass
 
     """
-    Convert OpenAlex Native Format Works Table to Truthtable
+    Convert OpenAlex Format Works Table to Truthtable
 
     Note that OpenAlex uses the fully qualified URL form of the doi in lower case and needs conversion.
     See the query for details.
     """
 
-    query = load_sql_to_string('openalex_native_truthtable.sql',
-                               parameters=dict(table=TABLES[source]['Work']),
+    query = load_sql_to_string('openalex_truthtable.sql',
+                               parameters=dict(table=TABLES[source]['Work_snapshots']),
                                directory=SQL_DIRECTORY)
 
     if not report_utils.bigquery_rerun(af, rerun, verbose, source):
@@ -720,7 +720,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
                                        )
         # Modify chart parameters here
         chart.process_data(
-            doc_types = OPENALEX_NATIVE_TYPES,
+            doc_types = OPENALEX_TYPES,
             palette = ['#FF7F0E', '#C0C0C0']
         )
         fig = chart.plotly()
@@ -854,13 +854,16 @@ def generate_tables(af,
 
 
 if __name__ == '__main__':
-    # source_to_intermediate(af="test",
-    #                       rerun=False,
-    #                      verbose=True)
     # crossref_to_truthtable(af='test',
     #                       rerun=False,
     #                       verbose=True)
-    # intermediate_to_source_truthtable(af="test",
+    # openalex_to_truthtable(af='test',
+    #                             rerun=False,
+    #                             verbose=True)
+    # source_to_intermediate(af="test",
+    #                       rerun=False,
+    #                      verbose=True)
+    # intermediate_to_truthtable(af="test",
     #                       rerun=False,
     #                      verbose=True)
     # dois_category_query(af='test',
@@ -869,7 +872,4 @@ if __name__ == '__main__':
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
-    # openalex_native_to_truthtable(af='test',
-    #                             rerun=False,
-    #                             verbose=True)
-    pass
+     pass

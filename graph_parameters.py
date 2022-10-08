@@ -11,8 +11,7 @@ if not GRAPH_DIR.is_dir():
 FORMATTED_SOURCE_NAMES = dict(
     crossref='Crossref',
     mag='MAG',
-    openalex='OpenAlex (MAG format)',
-    openalex_native='OpenAlex'
+    openalex='OpenAlex'
 )
 
 # Time Frames
@@ -82,45 +81,6 @@ VALUE_ADD_META = {
             }
         },
         'openalex': {
-            'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
-            'ys': {
-                'Crossref': {
-                    'Affiliations': 'pc_crossref_has_affiliations_string',
-                    'Authors': 'pc_crossref_has_authors',
-                    'Authors ORCIDs': 'pc_crossref_has_authors_orcid',
-                    'Abstracts': 'pc_crossref_has_abstract',
-                    'Citations to': 'pc_crossref_has_citations',
-                    'References from': 'pc_crossref_has_references',
-                    'Journals': 'pc_crossref_has_venue',
-                    'Journals ISSN': 'pc_crossref_has_venue_issn',
-                    'Fields': 'pc_crossref_has_fields'
-                },
-                'OpenAlex (MAG format)': {
-                    'Affiliations': 'pc_openalex_has_affiliations_string',
-                    'Authors': 'pc_openalex_has_authors',
-                    'Authors ORCIDs': 'pc_openalex_has_authors_orcid',
-                    'Abstracts': 'pc_openalex_has_abstract',
-                    'Citations to': 'pc_openalex_has_citations',
-                    'References from': 'pc_openalex_has_references',
-                    'Journals': 'pc_openalex_has_venue',
-                    'Journals ISSN': 'pc_openalex_has_venue_issn',
-                    'Fields': 'pc_openalex_has_fields'
-                },
-                'OpenAlex (MAG format) Added Value': {
-                    'Affiliations': 'pc_openalex_affiliations_string_adds_presence',
-                    'Authors': 'pc_openalex_authors_adds_presence',
-                    'Authors ORCIDs': 'pc_openalex_authors_orcid_adds_presence',
-                    'Abstracts': 'pc_openalex_abstract_adds_presence',
-                    'Citations to': 'pc_openalex_citations_adds_presence',
-                    'References from': 'pc_openalex_references_adds_presence',
-                    'Journals': 'pc_openalex_venue_adds_presence',
-                    'Journals ISSN': 'pc_openalex_venue_issn_adds_presence',
-                    'Fields': 'pc_openalex_fields_adds_presence'
-                }
-            },
-        },
-        'openalex_native': {
             'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
                    'References from', 'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
@@ -137,28 +97,28 @@ VALUE_ADD_META = {
                     'Fields': 'pc_crossref_has_fields'
                 },
                 'OpenAlex': {
-                    'Affiliations': 'pc_openalex_native_has_affiliations_string',
-                    'Affiliations ROR': 'pc_openalex_native_has_affiliations_ror',
-                    'Authors': 'pc_openalex_native_has_authors',
-                    'Authors ORCIDs': 'pc_openalex_native_has_authors_orcid',
-                    'Abstracts': 'pc_openalex_native_has_abstract',
-                    'Citations to': 'pc_openalex_native_has_citations',
-                    'References from': 'pc_openalex_native_has_references',
-                    'Journals': 'pc_openalex_native_has_venue',
-                    'Journals ISSN': 'pc_openalex_native_has_venue_issn',
-                    'Fields': 'pc_openalex_native_has_fields'
+                    'Affiliations': 'pc_openalex_has_affiliations_string',
+                    'Affiliations ROR': 'pc_openalex_has_affiliations_ror',
+                    'Authors': 'pc_openalex_has_authors',
+                    'Authors ORCIDs': 'pc_openalex_has_authors_orcid',
+                    'Abstracts': 'pc_openalex_has_abstract',
+                    'Citations to': 'pc_openalex_has_citations',
+                    'References from': 'pc_openalex_has_references',
+                    'Journals': 'pc_openalex_has_venue',
+                    'Journals ISSN': 'pc_openalex_has_venue_issn',
+                    'Fields': 'pc_openalex_has_fields'
                 },
                 'OpenAlex Added Value': {
-                    'Affiliations': 'pc_openalex_native_affiliations_string_adds_presence',
-                    'Affiliations ROR': 'pc_openalex_native_affiliations_ror_adds_presence',
-                    'Authors': 'pc_openalex_native_authors_adds_presence',
-                    'Authors ORCIDs': 'pc_openalex_native_authors_orcid_adds_presence',
-                    'Abstracts': 'pc_openalex_native_abstract_adds_presence',
-                    'Citations to': 'pc_openalex_native_citations_adds_presence',
-                    'References from': 'pc_openalex_native_references_adds_presence',
-                    'Journals': 'pc_openalex_native_venue_adds_presence',
-                    'Journals ISSN': 'pc_openalex_native_has_venue_issn',
-                    'Fields': 'pc_openalex_native_fields_adds_presence'
+                    'Affiliations': 'pc_openalex_affiliations_string_adds_presence',
+                    'Affiliations ROR': 'pc_openalex_affiliations_ror_adds_presence',
+                    'Authors': 'pc_openalex_authors_adds_presence',
+                    'Authors ORCIDs': 'pc_openalex_authors_orcid_adds_presence',
+                    'Abstracts': 'pc_openalex_abstract_adds_presence',
+                    'Citations to': 'pc_openalex_citations_adds_presence',
+                    'References from': 'pc_openalex_references_adds_presence',
+                    'Journals': 'pc_openalex_venue_adds_presence',
+                    'Journals ISSN': 'pc_openalex_has_venue_issn',
+                    'Fields': 'pc_openalex_fields_adds_presence'
                 }
             }
         }
@@ -195,36 +155,6 @@ VALUE_ADD_META = {
     },
     'openalex': {
         'openalex': {
-            'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
-            'ys': {
-                'OpenAlex (MAG format) DOIs': {
-                    'Affiliations': 'pc_dois_has_affiliations_string',
-                    'Authors': 'pc_dois_has_authors',
-                    'Authors ORCIDs': 'pc_dois_has_authors_orcid',
-                    'Abstracts': 'pc_dois_has_abstract',
-                    'Citations to': 'pc_dois_has_citations',
-                    'References from': 'pc_dois_has_references',
-                    'Journals': 'pc_dois_has_venue',
-                    'Journals ISSN': 'pc_dois_has_venue_issn',
-                    'Fields': 'pc_dois_has_fields'
-                },
-                'OpenAlex (MAG format) non-DOIs': {
-                    'Affiliations': 'pc_non_dois_has_affiliations_string',
-                    'Authors': 'pc_non_dois_has_authors',
-                    'Authors ORCIDs': 'pc_non_dois_has_authors_orcid',
-                    'Abstracts': 'pc_non_dois_has_abstract',
-                    'Citations to': 'pc_non_dois_has_citations',
-                    'References from': 'pc_non_dois_has_references',
-                    'Journals': 'pc_non_dois_has_venue',
-                    'Journals ISSN': 'pc_non_dois_has_venue_issn',
-                    'Fields': 'pc_non_dois_has_fields'
-                }
-            }
-        }
-    },
-    'openalex_native': {
-        'openalex_native': {
             'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
                    'References from', 'Journals', 'Journals ISSN', 'Fields'],
             'ys': {
@@ -271,7 +201,7 @@ CROSSREF_TYPES = ['journal-article',
                   'report',
                   'monograph']
 
-OPENALEX_NATIVE_TYPES = ['journal-article',
+OPENALEX_TYPES = ['journal-article',
                          'proceedings-article',
                          'book-chapter',
                          'book',
@@ -358,17 +288,6 @@ SUMMARY_TABLE_COLUMNS = {
             'timeframe',
             'crossref_dois',
             'openalex_ids'],
-        'nice_column_names': [
-            'Time Frame',
-            'Crossref DOIs',
-            'OpenAlex Coverage of DOIs'
-        ]
-    },
-    'openalex_native': {
-        'column_names': [
-            'timeframe',
-            'crossref_dois',
-            'openalex_native_ids'],
         'nice_column_names': [
             'Time Frame',
             'Crossref DOIs',
