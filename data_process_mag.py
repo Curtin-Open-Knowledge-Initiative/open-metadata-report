@@ -77,7 +77,7 @@ def source_to_intermediate(af: AnalyticsFunction,
             print('...completed')
 
 
-def intermediate_to_source_truthtable(af: AnalyticsFunction,
+def intermediate_to_truthtable(af: AnalyticsFunction,
                                       rerun: bool = RERUN,
                                       verbose: bool = VERBOSE):
     """
@@ -906,7 +906,7 @@ if __name__ == '__main__':
     # crossref_to_truthtable(af='test',
     #                      rerun=False,
     #                     verbose=True)
-    # intermediate_to_source_truthtable(af="test",
+    # intermediate_to_truthtable(af="test",
     #                       rerun=False,
     #                      verbose=True)
     # dois_category_query(af='test',

@@ -9,8 +9,8 @@ RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
-SOURCES = ['openalex_native', 'crossref']
-MAG_FORMAT_SOURCES = [s  for s in ['mag', 'openalex'] if s in SOURCES]
+SOURCES = ['openalex', 'crossref']
+MAG_FORMAT_SOURCES = [s for s in ['mag'] if s in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
@@ -40,15 +40,12 @@ ARCHIVE_REPORT_NAME = output_store_dir
 PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
-MAG_DATE = "" #add date when mag is source
-OPENALEX_DATE = "" #add date when openalex is source
-OPENALEX_NATIVE_DATE = "20220829" #no dated version used for openalex_native
-CROSSREF_DATE = "20220807"
+MAG_DATE = "" #add date of partition when mag is source
+OPENALEX_DATE = "20220828" #date of partition to use
+CROSSREF_DATE = "20220807" #date of partition to use
 
 MAG_TABLE_LOCATION = 'academic-observatory.mag'
-OPENALEX_TABLE_LOCATION = 'utrecht-university.OpenAlex'
-#OPENALEX_NATIVE_TABLE_LOCATION = 'utrecht-university.OpenAlex_native' # if needed rerun openalex_native_to_truthtable with date 20220130
-OPENALEX_NATIVE_TABLE_LOCATION = 'academic-observatory.openalex' #only rerun openalex_native_to_truthtable for latest version
+OPENALEX_TABLE_LOCATION = 'academic-observatory.openalex'
 DOI_TABLE_LOCATION = 'academic-observatory.crossref.crossref_metadata'
 
 TABLE_NAMES = ['Papers',
@@ -67,34 +64,30 @@ TABLE_NAMES = ['Papers',
                'PaperUrls',
                'PaperMeSH',
                'doi',
-               'Author',
-               'Concept',
-               'Institution'','
-               'Venue',
-               'Work'
+               'Author_snapshots',
+               'Concept_snapshots',
+               'Institution_snapshots',
+               'Venue_snapshots',
+               'Work_snapshots'
                ]
 
 TABLE_DATES = dict(mag=MAG_DATE,
                    openalex=OPENALEX_DATE,
-                   openalex_native=OPENALEX_NATIVE_DATE,
                    crossref=CROSSREF_DATE)
 TABLE_LOCATIONS = dict(mag=MAG_TABLE_LOCATION,
                        openalex=OPENALEX_TABLE_LOCATION,
-                       openalex_native=OPENALEX_NATIVE_TABLE_LOCATION,
                        crossref=DOI_TABLE_LOCATION)
 
 ADDITIONAL_SOURCE_JOURNAL_FIELDS = dict(
     mag='',
     crossref=None,
-    openalex=', journal.Issns',
-    openalex_native=None
+    openalex=None
 )
 
 ADDITIONAL_SOURCE_ORG_FIELDS = dict(
     mag='',
     crossref=None,
-    openalex=', affiliation.RorId, author.Orcid',
-    openalex_native=None
+    openalex=None
 )
 
 ADDITIONAL_TRUTHTABLE_FIELDS = dict(
@@ -113,70 +106,16 @@ ADDITIONAL_TRUTHTABLE_FIELDS = dict(
     as count_venue_issn
     """,
     crossref=None,
-    openalex="""
-    , CASE
-        WHEN (SELECT COUNT(1) from UNNEST(journal.Issns) as issn WHERE TRIM(issn) !="") > 0
-        THEN TRUE
-        ELSE FALSE
-        END
-    as has_venue_issn
-    , (SELECT COUNT(1) from UNNEST(journal.Issns) as issn WHERE TRIM(issn) !="") as count_venue_issn
-    , CASE
-        WHEN TRIM(journal.Issn) != ""
-        THEN TRUE
-        ELSE FALSE
-        END
-    as has_venue_issnl
-    , CASE
-        WHEN TRIM(journal.Issn) !=""    
-        THEN 0
-        ELSE 1
-        END
-    as count_venue_issnl
-    , CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) > 0 THEN TRUE
-        ELSE FALSE
-    END
-    as has_authors_orcid
-    , (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.Orcid is not null) as count_authors_orcid
-    , CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.RorId is not null) > 0 THEN TRUE
-        ELSE FALSE
-    END
-    as has_affiliations_ror
-    , (SELECT COUNT(1) FROM UNNEST(authors) AS authors WHERE authors.RorId is not null) as count_affiliations_ror
-""",
-    openalex_native=None
+    openalex=None
 )
-
-#Replace TABLES definition with version to exclude date from source table for openalex_native.
-#TODO: Reverse when openalex_native source gets sharded in future
-
-#TABLES = {
-#    source:
-#        {
-#                table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}{TABLE_DATES.get(source)}'
-#                for table_name in TABLE_NAMES
-#        }
-#    for source in SOURCES
-#}
 
 TABLES = {
     source:
         {
-                table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}'
-                for table_name in TABLE_NAMES
-            }
-
-        if source == 'openalex_native'
-
-        else
-        {
                 table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}{TABLE_DATES.get(source)}'
                 for table_name in TABLE_NAMES
-            }
+        }
     for source in SOURCES
-
 }
 
 for source in SOURCES:
@@ -253,23 +192,6 @@ OPENALEX_DATA_ITEMS = [
     'affiliations_countrycode',
     'affiliations_sourceid',
     'affiliations_string',
-    'affiliations_grid',
-    'affiliations_ror',
-    'fields_mag',
-    'venue_sourceid',
-    'venue_string',
-    'venue_issn',
-    'venue_issnl'
-]
-
-OPENALEX_NATIVE_DATA_ITEMS = [
-    'authors_orcid',
-    'authors_sourceid',
-    'authors_string',
-    'authors_sequence',
-    'affiliations_countrycode',
-    'affiliations_sourceid',
-    'affiliations_string',
     'affiliations_ror',
     'fields_mag',
     'venue_sourceid',
@@ -281,8 +203,7 @@ OPENALEX_NATIVE_DATA_ITEMS = [
 SOURCE_DATA_ITEMS = dict(
     crossref=CROSSREF_DATA_ITEMS,
     mag=MAG_DATA_ITEMS,
-    openalex=OPENALEX_DATA_ITEMS,
-    openalex_native=OPENALEX_NATIVE_DATA_ITEMS
+    openalex=OPENALEX_DATA_ITEMS
 )
 
 ALL_DATA_ITEMS = list(set(CATEGORY_DATA_ITEMS + [item for source_list in SOURCE_DATA_ITEMS.values() for item in source_list]))
@@ -314,4 +235,3 @@ for source in SOURCES:
     data_elements = list(data_elements)
     data_elements.sort()
     SOURCE_DATA_ELEMENTS[source] = data_elements
-

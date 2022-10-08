@@ -77,7 +77,7 @@ and disciplines.
 This report was run using the following tables as source data:
 
 * {{ name_base_full }}: {{ metadata.TABLES.crossref }}
-* {{ name_source_full }}: {{ metadata.TABLES.openalex_native.Work }} with date {{ metadata.OPENALEX_NATIVE_DATE }}
+* {{ name_source_full }}: {{ metadata.TABLES.openalex.Work_snapshots }}
 
 
 Complete data and code are available on Github:
