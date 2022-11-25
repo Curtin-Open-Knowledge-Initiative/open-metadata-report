@@ -116,8 +116,8 @@ SELECT
         WHEN (SELECT COUNT(1) FROM UNNEST(concepts) AS fields WHERE fields.id is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_fields_mag,
-    (SELECT COUNT(1) FROM UNNEST(concepts) AS fields WHERE fields.id is not null) as count_fields_mag,
+    as has_fields,
+    (SELECT COUNT(1) FROM UNNEST(concepts) AS fields WHERE fields.id is not null) as count_fields,
 
     (SELECT fields.display_name from UNNEST(concepts) as fields WHERE fields.level = 0 LIMIT 1) as field,
 

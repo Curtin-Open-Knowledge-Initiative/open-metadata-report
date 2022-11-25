@@ -156,7 +156,7 @@ OPENALEX_DATA_ITEMS = [
     'affiliations_sourceid',
     'affiliations_string',
     'affiliations_ror',
-    'fields_mag',
+    'fields',
     'venue_sourceid',
     'venue_string',
     'venue_issn',
