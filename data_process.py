@@ -41,75 +41,6 @@ from report_graphs import (
 from observatory.reports.report_utils import generate_table_data
 
 
-def source_to_intermediate(af: AnalyticsFunction,
-                           rerun: bool = RERUN,
-                           verbose: bool = VERBOSE):
-    """
-    Generate the intermediate table from source data
-    """
-
-    for source in MAG_FORMAT_SOURCES:
-        query = load_sql_to_string('source_to_intermediate.sql',
-                                   parameters=TABLES[source],
-                                   directory=SQL_DIRECTORY
-                                   )
-        destination_table = INTERMEDIATE_TABLES[source]
-
-        if not report_utils.bigquery_rerun(af, rerun, verbose, source):
-            print(f"""Query String is:
-            
-    {query}
-    
-    """)
-            print(f'Destination Tables is:{destination_table}')
-            continue
-
-        with bigquery.Client() as client:
-            job_config = bigquery.QueryJobConfig(destination=destination_table,
-                                                 create_disposition='CREATE_IF_NEEDED',
-                                                 write_disposition=WRITE_DISPOSITION)
-
-            # Start the query, passing in the extra configuration.
-            query_job = client.query(query, job_config=job_config)  # Make an API request.
-            query_job.result()  # Wait for the job to complete.
-
-        if verbose:
-            print('...completed')
-
-
-def intermediate_to_truthtable(af: AnalyticsFunction,
-                                      rerun: bool = RERUN,
-                                      verbose: bool = VERBOSE):
-    """
-    Query and download category data from the intermediate tables
-    """
-
-    for source in MAG_FORMAT_SOURCES:
-        query = load_sql_to_string('intermediates_truthtable_query.sql',
-                                   parameters=dict(
-                                       table=INTERMEDIATE_TABLES[source],
-                                       additional_fields=TABLES[source]['additional_truthtable_fields']
-                                   ),
-                                   directory=SQL_DIRECTORY)
-
-        if not report_utils.bigquery_rerun(af, rerun, verbose, source):
-            print(f"""Query is:            
-    {query}
-    
-    """)
-            print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
-            continue
-
-        with bigquery.Client() as client:
-            job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
-                                                 create_disposition='CREATE_IF_NEEDED',
-                                                 write_disposition=WRITE_DISPOSITION)
-
-            query_job = client.query(query, job_config=job_config)  # Make an API request.
-            query_job.result()  # Wait for the job to complete.
-
-        if verbose:
-            print('...completed')
 
 
 def openalex_to_truthtable(af: AnalyticsFunction,
@@ -854,22 +785,16 @@ def generate_tables(af,
 
 
 if __name__ == '__main__':
-    # crossref_to_truthtable(af='test',
-    #                       rerun=False,
-    #                       verbose=True)
+     crossref_to_truthtable(af='test',
+                           rerun=False,
+                           verbose=True)
     # openalex_to_truthtable(af='test',
     #                             rerun=False,
     #                             verbose=True)
-    # source_to_intermediate(af="test",
-    #                       rerun=False,
-    #                      verbose=True)
-    # intermediate_to_truthtable(af="test",
-    #                       rerun=False,
-    #                      verbose=True)
     # dois_category_query(af='test',
     #                   rerun=False,
     #                    verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
-    pass
+     pass

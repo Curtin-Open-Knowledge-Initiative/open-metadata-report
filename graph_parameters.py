@@ -10,7 +10,6 @@ if not GRAPH_DIR.is_dir():
 
 FORMATTED_SOURCE_NAMES = dict(
     crossref='Crossref',
-    mag='MAG',
     openalex='OpenAlex'
 )
 
@@ -44,42 +43,6 @@ ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS
 
 VALUE_ADD_META = {
     'crossref': {
-        'mag': {
-            'xs': ['Affiliations', 'Authors', 'Abstracts', 'Citations to',
-                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
-            'ys': {
-                'Crossref': {
-                    'Affiliations': 'pc_crossref_has_affiliations_string',
-                    'Authors': 'pc_crossref_has_authors',
-                    'Abstracts': 'pc_crossref_has_abstract',
-                    'Citations to': 'pc_crossref_has_citations',
-                    'References from': 'pc_crossref_has_references',
-                    'Journals': 'pc_crossref_has_venue',
-                    'Journals ISSN': 'pc_crossref_has_venue_issn',
-                    'Fields': 'pc_crossref_has_fields'
-                },
-                'MAG': {
-                    'Affiliations': 'pc_mag_has_affiliations_string',
-                    'Authors': 'pc_mag_has_authors',
-                    'Abstracts': 'pc_mag_has_abstract',
-                    'Citations to': 'pc_mag_has_citations',
-                    'References from': 'pc_mag_has_references',
-                    'Journals': 'pc_mag_has_venue',
-                    'Journals ISSN': 'pc_mag_has_venue_issn',
-                    'Fields': 'pc_mag_has_fields'
-                },
-                'MAG Added Value': {
-                    'Affiliations': 'pc_mag_affiliations_string_adds_presence',
-                    'Authors': 'pc_mag_authors_adds_presence',
-                    'Abstracts': 'pc_mag_abstract_adds_presence',
-                    'Citations to': 'pc_mag_citations_adds_presence',
-                    'References from': 'pc_mag_references_adds_presence',
-                    'Journals': 'pc_mag_venue_adds_presence',
-                    'Journals ISSN': 'pc_mag_venue_issn_adds_presence',
-                    'Fields': 'pc_mag_fields_adds_presence'
-                }
-            }
-        },
         'openalex': {
             'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
                    'References from', 'Journals', 'Journals ISSN', 'Fields'],
@@ -119,36 +82,6 @@ VALUE_ADD_META = {
                     'Journals': 'pc_openalex_venue_adds_presence',
                     'Journals ISSN': 'pc_openalex_has_venue_issn',
                     'Fields': 'pc_openalex_fields_adds_presence'
-                }
-            }
-        }
-    },
-    'mag': {
-        'mag': {
-            'xs': ['Affiliations', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
-            'ys': {
-                'MAG DOIs': {
-                    'Affiliations': 'pc_dois_has_affiliations_string',
-                    'Authors': 'pc_dois_has_authors',
-                    'Authors ORCIDs': 'pc_dois_has_authors_orcid',
-                    'Abstracts': 'pc_dois_has_abstract',
-                    'Citations to': 'pc_dois_has_citations',
-                    'References from': 'pc_dois_has_references',
-                    'Journals': 'pc_dois_has_venue',
-                    'Journals ISSN': 'pc_dois_has_venue_issn',
-                    'Fields': 'pc_dois_has_fields'
-                },
-                'MAG non-DOIs': {
-                    'Affiliations': 'pc_non_dois_has_affiliations_string',
-                    'Authors': 'pc_non_dois_has_authors',
-                    'Authors ORCIDs': 'pc_non_dois_has_authors_orcid',
-                    'Abstracts': 'pc_non_dois_has_abstract',
-                    'Citations to': 'pc_non_dois_has_citations',
-                    'References from': 'pc_non_dois_has_references',
-                    'Journals': 'pc_non_dois_has_venue',
-                    'Journals ISSN': 'pc_non_dois_has_venue_issn',
-                    'Fields': 'pc_non_dois_has_fields'
                 }
             }
         }
@@ -210,20 +143,6 @@ OPENALEX_TYPES = ['journal-article',
                          'monograph',
                          'none']
 
-MAG_TYPES = ['Journal',
-             'Conference',
-             'BookChapter',
-             'Book',
-             'Repository',
-             'Thesis']
-
-MAG_TYPES_SELF = ['Journal',
-             'Conference',
-             'BookChapter',
-             'Book',
-             'Repository',
-             'Thesis',
-             'none']
 
 # Sources in Base Crossref Over Time
 
@@ -252,33 +171,6 @@ SUMMARY_TABLE_COLUMNS = {
             'Affiliation Strings',
             'Affiliation RORs',
             'Abstracts',
-            #'Open Abstracts', #?? not sure about this one 20220702
-            'Field Classification',
-            'Venue Names',
-            'ISSNs']
-    },
-    'mag': {
-        'column_names': [
-            'timeframe',
-            'crossref_dois',
-            'mag_ids',
-            'mag_has_authors',
-            'mag_has_authors_orcid',
-            'mag_has_affiliations',
-            'mag_has_abstract',
-            'mag_has_references',
-            'mag_has_fields',
-            'mag_has_venue',
-            'mag_has_venue_issn'],
-        'nice_column_names': [
-            'Time Frame',
-            'Crossref DOIs',
-            'MAG Coverage of DOIs',
-            'Author Strings',
-            'Author ORCIDs',
-            'Affiliation Strings',
-            'Abstracts',
-            'References',
             'Field Classification',
             'Venue Names',
             'ISSNs']
