@@ -119,7 +119,7 @@ SELECT
     as has_fields,
     (SELECT COUNT(1) FROM UNNEST(concepts) AS fields WHERE fields.id is not null) as count_fields,
 
-    (SELECT fields.display_name from UNNEST(concepts) as fields WHERE fields.level = 0 LIMIT 1) as field,
+    (SELECT fields.display_name from UNNEST(concepts) as fields WHERE fields.level = 0 LIMIT 1) as top_field,
 
     CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(mesh) AS fields WHERE fields.descriptor_ui is not null) > 0 THEN TRUE
