@@ -14,7 +14,7 @@ BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
 CURRENT = [2020, 2021, 2022]
-FOCUS = 2022
+FOCUS = 2021
 
 # Files and Directories
 SQL_DIRECTORY = Path('report_data_processing/sql')
@@ -38,7 +38,7 @@ PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 OPENALEX_DATE = "20221120" #date of partition to use
-CROSSREF_DATE = "20221007" #date of partition to use
+CROSSREF_DATE = "20221107" #date of partition to use
 
 OPENALEX_TABLE_LOCATION = 'academic-observatory.openalex'
 DOI_TABLE_LOCATION = 'academic-observatory.crossref.crossref_metadata'
