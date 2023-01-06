@@ -14,7 +14,7 @@ BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
 CURRENT = [2020, 2021, 2022]
-FOCUS = 2021
+FOCUS = 2022
 
 # Files and Directories
 SQL_DIRECTORY = Path('report_data_processing/sql')
@@ -156,6 +156,7 @@ OPENALEX_DATA_ITEMS = [
     'affiliations_sourceid',
     'affiliations_string',
     'affiliations_ror',
+    #does fields need to be included here, as it is already in CATEGORY_ITEMS ?
     'fields',
     'venue_sourceid',
     'venue_string',
