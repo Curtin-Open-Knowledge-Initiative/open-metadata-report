@@ -112,12 +112,6 @@ SELECT
 
     -- Note that this does not map to counting level 0 fields from mag format as it will count all the fields
     (SELECT COUNT(1) FROM UNNEST(concepts) AS fields WHERE fields.id is not null) as count_fields,
-    CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(concepts) AS fields WHERE fields.id is not null) > 0 THEN TRUE
-        ELSE FALSE
-    END
-    as has_fields,
-    (SELECT COUNT(1) FROM UNNEST(concepts) AS fields WHERE fields.id is not null) as count_fields,
 
     (SELECT fields.display_name from UNNEST(concepts) as fields WHERE fields.level = 0 LIMIT 1) as top_field,
 
