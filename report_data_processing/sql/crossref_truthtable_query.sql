@@ -1,3 +1,15 @@
+--- deduplicate DOIs on created_date
+WITH table_cleaned AS (
+
+    SELECT
+        * EXCEPT (var_dedup)
+
+    FROM (
+        SELECT DOI, ARRAY_AGG(DATE(created.date_time) ORDER BY DATE(created.date_time) DESC)[offset(0)] as var_dedup
+        FROM `{table}`
+        GROUP BY DOI)
+)
+
 SELECT
     UPPER(TRIM(doi)) as source_id,
     UPPER(TRIM(doi)) as doi,
