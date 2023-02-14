@@ -2,12 +2,15 @@
 WITH table_cleaned AS (
 
     SELECT
-        * EXCEPT (var_dedup)
+        papers.DOI
 
-    FROM (
-        SELECT DOI, ARRAY_AGG(DATE(created.date_time) ORDER BY DATE(created.date_time) DESC)[offset(0)] as var_dedup
-        FROM `{table}`
-        GROUP BY DOI)
+    FROM (SELECT DOI, ARRAY_AGG(DATE(created.date_time) ORDER BY DATE(created.date_time) DESC)[offset(0)] as var_dedup
+    FROM `{table}`
+    GROUP BY DOI) as dois
+
+    LEFT JOIN `{table}` as papers
+    ON papers.DOI = dois.DOI
+    AND DATE(papers.created.date_time) = DATE(dois.var_dedup)
 )
 
 SELECT
