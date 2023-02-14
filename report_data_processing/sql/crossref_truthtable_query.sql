@@ -2,7 +2,7 @@
 WITH table_cleaned AS (
 
     SELECT
-        papers.DOI
+        papers.*
 
     FROM (SELECT DOI, ARRAY_AGG(DATE(created.date_time) ORDER BY DATE(created.date_time) DESC)[offset(0)] as var_dedup
     FROM `{table}`
@@ -119,5 +119,5 @@ SELECT
     as has_venue_issn,
     ARRAY_LENGTH(ISSN) as count_venue_issn,
 
-FROM `{table}`
+FROM table_cleaned
 
