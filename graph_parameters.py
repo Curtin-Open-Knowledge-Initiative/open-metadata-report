@@ -19,8 +19,7 @@ FOCUS_YEAR = FOCUS
 
 TIME_FRAMES = {
     #'All Time': range(1900, 2100),
-    'All Time': range(1980, 2022),
-    # NB Range does not include last number!
+    'All Time': range(1980, 2023), # NB Range does not include last number!
     # TODO align with SOURCE_IN_BASE_YEAR_RANGE
     # All time here effects value add graphs, venn graph, but not bar/line graph or coverage bar graph!
     'Crossref Current': CROSSREF_CURRENT,
@@ -172,7 +171,7 @@ SOURCE_TYPES = dict(
 
 
 # Sources in Base Crossref Over Time
-SOURCE_IN_BASE_YEAR_RANGE = range(1980, 2022) #NB Range does not include last number!
+SOURCE_IN_BASE_YEAR_RANGE = range(1980, 2023) #NB Range does not include last number!
 # TODO Align with 'All time' #How does this relate to YEAR_RANGE in config.json?
 # affects bar-line graph
 
