@@ -14,7 +14,8 @@ BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
 CURRENT = [2020, 2021, 2022]
-FOCUS = 2021
+FOCUS = 2022
+COUNT_COMPARISON = 1 #0 for comparison against base, 1 against source
 
 # Files and Directories
 SQL_DIRECTORY = Path('report_data_processing/sql')
@@ -43,28 +44,13 @@ CROSSREF_DATE = "20221207" #date of partition to use
 OPENALEX_TABLE_LOCATION = 'academic-observatory.openalex'
 DOI_TABLE_LOCATION = 'academic-observatory.crossref.crossref_metadata'
 
-TABLE_NAMES = ['Papers',
-               'Affiliations',
-               'Authors',
-               'Journals',
-               'ConferenceInstances',
-               'ConferenceSeries',
-               'PaperAuthorAffiliations',
-               'FieldsOfStudy',
-               'FieldOfStudyExtendedAttributes',
-               'PaperAbstractsInvertedIndex',
-               'PaperFieldsOfStudy',
-               'PaperExtendedAttributes',
-               'PaperResources',
-               'PaperUrls',
-               'PaperMeSH',
-               'doi',
-               'Author_snapshots',
-               'Concept_snapshots',
-               'Institution_snapshots',
-               'Venue_snapshots',
-               'Work_snapshots'
-               ]
+#TODO refactor tables names, as TABLE will currently have two levels in data_parameters.json
+OPENALEX_TABLE_NAMES = 'Work_snapshots'
+DOI_TABLE_NAMES = ''
+
+TABLE_NAMES = dict(openalex=OPENALEX_TABLE_NAMES,
+                   crossref=DOI_TABLE_NAMES
+                   )
 
 TABLE_DATES = dict(openalex=OPENALEX_DATE,
                    crossref=CROSSREF_DATE)
@@ -178,7 +164,9 @@ for source in SOURCES:
     data_elements = {(elem, elem, elem) for elem in CATEGORY_DATA_ITEMS}
     data_elements = data_elements | {
         (
-            elem if elem in SOURCE_DATA_ITEMS['crossref'] else CATEGORY_DATA_ITEMS[
+            # replaced 'crossref' by base source
+            # elem if elem in SOURCE_DATA_ITEMS['crossref'] else CATEGORY_DATA_ITEMS[
+            elem if elem in SOURCE_DATA_ITEMS[BASE_COMPARISON] else CATEGORY_DATA_ITEMS[
                 CATEGORY_DATA_ITEMS.index(elem.split('_')[0])],
             elem,
             elem
@@ -186,15 +174,6 @@ for source in SOURCES:
         for elem in SOURCE_DATA_ITEMS[source]
     }
 
-    # data_elements = data_elements | {
-    #     (
-    #         elem,
-    #         elem if elem in SOURCE_DATA_ITEMS[source] else CATEGORY_DATA_ITEMS[
-    #             CATEGORY_DATA_ITEMS.index(elem.split('_')[0])],
-    #         elem
-    #     )
-    #     for elem in CROSSREF_DATA_ITEMS
-    # }
     data_elements = list(data_elements)
     data_elements.sort()
     SOURCE_DATA_ELEMENTS[source] = data_elements
