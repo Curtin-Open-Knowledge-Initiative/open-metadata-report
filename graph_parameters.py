@@ -150,7 +150,7 @@ CROSSREF_TYPES = ['journal-article',
                   'proceedings-article',
                   'book-chapter',
                   'posted-content',
-                  'book'
+                  'book',
                   'report',
                   'monograph']
 
