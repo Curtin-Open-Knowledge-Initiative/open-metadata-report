@@ -44,7 +44,7 @@ CROSSREF_DATE = "20230107" #date of partition to use #NB 20230107 is actually up
 OPENALEX_TABLE_LOCATION = 'academic-observatory.openalex'
 DOI_TABLE_LOCATION = 'academic-observatory.crossref.crossref_metadata'
 
-#TODO refactor tables names, as TABLE will currently have two levels in data_parameters.json
+
 OPENALEX_TABLE_NAMES = 'Work_snapshots'
 DOI_TABLE_NAMES = ''
 
