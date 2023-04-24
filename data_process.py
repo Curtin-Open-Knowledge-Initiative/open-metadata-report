@@ -28,8 +28,8 @@ from git import Repo
 from observatory.reports import report_utils
 from precipy.analytics_function import AnalyticsFunction
 from report_data_processing.sql import load_sql_to_string
-from data_parameters import *
-from graph_parameters import *
+from parameters.data_parameters import *
+from parameters.graph_parameters import *
 from report_graphs import (
     ValueAddBar,
     ValueAddByCrossrefType,
@@ -121,14 +121,14 @@ def source_category_query(af: AnalyticsFunction,
     Query and download category data from the intermediate tables
     """
 
-    for source in NON_BASE_SOURCES:
+    for source in SOURCES:
         query_template = load_sql_to_string('source_categories_query.sql.jinja2',
                                             directory=SQL_DIRECTORY)
 
-        data_items = list(set(CATEGORY_DATA_ITEMS + SOURCE_DATA_ITEMS[source]))
+        data_items = source.SOURCE_DATA_ELEMENTS
         data_items.sort()
         data = dict(
-            table=SOURCE_TRUTH_TABLES[source],
+            table=SOURCE_TRUTH_TABLES[source.SOURCE_NAME],
             data_items=data_items
         )
         query = jinja2.Template(query_template).render(data)
@@ -144,11 +144,8 @@ def source_category_query(af: AnalyticsFunction,
         categories = pd.read_gbq(query=query,
                                  project_id=PROJECT_ID)
 
-#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        store[STORE_ELEMENT[source]] = categories
-
-        categories.to_csv(CSV_FILE[source])
-        af.add_existing_file(CSV_FILE[source])
+        categories.to_csv(CSV_FILE[source.SOURCE_NAME])
+        af.add_existing_file(CSV_FILE[source.SOURCE_NAME])
 
         if verbose:
             print('...completed')
@@ -196,13 +193,13 @@ def save_data_parameters(af):
     Write out JSON for the data parameters
     """
 
-    import data_parameters as params
+    import parameters.data_parameters as params
     for f in af.generate_file('data_parameters.json'):
         json.dump({item: getattr(params, item) for item in dir(params) if not item.startswith('__')},
                   f,
                   default=str)
 
-    import graph_parameters as params
+    import parameters.graph_parameters as params
     for f in af.generate_file('graph_parameters.json'):
         json.dump({item: getattr(params, item) for item in dir(params) if not item.startswith('__')},
                   f,

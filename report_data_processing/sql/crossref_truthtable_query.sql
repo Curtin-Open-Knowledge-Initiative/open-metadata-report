@@ -36,8 +36,8 @@ SELECT
     CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.ORCID is not null) > 0 THEN TRUE
         ELSE FALSE
-    END as has_authors_orcid,
-    (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.ORCID is not null) as count_authors_orcid,
+    END as has_authors_id_orcid,
+    (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.ORCID is not null) as count_authors_id_orcid,
     CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.sequence is not null) > 0 THEN TRUE
         ELSE FALSE
@@ -60,8 +60,8 @@ SELECT
         WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors, UNNEST(authors.affiliation) AS affiliation, UNNEST (affiliation.id) AS affiliation_id WHERE (affiliation_id.id is not null AND affiliation_id.id_type = 'ROR')) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_affiliations_ror,
-    (SELECT COUNT(1) FROM UNNEST(author) AS authors, UNNEST(authors.affiliation) AS affiliation, UNNEST (affiliation.id) AS affiliation_id WHERE (affiliation_id.id is not null AND affiliation_id.id_type = 'ROR')) as count_affiliations_ror,
+    as has_affiliations_id_ror,
+    (SELECT COUNT(1) FROM UNNEST(author) AS authors, UNNEST(authors.affiliation) AS affiliation, UNNEST (affiliation.id) AS affiliation_id WHERE (affiliation_id.id is not null AND affiliation_id.id_type = 'ROR')) as count_affiliations_id_ror,
 
     CASE
         WHEN (abstract is not null) THEN TRUE
@@ -117,8 +117,8 @@ SELECT
         WHEN ARRAY_LENGTH(ISSN) > 0 THEN TRUE
         ELSE FALSE
         END
-    as has_venue_issn,
-    ARRAY_LENGTH(ISSN) as count_venue_issn,
+    as has_venue_id_issn,
+    ARRAY_LENGTH(ISSN) as count_venue_id_issn,
 
 FROM table_cleaned
 

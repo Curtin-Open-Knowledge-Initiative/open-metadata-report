@@ -19,6 +19,7 @@ SOURCE_DATA_ELEMENTS = [
     'affiliations_string',
     'affiliations_id_ror',
     'affiliations_id_source',
+    'affiliations_is_countrycode'
     'abstract',
     'citations',
     'references',

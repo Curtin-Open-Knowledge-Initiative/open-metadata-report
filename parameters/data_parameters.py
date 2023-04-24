@@ -12,18 +12,20 @@ VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
 SOURCES = [openalex, crossref]
-BASE_COMPARISON = 'crossref'
+COMPARISON = [crossref, openalex]
+SOURCE_NAMES = [source.SOURCE_NAME for source in COMPARISON]
+BASE_COMPARISON = crossref
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
 CURRENT = [2021, 2022, 2023]
 FOCUS = 2022
-COUNT_COMPARISON = 0 #0 for comparison against base, 1 against source
+# COUNT_COMPARISON = 0 #0 for comparison against base, 1 against source
 
 # Files and Directories
 SQL_DIRECTORY = Path('report_data_processing/sql')
 DATA_DIR = Path('data')
-STORE_ELEMENT = {source: f'{source}_categories' for source in SOURCES}
-CSV_FILE = {source: DATA_DIR / f'{source}_categories.csv' for source in SOURCES}
+# STORE_ELEMENT = {source.SOURCE_NAME: f'{source.SOURCE_NAME}_categories' for source in SOURCES}
+CSV_FILE = {source.SOURCE_NAME: DATA_DIR / f'{source.SOURCE_NAME}_categories.csv' for source in SOURCES}
 ARCHIVE_DIR = Path('reports')
 
 n = 1

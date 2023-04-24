@@ -25,15 +25,15 @@ SELECT
             (SELECT COUNT(1) FROM UNNEST(authorships) AS authors WHERE authors.author.id is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_authors_sourceid,
-    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors WHERE authors.author.id is not null) as count_authors_sourceid,
+    as has_authors_id_source,
+    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors WHERE authors.author.id is not null) as count_authors_id_source,
     CASE
         WHEN
             (SELECT COUNT(1) FROM UNNEST(authorships) AS authors WHERE authors.author.orcid is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_authors_orcid,
-    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors WHERE authors.author.orcid is not null) as count_authors_orcid,
+    as has_authors_id_orcid,
+    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors WHERE authors.author.orcid is not null) as count_authors_id_orcid,
     CASE
         WHEN
             (SELECT COUNT(1) FROM UNNEST(authorships) AS authors WHERE authors.author_position is not null) > 0 THEN TRUE
@@ -62,22 +62,22 @@ SELECT
             (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.id is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_affiliations_sourceid,
-    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.id is not null) as count_affiliations_sourceid,
+    as has_affiliations_id_source,
+    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.id is not null) as count_affiliations_id_source,
     CASE
         WHEN
             (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.ror is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_affiliations_ror,
-    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.ror is not null) as count_affiliations_ror,
+    as has_affiliations_id_ror,
+    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.ror is not null) as count_affiliations_id_ror,
     CASE
         WHEN
             (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.country_code is not null) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_affiliations_countrycode,
-    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.country_code is not null) as count_affiliations_countrycode,
+    as has_affiliations_id_countrycode,
+    (SELECT COUNT(1) FROM UNNEST(authorships) AS authors, UNNEST(institutions) as institution WHERE institution.country_code is not null) as count_affiliations_id_countrycode,
 
     -- Abstracts
     CASE
@@ -137,12 +137,12 @@ SELECT
         WHEN host_venue.id is not null THEN TRUE
         ELSE FALSE
     END
-    as has_venue_sourceid,
+    as has_venue_id_source,
     CASE
         WHEN host_venue.id is not null THEN 1
         ELSE 0
     END
-    as count_venue_sourceid,
+    as count_venue_id_source,
     CASE
         WHEN CHAR_LENGTH(host_venue.display_name) > 0 THEN TRUE
         ELSE FALSE
@@ -156,18 +156,18 @@ SELECT
         WHEN ARRAY_LENGTH(host_venue.issn) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_venue_issn,
+    as has_venue_id_issn,
     ARRAY_LENGTH(host_venue.issn) as count_venue_issn,
     CASE
         WHEN CHAR_LENGTH(host_venue.issn_l) > 0 THEN TRUE
         ELSE FALSE
     END
-    as has_venue_issnl,
+    as has_venue_id_issnl,
     CASE
         WHEN CHAR_LENGTH(host_venue.issn_l) > 0 THEN 1
         ELSE 0
     END
-    as count_venue_issnl
+    as count_venue_id_issnl
 
 
 FROM `{table}`
