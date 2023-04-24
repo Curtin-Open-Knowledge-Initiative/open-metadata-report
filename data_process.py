@@ -57,7 +57,7 @@ def openalex_to_truthtable(af: AnalyticsFunction,
     """
 
     query = load_sql_to_string('openalex_truthtable.sql',
-                               parameters=dict(table=TABLES[source]['Work_snapshots']),
+                               parameters=dict(table=TABLES[source]),
                                directory=SQL_DIRECTORY)
 
     if not report_utils.bigquery_rerun(af, rerun, verbose, source):
@@ -785,16 +785,16 @@ def generate_tables(af,
 
 
 if __name__ == '__main__':
-     crossref_to_truthtable(af='test',
-                           rerun=False,
-                           verbose=True)
-    # openalex_to_truthtable(af='test',
+    #crossref_to_truthtable(af='test',
+    #                       rerun=False,
+    #                       verbose=True)
+    #openalex_to_truthtable(af='test',
     #                             rerun=False,
     #                             verbose=True)
-    # dois_category_query(af='test',
+    #dois_category_query(af='test',
     #                   rerun=False,
     #                    verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
-     pass
+    pass
