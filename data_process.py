@@ -160,12 +160,14 @@ def dois_category_query(af: AnalyticsFunction,
     """
     Query and download category data from the quasi doi table
     """
-
+    #added 2 to query name to test variant
     query_template = load_sql_to_string('comparison_categories_query.sql.jinja2',
                                         directory=SQL_DIRECTORY)
 
     data = dict(
         sources={source: SOURCE_TRUTH_TABLES[source] for source in SOURCES},
+        # for testing: define base_comparison for identification in sql
+        base_comparison=BASE_COMPARISON,
         data_items=SOURCE_DATA_ELEMENTS
     )
     query = jinja2.Template(query_template).render(data)
@@ -349,37 +351,31 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
         # TODO Cleanup variable names here to abstract away from crossref to generalised base comparison
         figdata = base_comparison_data.groupby('type').agg(
             in_base_comparison=pd.NamedAgg(column=f'{base_comparison}_dois', aggfunc='sum'),
-            in_source=pd.NamedAgg(column=f'{source}_ids', aggfunc='sum'),
-            source_has_type=pd.NamedAgg(column=f'{source}_has_{source}_type', aggfunc='sum')
+            in_source=pd.NamedAgg(column=f'{source}_ids', aggfunc='sum')
         )
 
-        figdata['source_without_type'] = figdata.in_source - figdata.source_has_type
         figdata['not_in_source'] = figdata.in_base_comparison - figdata.in_source
         figdata = collate_value_add_values(figdata,
-                                           ['source_has_type',
-                                            'source_without_type',
+                                           ['in_source',
                                             'not_in_source'],
-                                           'in_base_comparison')
+                                            'in_base_comparison')
         figdata.reset_index(inplace=True)
 
         chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
-                                                 categories=[f'in {FORMATTED_SOURCE_NAMES[source]} with Document Type',
-                                                             f'in {FORMATTED_SOURCE_NAMES[source]} without Document Type',
-                                                             f'Not in {FORMATTED_SOURCE_NAMES[source]}'],
+                                                 categories=[f'DOIs in {FORMATTED_SOURCE_NAMES[source]}',
+                                                             f'DOIs not in {FORMATTED_SOURCE_NAMES[source]}'],
                                                  metadata_element='dummy',
                                                  ys={
-                                                     f'in {FORMATTED_SOURCE_NAMES[source]} with Document Type': {
-                                                         'dummy': 'pc_source_has_type'},
-                                                     f'in {FORMATTED_SOURCE_NAMES[source]} without Document Type': {
-                                                         'dummy': 'pc_source_without_type'},
-                                                     f'Not in {FORMATTED_SOURCE_NAMES[source]}': {
+                                                     f'DOIs in {FORMATTED_SOURCE_NAMES[source]}': {
+                                                         'dummy': 'pc_in_source'},
+                                                     f'DOIs not in {FORMATTED_SOURCE_NAMES[source]}': {
                                                          'dummy': 'pc_not_in_source'}
                                                  }
                                                  )
-
+        # Modify chart parameters here
         chart.process_data(
-            doc_types=CROSSREF_TYPES,
-            palette=['#FF7F0E', '#FAA77C', '#C0C0C0']
+            doc_types=SOURCE_TYPES[base_comparison],
+            palette=['#FF7F0E', '#C0C0C0']
         )
         fig = chart.plotly()
 
@@ -791,9 +787,9 @@ if __name__ == '__main__':
     #openalex_to_truthtable(af='test',
     #                             rerun=False,
     #                             verbose=True)
-    #dois_category_query(af='test',
-    #                   rerun=False,
-    #                    verbose=True)
+    dois_category_query(af='test',
+                       rerun=False,
+                        verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
