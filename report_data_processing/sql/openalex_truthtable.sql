@@ -3,6 +3,7 @@ SELECT
     id as source_id,
     type,
     publication_year as published_year,
+    RANK() OVER (ORDER BY cited_by_count DESC, id DESC) as deduplication_rank,
 
     -- This CASE WHEN construction may be unnecessary but is consistent with the mag formatted sources
     --Authors
