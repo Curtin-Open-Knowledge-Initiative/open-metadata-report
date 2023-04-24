@@ -21,7 +21,8 @@ qdoi_table AS (
 SELECT
     crossref.source_id as doi,
     crossref.published_year,
-    crossref.type
+    crossref.type,
+    crossref.member,
     {% for source_name, truthtable in sources.items() -%}
     , {{ source_name }}
     {% endfor -%}
