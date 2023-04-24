@@ -4,12 +4,14 @@ Main Location for Storing Parameters for Report
 
 import datetime
 from pathlib import Path
+import sourceparams_openalex as openalex
+import sourceparams_crossref as crossref
 
 RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
-SOURCES = ['openalex', 'crossref']
+SOURCES = [openalex, crossref]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
@@ -38,68 +40,24 @@ ARCHIVE_REPORT_NAME = output_store_dir
 PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
-OPENALEX_DATE = "20230122" #date of partition to use
-CROSSREF_DATE = "20230107" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
+openalex.DATE = "20230122" #date of partition to use
+crossref.DATE = "20230107" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
 
-OPENALEX_TABLE_LOCATION = 'academic-observatory.openalex'
-DOI_TABLE_LOCATION = 'academic-observatory.crossref.crossref_metadata'
+TABLE_DATES = {source.SOURCE_NAME: source.DATE for source in SOURCES}
 
-
-OPENALEX_TABLE_NAMES = 'Work_snapshots'
-DOI_TABLE_NAMES = ''
-
-TABLE_NAMES = dict(openalex=OPENALEX_TABLE_NAMES,
-                   crossref=DOI_TABLE_NAMES
-                   )
-
-TABLE_DATES = dict(openalex=OPENALEX_DATE,
-                   crossref=CROSSREF_DATE)
-TABLE_LOCATIONS = dict(openalex=OPENALEX_TABLE_LOCATION,
-                       crossref=DOI_TABLE_LOCATION)
-
-ADDITIONAL_SOURCE_JOURNAL_FIELDS = dict(
-    crossref=None,
-    openalex=None
-)
-
-ADDITIONAL_SOURCE_ORG_FIELDS = dict(
-    crossref=None,
-    openalex=None
-)
-
-ADDITIONAL_TRUTHTABLE_FIELDS = dict(
-    crossref=None,
-    openalex=None
-)
-
-TABLES = {
-    source:
-        {
-                table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}{TABLE_DATES.get(source)}'
-                for table_name in TABLE_NAMES
-        }
-    for source in SOURCES
-}
-
-for source in SOURCES:
-    TABLES[source].update(dict(
-        additional_source_journal_fields=ADDITIONAL_SOURCE_JOURNAL_FIELDS[source],
-        additional_source_org_fields=ADDITIONAL_SOURCE_ORG_FIELDS[source],
-        additional_truthtable_fields=ADDITIONAL_TRUTHTABLE_FIELDS[source]
-    )
-    )
-
-TABLES.update(dict(crossref=f'{DOI_TABLE_LOCATION}{CROSSREF_DATE}'))
+TABLES = {source.SOURCE_NAME: f'{source.SOURCE_TABLE_LOCATION}{source.DATE}' for source in SOURCES}
 
 ## Intermediate Tables
 
 INTERMEDIATE_TABLES = {
-    source: f'{PROJECT_ID}.{source}.{source}_intermediate{TABLE_DATES.get(source)}'
+    source.SOURCE_NAME:
+        f'{PROJECT_ID}.{source.SOURCE_NAME}.{source.SOURCE_NAME}_intermediate{TABLE_DATES.get(source.SOURCE_NAME)}'
     for source in SOURCES
 }
 
 SOURCE_TRUTH_TABLES = {
-    source: f'{PROJECT_ID}.{source}.{source}_truthtable{TABLE_DATES.get(source)}'
+    source.SOURCE_NAME:
+        f'{PROJECT_ID}.{source.SOURCE_NAME}.{source.SOURCE_NAME}_truthtable{TABLE_DATES.get(source.SOURCE_NAME)}'
     for source in SOURCES
 }
 
@@ -150,10 +108,8 @@ OPENALEX_DATA_ITEMS = [
     'venue_issnl'
 ]
 
-SOURCE_DATA_ITEMS = dict(
-    crossref=CROSSREF_DATA_ITEMS,
-    openalex=OPENALEX_DATA_ITEMS
-)
+SOURCE_DATA_ITEMS = {source.SOURCE_NAME: source.SOURCE_DATA_ELEMENTS for source in SOURCES}
+
 
 ALL_DATA_ITEMS = list(set(CATEGORY_DATA_ITEMS + [item for source_list in SOURCE_DATA_ITEMS.values() for item in source_list]))
 
@@ -171,7 +127,7 @@ for source in SOURCES:
             elem,
             elem
         )
-        for elem in SOURCE_DATA_ITEMS[source]
+        for elem in SOURCE_DATA_ITEMS[source.SOURCE_NAME]
     }
 
     data_elements = list(data_elements)
