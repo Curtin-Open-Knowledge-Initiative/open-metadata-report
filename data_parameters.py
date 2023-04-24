@@ -39,7 +39,7 @@ PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 OPENALEX_DATE = "20230122" #date of partition to use
-CROSSREF_DATE = "20230107" #date of partition to use
+CROSSREF_DATE = "20230107" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
 
 OPENALEX_TABLE_LOCATION = 'academic-observatory.openalex'
 DOI_TABLE_LOCATION = 'academic-observatory.crossref.crossref_metadata'
