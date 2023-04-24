@@ -19,10 +19,9 @@ WITH
 -- Construct a 'doi-table style' truth table
 qdoi_table AS (
 SELECT
-    crossref.source_id as doi,
-    crossref.published_year,
-    crossref.type,
-    crossref.member,
+    crossref.source_id as doi
+    , crossref.published_year
+    , crossref.type
     {% for source_name, truthtable in sources.items() -%}
     , {{ source_name }}
     {% endfor -%}
