@@ -1,17 +1,21 @@
 WITH
 -- Clean sources to dois only
 {% for source_name, truthtable in sources.items() -%}
-{% if source_name != 'crossref' -%}
+{% if source_name != base_comparison -%}
 {{ source_name }}_cleaned AS (
     SELECT
         papers.*
+        , cr.published_year as cr_published_year
+        , cr.type as cr_type
 
-    FROM (SELECT doi, ARRAY_AGG(source_id ORDER BY count_citations DESC, source_id DESC)[offset(0)] as source_id
+    FROM
+    (SELECT doi, ARRAY_AGG(source_id ORDER BY deduplication_variable)[offset(0)] as source_id
     FROM `{{ truthtable }}` as papers
-    WHERE papers.Doi IS NOT NULL
-    GROUP BY Doi) as dois
+    WHERE papers.doi IS NOT NULL
+    GROUP BY doi) as dois
 
     LEFT JOIN `{{ truthtable }}` as papers ON papers.source_id = dois.source_id
+
 ),
 {% endif -%}
 {% endfor -%}
@@ -19,35 +23,42 @@ WITH
 -- Construct a 'doi-table style' truth table
 qdoi_table AS (
 SELECT
-    crossref.source_id as doi
-    , crossref.published_year
-    , crossref.type
+    {{ base_comparison }}.doi as doi
+    , {{ base_comparison }}.published_year as published_year
+    , {{ base_comparison }}.type as type
+    , cr.cr_type
+    , cr.cr_published_year
+
     {% for source_name, truthtable in sources.items() -%}
     , {{ source_name }}
     {% endfor -%}
+
 FROM
-    `{{ sources.crossref }}` as crossref
+    (SELECT doi, published_year, type FROM `{{ sources["crossref"] }}`) as cr
+    LEFT JOIN `{{ sources[base_comparison] }}` as {{ base_comparison }} on cr.doi = {{ base_comparison }}.doi
     {% for source_name, truthtable in sources.items() -%}
-    {% if source_name != 'crossref' -%}
-    LEFT JOIN {{ source_name }}_cleaned as {{ source_name }} on crossref.doi = {{ source_name }}.doi
+    {% if source_name != base_comparison -%}
+    LEFT JOIN {{ source_name }}_cleaned as {{ source_name }} on UPPER(TRIM({{ base_comparison }}.doi)) = UPPER(TRIM({{ source_name }}.doi))
     {% endif -%}
-    {% endfor %}
+    {% endfor -%}
 )
 
 SELECT
     published_year
+    , cr_published_year
     , type
-    , COUNT(DISTINCT doi) as crossref_dois
+    , cr_type
+    , COUNT(DISTINCT doi) as {{ base_comparison}}_dois
     {% for source_name, truthtable in sources.items() %}
     , COUNT(DISTINCT {{ source_name }}.source_id) as {{ source_name }}_ids
-    , COUNT(DISTINCT IF({{ source_name }}.type is not null, doi, null)) as {{ source_name }}_has_{{ source_name }}_type
+    , COUNT(DISTINCT IF({{ source_name }}.type is not null, doi, null)) as {{ source_name }}_has_type
     {% for item in data_items[source_name] -%}
     , COUNT(DISTINCT IF({{ source_name }}.has_{{ item[1] }}, doi, null)) as {{ source_name }}_has_{{ item[2] }}
     {% endfor -%}
-    {% if source_name != 'crossref' -%}
+    {% if source_name != base_comparison -%}
     {% for item in data_items[source_name] -%}
-    , COUNT(DISTINCT IF((NOT crossref.has_{{ item[0] }} AND {{ source_name }}.has_{{ item[1] }}), doi, null)) as {{ source_name }}_{{ item[2] }}_adds_presence
-    , COUNT(DISTINCT IF((crossref.count_{{ item[0] }} < {{ source_name }}.count_{{ item[1] }}), doi, null)) as {{ source_name }}_{{ item[2] }}_adds_counts
+    , COUNT(DISTINCT IF((NOT {{ base_comparison}}.has_{{ item[0] }} AND {{ source_name }}.has_{{ item[1] }}), doi, null)) as {{ source_name }}_{{ item[2] }}_adds_presence
+    , COUNT(DISTINCT IF(({{ base_comparison}}.count_{{ item[0] }}  < {{ source_name }}.count_{{ item[1] }}), doi, null)) as {{ source_name }}_{{ item[2] }}_adds_counts
     {% endfor -%}
     {% endif -%}
     {% endfor -%}
