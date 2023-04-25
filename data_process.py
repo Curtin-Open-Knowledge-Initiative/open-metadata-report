@@ -254,7 +254,7 @@ def value_add_graphs(af: AnalyticsFunction,
             if source_b == source_a:
                 continue
             for timeframe in TIME_FRAMES.keys():
-                filtered = comparison_data[comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+                filtered = comparison_data[comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
                 filtered_sum = filtered.sum(axis=0)
                 figdata = collate_value_add_values(filtered_sum,
                                                    ALL_COLLATED_COLUMNS,
@@ -323,8 +323,8 @@ def value_add_graphs(af: AnalyticsFunction,
                                        metadata_element=metadata_element,
                                        ys=VALUE_ADD_META[base_comparison][source]['ys'],
                                        categories=[
-                                           FORMATTED_SOURCE_NAMES[base_comparison],
-                                           f'{FORMATTED_SOURCE_NAMES[source]}'],
+                                           source_a.SOURCE_NAME,
+                                           f'{source_b.SOURCE_NAME}'],
                                        stackedbar=False
                                        )
 
@@ -462,8 +462,8 @@ def overall_comparison(af: AnalyticsFunction,
             source_b_df = pd.read_csv(CSV_FILE_PATHS[source_b.SOURCE_NAME])
 
             for timeframe in TIME_FRAMES.keys():
-                filtered_base = source_a_df[source_a_df.published_year.isin(TIME_FRAMES[timeframe])]
-                filtered_source = source_b_df[source_b_df.published_year.isin(TIME_FRAMES[timeframe])]
+                filtered_base = source_a_df[source_a_df.cr_published_year.isin(TIME_FRAMES[timeframe])]
+                filtered_source = source_b_df[source_b_df.cr_published_year.isin(TIME_FRAMES[timeframe])]
 
                 figdata = calculate_overall_coverage(filtered_base, filtered_source,
                                                      source_a.SOURCE_NAME, source_b.SOURCE_NAME)
@@ -540,7 +540,7 @@ def value_add_self_graphs(af: AnalyticsFunction,
         # base_comparison_data[['type']] = base_comparison_data[['type']].fillna(value='none')
 
         for timeframe in TIME_FRAMES.keys():
-            filtered = comparison_data[comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered = comparison_data[comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
             filtered_sum = filtered.sum(axis=0)
             # TODO fix this to use collate_value_add in two cycles and cleanup PRESENCE_COLUMNS_SELF
             figdata = collate_value_add_self_values(filtered_sum,
@@ -637,7 +637,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction):
                                                  )
         # Modify chart parameters here
         chart.process_data(
-            doc_types=OPENALEX_TYPES,
+            doc_types=OPENALEX_TYPES, #TODO fix this
             palette=['#FF7F0E', '#C0C0C0']
         )
         fig = chart.plotly()
@@ -672,8 +672,8 @@ def dois_in_source_by_pubdate(af,
 
         figdata = pd.DataFrame(index=year_range,
                                data=[calculate_overall_coverage(
-                                   source_a_df=base_comparison_data[base_comparison_data.published_year == year],
-                                   source_b_df=source_data[source_data.published_year == year],
+                                   source_a_df=base_comparison_data[base_comparison_data.cr_published_year == year],
+                                   source_b_df=source_data[source_data.cr_published_year == year],
                                    source=source
                                )
                                    for year in year_range])
@@ -746,7 +746,7 @@ def generate_tables(af,
         source_data = pd.read_csv(CSV_FILE_PATHS[source])
 
     #    for timeframe in TIME_FRAMES.keys():
-    #        filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
+    #        filtered_source = source_data[source_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
     #        filtered_source_sum = filtered_source.sum(axis=0)
     #       filtered_source_sum['timeframe'] = timeframe
     #        summary_source_table_df = summary_source_table_df.append(filtered_comparison_sum, ignore_index=True)
