@@ -349,7 +349,7 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
     #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
     #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
+    comparison_data = pd.read_csv(CSV_FILE_PATHS['comparison'])
 
     for source_a in SOURCES:
         for source_b in SOURCES:
