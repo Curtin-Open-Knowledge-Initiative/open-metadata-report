@@ -266,7 +266,7 @@ def value_add_graphs(af: AnalyticsFunction,
                                         source_a.SOURCE_PRINT_NAME,
                                         f'{source_b.SOURCE_PRINT_NAME} Added Value'],
                                     xs=STACKED_BAR_SUMMARY_XS,
-                                    ys=VALUE_ADD_META[base_comparison][source_b.SOURCE_PRINT_NAME]['ys'])
+                                    ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'])
 
                 fig = chart.plotly()
                 filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}'
@@ -277,11 +277,11 @@ def value_add_graphs(af: AnalyticsFunction,
                 # Side by side bar (including Fields)
                 chart = ValueAddBar(df=figdata,
                                     categories=[
-                                        SOURCES[source_a]["SOURCE_PRINT_NAME"],
-                                        f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]}'
+                                        source_a.SOURCE_PRINT_NAME,
+                                        source_b.SOURCE_PRINT_NAME
                                     ],
                                     xs=SIDEBYSIDE_BAR_SUMMARY_XS,
-                                    ys=VALUE_ADD_META[base_comparison][source_b.SOURCE_PRINT_NAME]['ys'],
+                                    ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
                                     stackedbar=False)
 
                 fig = chart.plotly()
@@ -291,7 +291,7 @@ def value_add_graphs(af: AnalyticsFunction,
                 af.add_existing_file(filepath.with_suffix('.png'))
 
             # Details graph for each metadata element
-            for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
+            for metadata_element in VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']:
                 sum_by_type = filtered.groupby('cr_type').sum().reset_index()
                 collated_sum_by_type = collate_value_add_values(sum_by_type,
                                                                 ALL_COLLATED_COLUMNS,
@@ -323,8 +323,8 @@ def value_add_graphs(af: AnalyticsFunction,
                                        metadata_element=metadata_element,
                                        ys=VALUE_ADD_META[base_comparison][source]['ys'],
                                        categories=[
-                                           source_a.SOURCE_NAME,
-                                           f'{source_b.SOURCE_NAME}'],
+                                           source_a.SOURCE_PRINT_NAME,
+                                           f'{source_b.SOURCE_PRINT_NAME}'],
                                        stackedbar=False
                                        )
 
