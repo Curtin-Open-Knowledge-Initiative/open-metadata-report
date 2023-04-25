@@ -5,13 +5,17 @@ WITH
 {{ source_name }}_cleaned AS (
     SELECT
         papers.*
+        , cr.published_year as cr_published_year
+        , cr.type as cr_type
 
-    FROM (SELECT doi, ARRAY_AGG(source_id ORDER BY count_citations DESC, source_id DESC)[offset(0)] as source_id
+    FROM
+    (SELECT doi, ARRAY_AGG(source_id ORDER BY deduplication_variable)[offset(0)] as source_id
     FROM `{{ truthtable }}` as papers
     WHERE papers.doi IS NOT NULL
     GROUP BY doi) as dois
 
     LEFT JOIN `{{ truthtable }}` as papers ON papers.source_id = dois.source_id
+
 ),
 {% endif -%}
 {% endfor -%}
@@ -22,17 +26,16 @@ SELECT
     {{ base_comparison }}.doi as doi
     , {{ base_comparison }}.published_year as published_year
     , {{ base_comparison }}.type as type
+    , cr.cr_type
+    , cr.cr_published_year
 
     {% for source_name, truthtable in sources.items() -%}
     , {{ source_name }}
     {% endfor -%}
 
 FROM
-    {% for source_name, truthtable in sources.items() -%}
-    {% if source_name == base_comparison -%}
-    `{{ truthtable }}` as {{ base_comparison }}
-    {% endif -%}
-    {% endfor -%}
+    (SELECT doi, published_year, type FROM `{{ sources["crossref"] }}`) as cr
+    LEFT JOIN `{{ sources[base_comparison] }}` as {{ base_comparison }} on cr.doi = {{ base_comparison }}.doi
     {% for source_name, truthtable in sources.items() -%}
     {% if source_name != base_comparison -%}
     LEFT JOIN {{ source_name }}_cleaned as {{ source_name }} on UPPER(TRIM({{ base_comparison }}.doi)) = UPPER(TRIM({{ source_name }}.doi))
@@ -42,7 +45,9 @@ FROM
 
 SELECT
     published_year
+    , cr_published_year
     , type
+    , cr_type
     , COUNT(DISTINCT doi) as {{ base_comparison}}_dois
     {% for source_name, truthtable in sources.items() %}
     , COUNT(DISTINCT {{ source_name }}.source_id) as {{ source_name }}_ids

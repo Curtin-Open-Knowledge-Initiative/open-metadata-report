@@ -16,6 +16,7 @@ WITH table_cleaned AS (
 SELECT
     UPPER(TRIM(doi)) as source_id,
     UPPER(TRIM(doi)) as doi,
+    RANK() OVER (ORDER BY is_referenced_by_count DESC, created.date_time DESC) as deduplication_rank,
     DATE(created.date_time) AS created_date,
     type,
     member,
