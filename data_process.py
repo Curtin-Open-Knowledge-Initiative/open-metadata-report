@@ -523,27 +523,26 @@ def value_add_self_graphs(af: AnalyticsFunction,
     :param base_comparison: Lowercase string name of the base_comparison, set the same as the source being compared
     use NON_BASE_SOURCES in data_parameters.py
     """
-    # TODO Dynamically set base_comparison when looping over multiple sources?
 
-    print('Generating value add graphs...')
+    print('Generating doi-non-doi comparison graphs...')
 
-    base_comparison_data = pd.read_csv(CSV_FILE_PATHS[base_comparison])
-
-    for source in NON_BASE_SOURCES:
+    for source in SOURCES:
+        comparison_data = pd.read_csv(CSV_FILE_PATHS[source.SOURCE_NAME])
 
         # Replace None (which is not a string) values with string 'none' to include in aggregation
         # base_comparison_data[['type']] = base_comparison_data[['type']].fillna(value='none')
 
         for timeframe in TIME_FRAMES.keys():
-            filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered = comparison_data[comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
             filtered_sum = filtered.sum(axis=0)
+            # TODO fix this to use collate_value_add in two cycles and cleanup PRESENCE_COLUMNS_SELF
             figdata = collate_value_add_self_values(filtered_sum,
                                                     PRESENCE_COLUMNS_SELF)
 
             # Side by side bar (including Fields)
             chart = ValueAddBar(df=figdata,
-                                categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
-                                            f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
+                                categories=[f'{source.SOURCE_PRINT_NAME} DOIs',
+                                            f'{source.SOURCE_PRINT_NAME} non-DOIs'],
                                 xs=SIDEBYSIDE_BAR_SUMMARY_XS,
                                 ys=VALUE_ADD_META[base_comparison][source]['ys'],
                                 stackedbar=False)
@@ -567,11 +566,13 @@ def value_add_self_graphs(af: AnalyticsFunction,
                                                                      PRESENCE_COLUMNS_SELF)
 
                 # Side by side bar
+                # TODO Remove use of base_comparison in this context - not totally clear how
+                # TODO or alternately this is an appropriate use of crossref as the base comparison
                 chart = ValueAddByCrossrefType(df=collated_sum_by_type,
                                                metadata_element=metadata_element,
                                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
-                                               categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
-                                                           f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
+                                               categories=[f'{source.SOURCE_PRINT_NAME} DOIs',
+                                                           f'{source.SOURCE_PRINT_NAME} non-DOIs'],
                                                stackedbar=False
                                                )
 
@@ -588,9 +589,7 @@ def value_add_self_graphs(af: AnalyticsFunction,
                 af.add_existing_file(filepath.with_suffix('.png'))
 
 
-def source_coverage_self_by_type(af: AnalyticsFunction,
-                                 # base_comparison: str = BASE_COMPARISON):
-                                 base_comparison: str = NON_BASE_SOURCES[0]):
+def source_coverage_self_by_type(af: AnalyticsFunction):
     """
     Graph the coverage of dois and non-dois in source by source type
     Adapted from source_coverage_by_crossref_type
@@ -600,14 +599,15 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
     #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
     #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    base_comparison_data = pd.read_csv(CSV_FILE_PATHS[base_comparison])
 
-    for source in NON_BASE_SOURCES:
+
+    for source in SOURCES:
+        comparison_data = pd.read_csv(CSV_FILE_PATHS[source.SOURCE_NAME])
         # Replace None (which is not a string) values with string 'none' to include in aggregation
-        figdata = base_comparison_data
-        figdata[['type']] = base_comparison_data[['type']].fillna(value='none')
+        figdata = comparison_data
+        figdata[['type']] = comparison_data[['type']].fillna(value='none')
 
-        figdata = base_comparison_data.groupby('type').agg(
+        figdata = comparison_data.groupby('type').agg(
             source_objects=pd.NamedAgg(column='num_objects', aggfunc='sum'),
             source_dois=pd.NamedAgg(column='num_dois', aggfunc='sum'),
             source_non_dois=pd.NamedAgg(column='num_non_dois', aggfunc='sum')
