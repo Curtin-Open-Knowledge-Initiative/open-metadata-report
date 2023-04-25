@@ -266,7 +266,7 @@ def value_add_graphs(af: AnalyticsFunction,
                                         source_a.SOURCE_PRINT_NAME,
                                         f'{source_b.SOURCE_PRINT_NAME} Added Value'],
                                     xs=STACKED_BAR_SUMMARY_XS,
-                                    ys=VALUE_ADD_META[base_comparison][source]['ys'])
+                                    ys=VALUE_ADD_META[base_comparison][source_b.SOURCE_PRINT_NAME]['ys'])
 
                 fig = chart.plotly()
                 filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}'
@@ -281,7 +281,7 @@ def value_add_graphs(af: AnalyticsFunction,
                                         f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]}'
                                     ],
                                     xs=SIDEBYSIDE_BAR_SUMMARY_XS,
-                                    ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                    ys=VALUE_ADD_META[base_comparison][source_b.SOURCE_PRINT_NAME]['ys'],
                                     stackedbar=False)
 
                 fig = chart.plotly()
@@ -302,8 +302,8 @@ def value_add_graphs(af: AnalyticsFunction,
                                                metadata_element=metadata_element,
                                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
                                                categories=[
-                                                   SOURCES[source_a]["SOURCE_PRINT_NAME"],
-                                                   f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]} Added Value'
+                                                   source_a.SOURCE_PRINT_NAME,
+                                                   f'{source_b.SOURCE_PRINT_NAME} Added Value'
                                                ],
                                                )
 
@@ -313,7 +313,7 @@ def value_add_graphs(af: AnalyticsFunction,
             )
 
             fig = chart.plotly()
-            filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+            filename = f'value_add_stacked_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
             filepath = GRAPH_DIR / filename
             fig.write_image(filepath.with_suffix('.png'))
             af.add_existing_file(filepath.with_suffix('.png'))
@@ -334,7 +334,7 @@ def value_add_graphs(af: AnalyticsFunction,
         )
 
         fig = chart.plotly()
-        filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+        filename = f'value_add_sidebyside_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
         filepath = GRAPH_DIR / filename
         fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))
