@@ -5,11 +5,9 @@ WITH
 {{ source_name }}_cleaned AS (
     SELECT
         papers.*
-        , cr.published_year as cr_published_year
-        , cr.type as cr_type
 
     FROM
-    (SELECT doi, ARRAY_AGG(source_id ORDER BY deduplication_variable)[offset(0)] as source_id
+    (SELECT doi, ARRAY_AGG(source_id ORDER BY deduplication_rank)[offset(0)] as source_id
     FROM `{{ truthtable }}` as papers
     WHERE papers.doi IS NOT NULL
     GROUP BY doi) as dois
@@ -26,8 +24,8 @@ SELECT
     {{ base_comparison }}.doi as doi
     , {{ base_comparison }}.published_year as published_year
     , {{ base_comparison }}.type as type
-    , cr.cr_type
-    , cr.cr_published_year
+    , cr.type as cr_type
+    , cr.published_year as cr_published_year
 
     {% for source_name, truthtable in sources.items() -%}
     , {{ source_name }}
@@ -44,9 +42,7 @@ FROM
 )
 
 SELECT
-    published_year
-    , cr_published_year
-    , type
+    cr_published_year
     , cr_type
     , COUNT(DISTINCT doi) as {{ base_comparison}}_dois
     {% for source_name, truthtable in sources.items() %}
@@ -64,5 +60,5 @@ SELECT
     {% endfor -%}
 
 FROM qdoi_table
-GROUP BY published_year, type
-ORDER BY published_year DESC, type ASC
+GROUP BY cr_published_year, cr_type
+ORDER BY cr_published_year DESC, cr_type ASC
