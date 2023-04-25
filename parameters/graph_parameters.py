@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 
-from data_parameters import ALL_DATA_ITEMS, SOURCES, SOURCES_SELF, CURRENT, FOCUS, BASE_COMPARISON
+from parameters.data_parameters import SOURCES, SOURCES_SELF, CURRENT, FOCUS, BASE_COMPARISON
 
 GRAPH_DIR = Path('graphs')
 if not GRAPH_DIR.is_dir():

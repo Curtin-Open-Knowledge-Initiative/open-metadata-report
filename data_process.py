@@ -29,25 +29,23 @@ from observatory.reports import report_utils
 from precipy.analytics_function import AnalyticsFunction
 from report_data_processing.sql import load_sql_to_string
 from parameters.data_parameters import *
-from parameters.graph_parameters import *
-from report_graphs import (
-    ValueAddBar,
-    ValueAddByCrossrefType,
-    ValueAddByCrossrefTypeHorizontal,
-    OverallCoverage,
-    BarLine,
-    Alluvial
-)
+# from parameters.graph_parameters import *
+# from report_graphs import (
+#     ValueAddBar,
+#     ValueAddByCrossrefType,
+#     ValueAddByCrossrefTypeHorizontal,
+#     OverallCoverage,
+#     BarLine,
+#     Alluvial
+# )
 from observatory.reports.report_utils import generate_table_data
 
 
-
-
 def openalex_to_truthtable(af: AnalyticsFunction,
-                                  source: str = 'openalex',
-                                  rerun: bool = RERUN,
-                                  verbose: bool = VERBOSE):
-#    pass
+                           source: str = 'openalex',
+                           rerun: bool = RERUN,
+                           verbose: bool = VERBOSE):
+    #    pass
 
     """
     Convert OpenAlex Format Works Table to Truthtable
@@ -157,15 +155,14 @@ def dois_category_query(af: AnalyticsFunction,
     """
     Query and download category data from the quasi doi table
     """
-    #added 2 to query name to test variant
+    # added 2 to query name to test variant
     query_template = load_sql_to_string('comparison_categories_query.sql.jinja2',
                                         directory=SQL_DIRECTORY)
 
     data = dict(
-        sources={source: SOURCE_TRUTH_TABLES[source] for source in SOURCES},
-        # for testing: define base_comparison for identification in sql
-        base_comparison=BASE_COMPARISON,
-        data_items=SOURCE_DATA_ELEMENTS
+        sources={source.SOURCE_NAME: SOURCE_TRUTH_TABLES[source.SOURCE_NAME] for source in SOURCES},
+        source_data_items={source.SOURCE_NAME: source.SOURCE_DATA_ELEMENTS for source in SOURCES},
+        comparison_element_mapping=COMPARISON_ELEMENT_MAPPING
     )
     query = jinja2.Template(query_template).render(data)
 
@@ -180,8 +177,8 @@ def dois_category_query(af: AnalyticsFunction,
     categories = pd.read_gbq(query=query,
                              project_id=PROJECT_ID)
 
-#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        store[STORE_ELEMENT['crossref']] = categories
+    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+    #        store[STORE_ELEMENT['crossref']] = categories
 
     categories.to_csv(CSV_FILE['crossref'])
     af.add_existing_file(CSV_FILE['crossref'])
@@ -206,6 +203,7 @@ def save_data_parameters(af):
         json.dump({item: getattr(params, item) for item in dir(params) if not item.startswith('__')},
                   f,
                   default=str)
+
 
 #   for source in SOURCES:
 #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
@@ -250,8 +248,8 @@ def value_add_graphs(af: AnalyticsFunction,
     """
 
     print('Generating value add graphs...')
-#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
     base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
@@ -332,19 +330,19 @@ def value_add_graphs(af: AnalyticsFunction,
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
 
+
 def source_coverage_by_crossref_type(af: AnalyticsFunction,
                                      base_comparison: str = BASE_COMPARISON):
     """
     Graph the coverage of the source compared to the base comparison by crossref-type
     """
 
-#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
     base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source in NON_BASE_SOURCES:
-
         # TODO Cleanup variable names here to abstract away from crossref to generalised base comparison
         figdata = base_comparison_data.groupby('type').agg(
             in_base_comparison=pd.NamedAgg(column=f'{base_comparison}_dois', aggfunc='sum'),
@@ -355,7 +353,7 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
         figdata = collate_value_add_values(figdata,
                                            ['in_source',
                                             'not_in_source'],
-                                            'in_base_comparison')
+                                           'in_base_comparison')
         figdata.reset_index(inplace=True)
 
         chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
@@ -410,6 +408,7 @@ def collate_value_add_values(df: pd.DataFrame,
     df = pd.concat([df, added_columns], axis=1)
     return df
 
+
 def calculate_overall_coverage(base_df: pd.DataFrame,
                                source_df: pd.DataFrame,
                                source: str,
@@ -432,7 +431,7 @@ def calculate_overall_coverage(base_df: pd.DataFrame,
         cr_in_source=dois_in_source,
         cr_not_in_source=base_total - dois_in_source,
         cr_total=base_total,
-        #Added for dois_in_source_by_pubdate
+        # Added for dois_in_source_by_pubdate
         source_total=source_total,
         source_dois=source_with_doi
     )
@@ -440,8 +439,8 @@ def calculate_overall_coverage(base_df: pd.DataFrame,
 
 def overall_comparison(af: AnalyticsFunction,
                        base_comparison: str = BASE_COMPARISON):
-#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
     base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
@@ -449,8 +448,8 @@ def overall_comparison(af: AnalyticsFunction,
         if source == base_comparison:
             continue
 
-#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#            source_data = store[STORE_ELEMENT[source]]
+        #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        #            source_data = store[STORE_ELEMENT[source]]
 
         source_data = pd.read_csv(CSV_FILE[source])
 
@@ -474,8 +473,8 @@ def overall_comparison(af: AnalyticsFunction,
 
 def source_in_base_by_pubdate(af,
                               base_comparison: str = BASE_COMPARISON):
-#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
     base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
@@ -483,8 +482,8 @@ def source_in_base_by_pubdate(af,
         if source == base_comparison:
             continue
 
-#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#            source_data = store[STORE_ELEMENT[source]]
+        #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        #            source_data = store[STORE_ELEMENT[source]]
 
         source_data = pd.read_csv(CSV_FILE[source])
 
@@ -519,7 +518,7 @@ def source_in_base_by_pubdate(af,
 def value_add_self_graphs(af: AnalyticsFunction,
                           # base_comparison: str = BASE_COMPARISON):
                           base_comparison: str = NON_BASE_SOURCES[0]):
-#    pass
+    #    pass
 
     """
     Generate graphs that provide information on metadata coverage of dois and non-dois in a given source
@@ -533,14 +532,12 @@ def value_add_self_graphs(af: AnalyticsFunction,
     # TODO Dynamically set base_comparison when looping over multiple sources?
 
     print('Generating value add graphs...')
-#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
     base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source in NON_BASE_SOURCES:
-
-
 
         # Replace None (which is not a string) values with string 'none' to include in aggregation
         # base_comparison_data[['type']] = base_comparison_data[['type']].fillna(value='none')
@@ -549,7 +546,7 @@ def value_add_self_graphs(af: AnalyticsFunction,
             filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
             filtered_sum = filtered.sum(axis=0)
             figdata = collate_value_add_self_values(filtered_sum,
-                                               PRESENCE_COLUMNS_SELF)
+                                                    PRESENCE_COLUMNS_SELF)
 
             # Side by side bar (including Fields)
             chart = ValueAddBar(df=figdata,
@@ -570,23 +567,23 @@ def value_add_self_graphs(af: AnalyticsFunction,
             fig.write_image(filepath.with_suffix('.png'))
             af.add_existing_file(filepath.with_suffix('.png'))
 
-           #Detailed graphs per metadata element
+            # Detailed graphs per metadata element
 
             for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
                 sum_by_type = filtered.groupby('type').sum().reset_index()
                 collated_sum_by_type = collate_value_add_self_values(sum_by_type,
-                                                                PRESENCE_COLUMNS_SELF)
+                                                                     PRESENCE_COLUMNS_SELF)
 
                 # Side by side bar
                 chart = ValueAddByCrossrefType(df=collated_sum_by_type,
-                                                  metadata_element=metadata_element,
+                                               metadata_element=metadata_element,
                                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
                                                categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
                                                            f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
                                                stackedbar=False
                                                )
 
-                #Modify chart parameters here
+                # Modify chart parameters here
                 chart.process_data(
                     doc_types=CROSSREF_TYPES,
                     palette=['#FF7F0E', '#C0C0C0']
@@ -608,14 +605,13 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
     """
     # TODO Dynamically set base_comparison when looping over multiple sources?
 
-#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
     base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source in NON_BASE_SOURCES:
-
-        #Replace None (which is not a string) values with string 'none' to include in aggregation
+        # Replace None (which is not a string) values with string 'none' to include in aggregation
         figdata = base_comparison_data
         figdata[['type']] = base_comparison_data[['type']].fillna(value='none')
 
@@ -630,22 +626,21 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
                                            'source_objects')
         figdata.reset_index(inplace=True)
 
-
         chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
-                                       categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
-                                                   f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
-                                       metadata_element='dummy',
-                                       ys={
-                                           f'{FORMATTED_SOURCE_NAMES[source]} DOIs': {
-                                               'dummy': 'pc_source_dois'},
-                                           f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs': {
-                                               'dummy': 'pc_source_non_dois'}
-                                       }
-                                       )
+                                                 categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
+                                                             f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
+                                                 metadata_element='dummy',
+                                                 ys={
+                                                     f'{FORMATTED_SOURCE_NAMES[source]} DOIs': {
+                                                         'dummy': 'pc_source_dois'},
+                                                     f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs': {
+                                                         'dummy': 'pc_source_non_dois'}
+                                                 }
+                                                 )
         # Modify chart parameters here
         chart.process_data(
-            doc_types = OPENALEX_TYPES,
-            palette = ['#FF7F0E', '#C0C0C0']
+            doc_types=OPENALEX_TYPES,
+            palette=['#FF7F0E', '#C0C0C0']
         )
         fig = chart.plotly()
         filename = f'{source}_coverage_self_by_type'
@@ -661,8 +656,8 @@ def dois_in_source_by_pubdate(af,
        Adapted from source_in_base_by_pubdate
        """
 
-#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
     base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
@@ -670,8 +665,8 @@ def dois_in_source_by_pubdate(af,
         if source == base_comparison:
             continue
 
-#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#            source_data = store[STORE_ELEMENT[source]]
+        #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        #            source_data = store[STORE_ELEMENT[source]]
 
         source_data = pd.read_csv(CSV_FILE[source])
 
@@ -729,15 +724,13 @@ def collate_value_add_self_values(df: pd.DataFrame,
     return df
 
 
-
 ## Tables
 
 def generate_tables(af,
                     base_comparison: str = BASE_COMPARISON):
-
     table_json = {}
-#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
     base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
     summary_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
     summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
@@ -749,8 +742,8 @@ def generate_tables(af,
         summary_table_df = summary_table_df.append(filtered_comparison_sum, ignore_index=True)
 
     for source in SOURCES:
-#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#            source_data = store[STORE_ELEMENT[source]]
+        #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
+        #            source_data = store[STORE_ELEMENT[source]]
 
         source_data = pd.read_csv(CSV_FILE[source])
 
@@ -778,14 +771,14 @@ def generate_tables(af,
 
 
 if __name__ == '__main__':
-    #crossref_to_truthtable(af='test',
+    # crossref_to_truthtable(af='test',
     #                       rerun=False,
     #                       verbose=True)
-    #openalex_to_truthtable(af='test',
+    # openalex_to_truthtable(af='test',
     #                             rerun=False,
     #                             verbose=True)
     dois_category_query(af='test',
-                       rerun=False,
+                        rerun=False,
                         verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,

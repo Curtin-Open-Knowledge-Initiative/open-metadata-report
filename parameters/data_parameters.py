@@ -4,8 +4,8 @@ Main Location for Storing Parameters for Report
 
 import datetime
 from pathlib import Path
-import sourceparams_openalex as openalex
-import sourceparams_crossref as crossref
+import parameters.sourceparams_openalex as openalex
+import parameters.sourceparams_crossref as crossref
 
 RERUN = False
 VERBOSE = True
@@ -82,5 +82,5 @@ for source_b in SOURCES:
             if element in source_a.SOURCE_DATA_ELEMENTS:
                 mapped_element = element
             else:
-                mapped_element = "zeros"
+                mapped_element = "dummy_falses"
             COMPARISON_ELEMENT_MAPPING[source_b.SOURCE_NAME][source_a.SOURCE_NAME][element] = mapped_element

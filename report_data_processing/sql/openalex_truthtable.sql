@@ -170,5 +170,4 @@ SELECT
     END
     as count_venue_id_issnl
 
-
 FROM `{table}`
