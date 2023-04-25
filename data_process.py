@@ -261,7 +261,7 @@ def value_add_graphs(af: AnalyticsFunction,
     for source in NON_BASE_SOURCES:
 
         for timeframe in TIME_FRAMES.keys():
-            filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered = base_comparison_data[base_comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
             filtered_sum = filtered.sum(axis=0)
             figdata = collate_value_add_values(filtered_sum,
                                                ALL_COLLATED_COLUMNS,
@@ -296,7 +296,7 @@ def value_add_graphs(af: AnalyticsFunction,
 
             # Details graph for each metadata element
             for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
-                sum_by_type = filtered.groupby('type').sum().reset_index()
+                sum_by_type = filtered.groupby('cr_type').sum().reset_index()
                 collated_sum_by_type = collate_value_add_values(sum_by_type,
                                                                 ALL_COLLATED_COLUMNS,
                                                                 'crossref_dois')
@@ -312,6 +312,7 @@ def value_add_graphs(af: AnalyticsFunction,
 
                 chart.process_data(
                     doc_types=CROSSREF_TYPES,
+                    type_column='cr_type'
                 )
 
                 fig = chart.plotly()
@@ -329,6 +330,12 @@ def value_add_graphs(af: AnalyticsFunction,
                                                    f'{FORMATTED_SOURCE_NAMES[source]}'],
                                                stackedbar=False
                                                )
+
+                chart.process_data(
+                    doc_types=CROSSREF_TYPES,
+                    type_column='cr_type'
+                )
+
                 fig = chart.plotly()
                 filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
                 filepath = GRAPH_DIR / filename
@@ -349,7 +356,7 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
     for source in NON_BASE_SOURCES:
 
         # TODO Cleanup variable names here to abstract away from crossref to generalised base comparison
-        figdata = base_comparison_data.groupby('type').agg(
+        figdata = base_comparison_data.groupby('cr_type').agg(
             in_base_comparison=pd.NamedAgg(column=f'{base_comparison}_dois', aggfunc='sum'),
             in_source=pd.NamedAgg(column=f'{source}_ids', aggfunc='sum')
         )
@@ -375,6 +382,7 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
         # Modify chart parameters here
         chart.process_data(
             doc_types=SOURCE_TYPES[base_comparison],
+            type_column='cr_type',
             palette=['#FF7F0E', '#C0C0C0']
         )
         fig = chart.plotly()
@@ -458,7 +466,7 @@ def overall_comparison(af: AnalyticsFunction,
         source_data = pd.read_csv(CSV_FILE[source])
 
         for timeframe in TIME_FRAMES.keys():
-            filtered_base = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered_base = base_comparison_data[base_comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
             filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
 
             figdata = calculate_overall_coverage(filtered_base, filtered_source,
@@ -495,7 +503,7 @@ def source_in_base_by_pubdate(af,
 
         figdata = pd.DataFrame(index=year_range,
                                data=[calculate_overall_coverage(
-                                   base_df=base_comparison_data[base_comparison_data.published_year == year],
+                                   base_df=base_comparison_data[base_comparison_data.cr_published_year == year],
                                    source_df=source_data[source_data.published_year == year],
                                    source=source
                                )
@@ -592,6 +600,7 @@ def value_add_self_graphs(af: AnalyticsFunction,
                 #Modify chart parameters here
                 chart.process_data(
                     doc_types=CROSSREF_TYPES,
+                    type_column='type',
                     palette=['#FF7F0E', '#C0C0C0']
                 )
 
@@ -682,7 +691,7 @@ def dois_in_source_by_pubdate(af,
 
         figdata = pd.DataFrame(index=year_range,
                                data=[calculate_overall_coverage(
-                                   base_df=base_comparison_data[base_comparison_data.published_year == year],
+                                   base_df=base_comparison_data[base_comparison_data.cr_published_year == year],
                                    source_df=source_data[source_data.published_year == year],
                                    source=source
                                )
@@ -743,53 +752,53 @@ def generate_tables(af,
 #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
     base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
     summary_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
-    summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
+    #summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
 
     for timeframe in TIME_FRAMES.keys():
-        filtered_comparison = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+        filtered_comparison = base_comparison_data[base_comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
         filtered_comparison_sum = filtered_comparison.sum(axis=0)
         filtered_comparison_sum['timeframe'] = timeframe
         summary_table_df = summary_table_df.append(filtered_comparison_sum, ignore_index=True)
 
-    for source in SOURCES:
+    #for source in SOURCES:
 #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
 #            source_data = store[STORE_ELEMENT[source]]
 
-        source_data = pd.read_csv(CSV_FILE[source])
+    #    source_data = pd.read_csv(CSV_FILE[source])
 
-        for timeframe in TIME_FRAMES.keys():
-            filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
-            filtered_source_sum = filtered_source.sum(axis=0)
-            filtered_source_sum['timeframe'] = timeframe
-            summary_source_table_df = summary_source_table_df.append(filtered_comparison_sum, ignore_index=True)
+    #    for timeframe in TIME_FRAMES.keys():
+    #        filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
+    #        filtered_source_sum = filtered_source.sum(axis=0)
+    #       filtered_source_sum['timeframe'] = timeframe
+    #        summary_source_table_df = summary_source_table_df.append(filtered_comparison_sum, ignore_index=True)
 
-        table_dict = generate_table_data(
-            title=f'{FORMATTED_SOURCE_NAMES[source]} Metadata Coverage of Crossref DOIs',
-            df=summary_table_df,
-            columns=SUMMARY_TABLE_COLUMNS[source]['column_names'],
-            short_column_names=SUMMARY_TABLE_COLUMNS[source]['nice_column_names'],
-            identifier=None,
-            sort_column=None
-        )
+    #    table_dict = generate_table_data(
+    #        title=f'{FORMATTED_SOURCE_NAMES[source]} Metadata Coverage of Crossref DOIs',
+    #       df=summary_table_df,
+    #        columns=SUMMARY_TABLE_COLUMNS[source]['column_names'],
+    #        short_column_names=SUMMARY_TABLE_COLUMNS[source]['nice_column_names'],
+    #        identifier=None,
+    #        sort_column=None
+    #    )
 
-        table_json[source] = {
-            'summary_comparison_table': table_dict
-        }
+    #    table_json[source] = {
+    #        'summary_comparison_table': table_dict
+    #    }
 
     for f in af.generate_file('tables.json'):
         json.dump(table_json, f)
 
 
 if __name__ == '__main__':
-    #crossref_to_truthtable(af='test',
-    #                       rerun=False,
-    #                       verbose=True)
+    crossref_to_truthtable(af='test',
+                           rerun=False,
+                           verbose=True)
     #openalex_to_truthtable(af='test',
     #                             rerun=False,
     #                             verbose=True)
-    dois_category_query(af='test',
-                       rerun=False,
-                        verbose=True)
+    #dois_category_query(af='test',
+    #                   rerun=False,
+    #                    verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
