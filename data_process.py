@@ -29,15 +29,15 @@ from observatory.reports import report_utils
 from precipy.analytics_function import AnalyticsFunction
 from report_data_processing.sql import load_sql_to_string
 from parameters.data_parameters import *
-# from parameters.graph_parameters import *
-# from report_graphs import (
-#     ValueAddBar,
-#     ValueAddByCrossrefType,
-#     ValueAddByCrossrefTypeHorizontal,
-#     OverallCoverage,
-#     BarLine,
-#     Alluvial
-# )
+from parameters.graph_parameters import *
+from report_graphs import (
+    ValueAddBar,
+    ValueAddByCrossrefType,
+    ValueAddByCrossrefTypeHorizontal,
+    OverallCoverage,
+    BarLine,
+    Alluvial
+)
 from observatory.reports.report_utils import generate_table_data
 
 
@@ -142,16 +142,16 @@ def source_category_query(af: AnalyticsFunction,
         categories = pd.read_gbq(query=query,
                                  project_id=PROJECT_ID)
 
-        categories.to_csv(CSV_FILE[source.SOURCE_NAME])
-        af.add_existing_file(CSV_FILE[source.SOURCE_NAME])
+        categories.to_csv(CSV_FILE_PATHS[source.SOURCE_NAME])
+        af.add_existing_file(CSV_FILE_PATHS[source.SOURCE_NAME])
 
         if verbose:
             print('...completed')
 
 
-def dois_category_query(af: AnalyticsFunction,
-                        rerun: bool = RERUN,
-                        verbose: bool = VERBOSE):
+def comparison_categories_query(af: AnalyticsFunction,
+                                rerun: bool = RERUN,
+                                verbose: bool = VERBOSE):
     """
     Query and download category data from the quasi doi table
     """
@@ -177,11 +177,9 @@ def dois_category_query(af: AnalyticsFunction,
     categories = pd.read_gbq(query=query,
                              project_id=PROJECT_ID)
 
-    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-    #        store[STORE_ELEMENT['crossref']] = categories
-
-    categories.to_csv(CSV_FILE['crossref'])
-    af.add_existing_file(CSV_FILE['crossref'])
+    filepath = CSV_FILE_PATHS.get('comparison')
+    categories.to_csv(filepath)
+    af.add_existing_file(filepath)
 
     if verbose:
         print('...completed')
@@ -248,138 +246,142 @@ def value_add_graphs(af: AnalyticsFunction,
     """
 
     print('Generating value add graphs...')
-    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
+    comparison_data = pd.read_csv(CSV_FILE_PATHS['comparison'])
 
-    for source in NON_BASE_SOURCES:
-
-        for timeframe in TIME_FRAMES.keys():
-            filtered = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
-            filtered_sum = filtered.sum(axis=0)
-            figdata = collate_value_add_values(filtered_sum,
-                                               ALL_COLLATED_COLUMNS,
-                                               'crossref_dois')
-
-            # Stacked Bar
-            chart = ValueAddBar(df=figdata,
-                                categories=[FORMATTED_SOURCE_NAMES[base_comparison],
-                                            f'{FORMATTED_SOURCE_NAMES[source]} Added Value'],
-                                xs=STACKED_BAR_SUMMARY_XS,
-                                ys=VALUE_ADD_META[base_comparison][source]['ys'])
-
-            fig = chart.plotly()
-            filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}'
-            filepath = GRAPH_DIR / filename
-            fig.write_image(filepath.with_suffix('.png'))
-            af.add_existing_file(filepath.with_suffix('.png'))
-
-            # Side by side bar (including Fields)
-            chart = ValueAddBar(df=figdata,
-                                categories=[FORMATTED_SOURCE_NAMES[base_comparison],
-                                            f'{FORMATTED_SOURCE_NAMES[source]}'],
-                                xs=SIDEBYSIDE_BAR_SUMMARY_XS,
-                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
-                                stackedbar=False)
-
-            fig = chart.plotly()
-            filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}'
-            filepath = GRAPH_DIR / filename
-            fig.write_image(filepath.with_suffix('.png'))
-            af.add_existing_file(filepath.with_suffix('.png'))
-
-            # Details graph for each metadata element
-            for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
-                sum_by_type = filtered.groupby('type').sum().reset_index()
-                collated_sum_by_type = collate_value_add_values(sum_by_type,
-                                                                ALL_COLLATED_COLUMNS,
-                                                                'crossref_dois')
+    for source_a in SOURCES:
+        for source_b in SOURCES:
+            if source_b == source_a:
+                continue
+            for timeframe in TIME_FRAMES.keys():
+                filtered = comparison_data[comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+                filtered_sum = filtered.sum(axis=0)
+                figdata = collate_value_add_values(filtered_sum,
+                                                   ALL_COLLATED_COLUMNS,
+                                                   'crossref_dois')
 
                 # Stacked Bar
-                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
-                                               metadata_element=metadata_element,
-                                               ys=VALUE_ADD_META[base_comparison][source]['ys'],
-                                               categories=[
-                                                   FORMATTED_SOURCE_NAMES[base_comparison],
-                                                   f'{FORMATTED_SOURCE_NAMES[source]} Added Value']
-                                               )
-
-                chart.process_data(
-                    doc_types=CROSSREF_TYPES,
-                )
+                chart = ValueAddBar(df=figdata,
+                                    categories=[
+                                        SOURCES[source_a]["SOURCE_PRINT_NAME"],
+                                        f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]} Added Value'],
+                                    xs=STACKED_BAR_SUMMARY_XS,
+                                    ys=VALUE_ADD_META[base_comparison][source]['ys'])
 
                 fig = chart.plotly()
-                filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}'
                 filepath = GRAPH_DIR / filename
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
 
-                # Side by side bar
-                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
-                                               metadata_element=metadata_element,
-                                               ys=VALUE_ADD_META[base_comparison][source]['ys'],
-                                               categories=[
-                                                   FORMATTED_SOURCE_NAMES[base_comparison],
-                                                   f'{FORMATTED_SOURCE_NAMES[source]}'],
-                                               stackedbar=False
-                                               )
+                # Side by side bar (including Fields)
+                chart = ValueAddBar(df=figdata,
+                                    categories=[
+                                        SOURCES[source_a]["SOURCE_PRINT_NAME"],
+                                        f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]}'
+                                    ],
+                                    xs=SIDEBYSIDE_BAR_SUMMARY_XS,
+                                    ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                    stackedbar=False)
+
                 fig = chart.plotly()
-                filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}'
                 filepath = GRAPH_DIR / filename
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
+
+                # Details graph for each metadata element
+                for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
+                    sum_by_type = filtered.groupby('type').sum().reset_index()
+                    collated_sum_by_type = collate_value_add_values(sum_by_type,
+                                                                    ALL_COLLATED_COLUMNS,
+                                                                    'crossref_dois')
+
+                    # Stacked Bar
+                    chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                                   metadata_element=metadata_element,
+                                                   ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                                   categories=[
+                                                       SOURCES[source_a]["SOURCE_PRINT_NAME"],
+                                                       f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]} Added Value'
+                                                   ],
+                                                   )
+
+                    chart.process_data(
+                        doc_types=CROSSREF_TYPES,
+                    )
+
+                    fig = chart.plotly()
+                    filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                    filepath = GRAPH_DIR / filename
+                    fig.write_image(filepath.with_suffix('.png'))
+                    af.add_existing_file(filepath.with_suffix('.png'))
+
+                    # Side by side bar
+                    chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                                   metadata_element=metadata_element,
+                                                   ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                                   categories=[
+                                                       SOURCES[source_a]["SOURCE_PRINT_NAME"],
+                                                       f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]} Added Value'
+                                                   ],
+                                                   stackedbar=False
+                                                   )
+                    fig = chart.plotly()
+                    filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                    filepath = GRAPH_DIR / filename
+                    fig.write_image(filepath.with_suffix('.png'))
+                    af.add_existing_file(filepath.with_suffix('.png'))
 
 
 def source_coverage_by_crossref_type(af: AnalyticsFunction,
                                      base_comparison: str = BASE_COMPARISON):
     """
-    Graph the coverage of the source compared to the base comparison by crossref-type
+    Graph the coverage of the sources compared to each other by crossref type
     """
 
-    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    comparison_data = pd.read_csv(CSV_FILE_PATHS['comparison'])
 
-    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
+    for source_a in SOURCES:
+        for source_b in SOURCES:
+            if source_b == source_a:
+                continue
+            # TODO Cleanup variable names here to abstract away from crossref to generalised base comparison
+            figdata = comparison_data.groupby('type').agg(
+                source_a_comparison=pd.NamedAgg(column=f'{source_a.SOURCE_NAME}_dois', aggfunc='sum'),
+                source_b_comparison=pd.NamedAgg(column=f'{source_b.SOURCE_NAME}_ids', aggfunc='sum')
+            )
 
-    for source in NON_BASE_SOURCES:
-        # TODO Cleanup variable names here to abstract away from crossref to generalised base comparison
-        figdata = base_comparison_data.groupby('type').agg(
-            in_base_comparison=pd.NamedAgg(column=f'{base_comparison}_dois', aggfunc='sum'),
-            in_source=pd.NamedAgg(column=f'{source}_ids', aggfunc='sum')
-        )
+            figdata['not_in_source_b'] = figdata.source_a_comparison - figdata.source_b_comparison
+            figdata = collate_value_add_values(figdata,
+                                               ['source_b_comparison',
+                                                'not_in_source_b'],
+                                               'source_a_comparison')
+            figdata.reset_index(inplace=True)
 
-        figdata['not_in_source'] = figdata.in_base_comparison - figdata.in_source
-        figdata = collate_value_add_values(figdata,
-                                           ['in_source',
-                                            'not_in_source'],
-                                           'in_base_comparison')
-        figdata.reset_index(inplace=True)
+            chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
+                                                     categories=[f'DOIs in {source_b.SOURCE_PRINT_NAME}',
+                                                                 f'DOIs not in {source_b.SOURCE_PRINT_NAME}'],
+                                                     metadata_element='dummy',
+                                                     ys={
+                                                         f'DOIs in {source_b.SOURCE_PRINT_NAME}': {
+                                                             'dummy': 'pc_in_source'},
+                                                         f'DOIs not in {source_b.SOURCE_PRINT_NAME}': {
+                                                             'dummy': 'pc_not_in_source'}
+                                                     }
+                                                     )
+            # Modify chart parameters here
+            chart.process_data(
+                doc_types=SOURCE_TYPES[base_comparison],
+                palette=['#FF7F0E', '#C0C0C0']
+            )
+            fig = chart.plotly()
 
-        chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
-                                                 categories=[f'DOIs in {FORMATTED_SOURCE_NAMES[source]}',
-                                                             f'DOIs not in {FORMATTED_SOURCE_NAMES[source]}'],
-                                                 metadata_element='dummy',
-                                                 ys={
-                                                     f'DOIs in {FORMATTED_SOURCE_NAMES[source]}': {
-                                                         'dummy': 'pc_in_source'},
-                                                     f'DOIs not in {FORMATTED_SOURCE_NAMES[source]}': {
-                                                         'dummy': 'pc_not_in_source'}
-                                                 }
-                                                 )
-        # Modify chart parameters here
-        chart.process_data(
-            doc_types=SOURCE_TYPES[base_comparison],
-            palette=['#FF7F0E', '#C0C0C0']
-        )
-        fig = chart.plotly()
-
-        # TODO Cleanup file name here (and downstream!) to abstract away from crossref to generalised base comparison
-        filename = f'{source}_coverage_by_crossref_type'
-        filepath = GRAPH_DIR / filename
-        fig.write_image(filepath.with_suffix('.png'))
-        af.add_existing_file(filepath.with_suffix('.png'))
-        # write_plotly_div(af, fig, f'{source}_coverage_by_crossref_type.html')
+            # TODO Cleanup file name here (and downstream!) to abstract away from crossref to generalised base comparison
+            filename = f'{source_b}_coverage_of_{source_a}_by_crossref_type'
+            filepath = GRAPH_DIR / filename
+            fig.write_image(filepath.with_suffix('.png'))
+            af.add_existing_file(filepath.with_suffix('.png'))
 
 
 def collate_value_add_values(df: pd.DataFrame,
@@ -409,14 +411,15 @@ def collate_value_add_values(df: pd.DataFrame,
     return df
 
 
-def calculate_overall_coverage(base_df: pd.DataFrame,
-                               source_df: pd.DataFrame,
-                               source: str,
-                               base_comparison: str = BASE_COMPARISON) -> dict:
-    base_total = base_df[f'{base_comparison}_ids'].sum()
-    dois_in_source = base_df[f'{source}_ids'].sum()
-    source_total = source_df.num_objects.sum()
-    source_with_doi = source_df.num_dois.sum()
+def calculate_overall_coverage(source_a_df: pd.DataFrame,
+                               source_b_df: pd.DataFrame,
+                               source_a_name: str,
+                               source_b_name: str) -> dict:
+    base_total = source_a_df[f'{source_a_name}_ids'].sum()
+    # TODO Check this reference to source_a_df is correct
+    dois_in_source = source_a_df[f'{source_b_name}_ids'].sum()
+    source_total = source_b_df.num_objects.sum()
+    source_with_doi = source_b_df.num_dois.sum()
     source_dois_not_base = source_with_doi - dois_in_source
     total_objects = base_total + (source_total - dois_in_source) + source_dois_not_base
     total_dois = base_total + source_dois_not_base
@@ -439,78 +442,69 @@ def calculate_overall_coverage(base_df: pd.DataFrame,
 
 def overall_comparison(af: AnalyticsFunction,
                        base_comparison: str = BASE_COMPARISON):
-    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
-    for source in SOURCES:
-        if source == base_comparison:
-            continue
+    for source_a in SOURCES:
+        source_a_df = pd.read_csv(CSV_FILE_PATHS[source_a.SOURCE_NAME])
 
-        #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        #            source_data = store[STORE_ELEMENT[source]]
+        for source_b in SOURCES:
+            if source_b == source_a:
+                continue
 
-        source_data = pd.read_csv(CSV_FILE[source])
+            source_b_df = pd.read_csv(CSV_FILE_PATHS[source_b.SOURCE_NAME])
 
-        for timeframe in TIME_FRAMES.keys():
-            filtered_base = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
-            filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
+            for timeframe in TIME_FRAMES.keys():
+                filtered_base = source_a_df[source_a_df.published_year.isin(TIME_FRAMES[timeframe])]
+                filtered_source = source_b_df[source_b_df.published_year.isin(TIME_FRAMES[timeframe])]
 
-            figdata = calculate_overall_coverage(filtered_base, filtered_source,
-                                                 source, base_comparison)
-            chart = OverallCoverage(source=FORMATTED_SOURCE_NAMES[source],
-                                    data_dict=figdata,
-                                    line_offset=0.06)
+                figdata = calculate_overall_coverage(filtered_base, filtered_source,
+                                                     source_a.SOURCE_NAME, source_b.SOURCE_NAME)
+                chart = OverallCoverage(source=source_b.SOURCE_PRINT_NAME,
+                                        data_dict=figdata,
+                                        line_offset=0.06)
+
+                fig = chart.plotly()
+                filename = f'{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_coverage_{timeframe.lower().replace(" ", "_")}'
+                filepath = GRAPH_DIR / filename
+                fig.write_image(filepath.with_suffix('.png'))
+                af.add_existing_file(filepath.with_suffix('.png'))
+
+
+def source_in_base_by_pubdate(af: AnalyticsFunction):
+
+    for source_a in SOURCES:
+        source_a_df = pd.read_csv(CSV_FILE_PATHS[source_a.SOURCE_NAME])
+
+        for source_b in SOURCES:
+            if source_b == source_a:
+                continue
+
+            source_b_df = pd.read_csv(CSV_FILE_PATHS[source_b.SOURCE_NAME])
+
+            year_range = SOURCE_IN_BASE_YEAR_RANGE
+
+            figdata = pd.DataFrame(index=year_range,
+                                   data=[calculate_overall_coverage(
+                                       source_a_df=source_a_df[source_a_df.published_year == year],
+                                       source_b_df=source_b_df[source_b_df.published_year == year],
+                                       source_a_name=source_a.SOURCE_NAME,
+                                       source_b_name=source_b.SOURCE_NAME
+                                   )
+                                       for year in year_range])
+
+            figdata['pc_source_in_base'] = figdata.cr_in_source / figdata.cr_total * 100
+
+            chart = BarLine(xdata=figdata.index,
+                            bardata=figdata.cr_total,
+                            barname=f'Registered {source_a.SOURCE_PRINT_NAME} DOIs',
+                            linedata=figdata.pc_source_in_base,
+                            linename=f'Crossref DOIs in {source_b.SOURCE_PRINT_NAME} (%)')
 
             fig = chart.plotly()
-            filename = f'{source}_{base_comparison}_coverage_{timeframe.lower().replace(" ", "_")}'
+            filename = f'{source_a.SOURCE_NAME}_in_{source_b.SOURCE_NAME}_by_pubdate'
             filepath = GRAPH_DIR / filename
             fig.write_image(filepath.with_suffix('.png'))
             af.add_existing_file(filepath.with_suffix('.png'))
-            # write_plotly_div(af, fig, 'overall_coverage.html')
-
-
-def source_in_base_by_pubdate(af,
-                              base_comparison: str = BASE_COMPARISON):
-    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
-
-    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
-
-    for source in SOURCES:
-        if source == base_comparison:
-            continue
-
-        #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        #            source_data = store[STORE_ELEMENT[source]]
-
-        source_data = pd.read_csv(CSV_FILE[source])
-
-        year_range = SOURCE_IN_BASE_YEAR_RANGE
-
-        figdata = pd.DataFrame(index=year_range,
-                               data=[calculate_overall_coverage(
-                                   base_df=base_comparison_data[base_comparison_data.published_year == year],
-                                   source_df=source_data[source_data.published_year == year],
-                                   source=source
-                               )
-                                   for year in year_range])
-
-        figdata['pc_source_in_base'] = figdata.cr_in_source / figdata.cr_total * 100
-
-        chart = BarLine(xdata=figdata.index,
-                        bardata=figdata.cr_total,
-                        barname=f'Registered {FORMATTED_SOURCE_NAMES[base_comparison]} DOIs',
-                        linedata=figdata.pc_source_in_base,
-                        linename=f'Crossref DOIs in {FORMATTED_SOURCE_NAMES[source]} (%)')
-
-        fig = chart.plotly()
-        filename = f'{base_comparison}_in_{source}_by_pubdate'
-        filepath = GRAPH_DIR / filename
-        fig.write_image(filepath.with_suffix('.png'))
-        af.add_existing_file(filepath.with_suffix('.png'))
-        # write_plotly_div(af, fig, 'cr_in_mag_barline.html')
 
 
 ## Graphs for comparing source database with itself (eg dois vs non-dois)
@@ -532,10 +526,8 @@ def value_add_self_graphs(af: AnalyticsFunction,
     # TODO Dynamically set base_comparison when looping over multiple sources?
 
     print('Generating value add graphs...')
-    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
+    base_comparison_data = pd.read_csv(CSV_FILE_PATHS[base_comparison])
 
     for source in NON_BASE_SOURCES:
 
@@ -608,7 +600,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction,
     #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
     #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
+    base_comparison_data = pd.read_csv(CSV_FILE_PATHS[base_comparison])
 
     for source in NON_BASE_SOURCES:
         # Replace None (which is not a string) values with string 'none' to include in aggregation
@@ -659,7 +651,7 @@ def dois_in_source_by_pubdate(af,
     #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
     #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
+    base_comparison_data = pd.read_csv(CSV_FILE_PATHS[base_comparison])
 
     for source in SOURCES:
         if source == base_comparison:
@@ -668,14 +660,14 @@ def dois_in_source_by_pubdate(af,
         #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
         #            source_data = store[STORE_ELEMENT[source]]
 
-        source_data = pd.read_csv(CSV_FILE[source])
+        source_data = pd.read_csv(CSV_FILE_PATHS[source])
 
         year_range = SOURCE_IN_BASE_YEAR_RANGE
 
         figdata = pd.DataFrame(index=year_range,
                                data=[calculate_overall_coverage(
-                                   base_df=base_comparison_data[base_comparison_data.published_year == year],
-                                   source_df=source_data[source_data.published_year == year],
+                                   source_a_df=base_comparison_data[base_comparison_data.published_year == year],
+                                   source_b_df=source_data[source_data.published_year == year],
                                    source=source
                                )
                                    for year in year_range])
@@ -731,7 +723,7 @@ def generate_tables(af,
     table_json = {}
     #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
     #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
-    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
+    base_comparison_data = pd.read_csv(CSV_FILE_PATHS[base_comparison])
     summary_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
     summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
 
@@ -745,7 +737,7 @@ def generate_tables(af,
         #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
         #            source_data = store[STORE_ELEMENT[source]]
 
-        source_data = pd.read_csv(CSV_FILE[source])
+        source_data = pd.read_csv(CSV_FILE_PATHS[source])
 
         for timeframe in TIME_FRAMES.keys():
             filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]

@@ -5,6 +5,7 @@ To create a new source, make a copy of the sourceparams_template.py file and ins
 """
 
 SOURCE_NAME = "crossref"
+SOURCE_PRINT_NAME = "Crossref"
 SOURCE_GBQ_LOCATION = "academic-observatory.crossref"
 SOURCE_TABLE_NAME = "crossref_metadata"
 SOURCE_TABLE_LOCATION = f"{SOURCE_GBQ_LOCATION}.{SOURCE_TABLE_NAME}"

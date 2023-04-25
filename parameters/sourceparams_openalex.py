@@ -5,6 +5,7 @@ To create a new source, make a copy of the sourceparams_template.py file and ins
 """
 
 SOURCE_NAME = "openalex"
+SOURCE_PRINT_NAME = "OpenAlex"
 SOURCE_GBQ_LOCATION = "academic-observatory.openalex"
 SOURCE_TABLE_NAME = "Work_snapshots"
 SOURCE_TABLE_LOCATION = f"{SOURCE_GBQ_LOCATION}.{SOURCE_TABLE_NAME}"

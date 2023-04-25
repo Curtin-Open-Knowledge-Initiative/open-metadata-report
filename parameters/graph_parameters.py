@@ -1,16 +1,11 @@
 from pathlib import Path
 import os
 
-from parameters.data_parameters import SOURCES, SOURCES_SELF, CURRENT, FOCUS, BASE_COMPARISON
+from parameters.data_parameters import SOURCES, SOURCES_SELF, CURRENT, FOCUS
 
 GRAPH_DIR = Path('graphs')
 if not GRAPH_DIR.is_dir():
     os.mkdir(GRAPH_DIR)
-
-FORMATTED_SOURCE_NAMES = dict(
-    crossref='Crossref',
-    openalex='OpenAlex'
-)
 
 # Time Frames
 
@@ -18,7 +13,7 @@ CROSSREF_CURRENT = CURRENT
 FOCUS_YEAR = FOCUS
 
 TIME_FRAMES = {
-    #'All Time': range(1900, 2100),
+
     'All Time': range(1980, 2023), # NB Range does not include last number!
     # TODO align with SOURCE_IN_BASE_YEAR_RANGE
     # All time here effects value add graphs, venn graph, but not bar/line graph or coverage bar graph!
@@ -28,21 +23,23 @@ TIME_FRAMES = {
 
 # Value Add Graphs
 
+all_data_elems = [element for elems in [source.SOURCE_DATA_ELEMENTS for source in SOURCES] for element in elems]
+
 PRESENCE_COLUMNS = [
-    f'{source}_has_{item}' for item in ALL_DATA_ITEMS for source in SOURCES
+    f'{source.SOURCE_NAME}_has_{item}' for item in all_data_elems for source in SOURCES
 ]
 
 PRESENCE_COLUMNS_SELF = [
-    f'{source_self}_has_{item}' for item in ALL_DATA_ITEMS for source_self in SOURCES_SELF
+    f'{source_self}_has_{item}' for item in all_data_elems for source_self in SOURCES_SELF
 ]
 
 
 ADDED_VALUE_COLUMNS = [
-    f'{source}_{item}_adds_presence' for item in ALL_DATA_ITEMS for source in SOURCES if source is not BASE_COMPARISON
+    f'{source.SOURCE_NAME}_{item}_adds_presence' for item in all_data_elems for source in SOURCES
 ]
 
 ADDED_VALUE_COUNTS_COLUMNS = [
-    f'{source}_{item}_adds_counts' for item in ALL_DATA_ITEMS for source in SOURCES if source is not BASE_COMPARISON
+    f'{source.SOURCE_NAME}_{item}_adds_counts' for item in all_data_elems for source in SOURCES
 ]
 
 ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS + ADDED_VALUE_COUNTS_COLUMNS
