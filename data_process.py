@@ -290,12 +290,12 @@ def value_add_graphs(af: AnalyticsFunction,
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
 
-                # Details graph for each metadata element
-                for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
-                    sum_by_type = filtered.groupby('type').sum().reset_index()
-                    collated_sum_by_type = collate_value_add_values(sum_by_type,
-                                                                    ALL_COLLATED_COLUMNS,
-                                                                    'crossref_dois')
+            # Details graph for each metadata element
+            for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
+                sum_by_type = filtered.groupby('cr_type').sum().reset_index()
+                collated_sum_by_type = collate_value_add_values(sum_by_type,
+                                                                ALL_COLLATED_COLUMNS,
+                                                                'crossref_dois')
 
                     # Stacked Bar
                     chart = ValueAddByCrossrefType(df=collated_sum_by_type,
@@ -307,9 +307,10 @@ def value_add_graphs(af: AnalyticsFunction,
                                                    ],
                                                    )
 
-                    chart.process_data(
-                        doc_types=CROSSREF_TYPES,
-                    )
+                chart.process_data(
+                    doc_types=CROSSREF_TYPES,
+                    type_column='cr_type'
+                )
 
                     fig = chart.plotly()
                     filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
@@ -317,37 +318,45 @@ def value_add_graphs(af: AnalyticsFunction,
                     fig.write_image(filepath.with_suffix('.png'))
                     af.add_existing_file(filepath.with_suffix('.png'))
 
-                    # Side by side bar
-                    chart = ValueAddByCrossrefType(df=collated_sum_by_type,
-                                                   metadata_element=metadata_element,
-                                                   ys=VALUE_ADD_META[base_comparison][source]['ys'],
-                                                   categories=[
-                                                       SOURCES[source_a]["SOURCE_PRINT_NAME"],
-                                                       f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]} Added Value'
-                                                   ],
-                                                   stackedbar=False
-                                                   )
-                    fig = chart.plotly()
-                    filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
-                    filepath = GRAPH_DIR / filename
-                    fig.write_image(filepath.with_suffix('.png'))
-                    af.add_existing_file(filepath.with_suffix('.png'))
+                # Side by side bar
+                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                               metadata_element=metadata_element,
+                                               ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                               categories=[
+                                                   FORMATTED_SOURCE_NAMES[base_comparison],
+                                                   f'{FORMATTED_SOURCE_NAMES[source]}'],
+                                               stackedbar=False
+                                               )
+
+                chart.process_data(
+                    doc_types=CROSSREF_TYPES,
+                    type_column='cr_type'
+                )
+
+                fig = chart.plotly()
+                filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                filepath = GRAPH_DIR / filename
+                fig.write_image(filepath.with_suffix('.png'))
+                af.add_existing_file(filepath.with_suffix('.png'))
 
 
 def source_coverage_by_crossref_type(af: AnalyticsFunction,
                                      base_comparison: str = BASE_COMPARISON):
     """
-    Graph the coverage of the sources compared to each other by crossref type
+    Graph the coverage of the source compared to the base comparison by crossref-type
     """
 
-    comparison_data = pd.read_csv(CSV_FILE_PATHS['comparison'])
+#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+
+    base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
     for source_a in SOURCES:
         for source_b in SOURCES:
             if source_b == source_a:
                 continue
             # TODO Cleanup variable names here to abstract away from crossref to generalised base comparison
-            figdata = comparison_data.groupby('type').agg(
+            figdata = comparison_data.groupby('cr_type').agg(
                 source_a_comparison=pd.NamedAgg(column=f'{source_a.SOURCE_NAME}_dois', aggfunc='sum'),
                 source_b_comparison=pd.NamedAgg(column=f'{source_b.SOURCE_NAME}_ids', aggfunc='sum')
             )
@@ -373,6 +382,7 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
             # Modify chart parameters here
             chart.process_data(
                 doc_types=SOURCE_TYPES[base_comparison],
+                type_column='cr_type'
                 palette=['#FF7F0E', '#C0C0C0']
             )
             fig = chart.plotly()
@@ -485,8 +495,8 @@ def source_in_base_by_pubdate(af: AnalyticsFunction):
 
             figdata = pd.DataFrame(index=year_range,
                                    data=[calculate_overall_coverage(
-                                       source_a_df=source_a_df[source_a_df.published_year == year],
-                                       source_b_df=source_b_df[source_b_df.published_year == year],
+                                       source_a_df=source_a_df[source_a_df.cr_published_year == year],
+                                       source_b_df=source_b_df[source_b_df.cr_published_year == year],
                                        source_a_name=source_a.SOURCE_NAME,
                                        source_b_name=source_b.SOURCE_NAME
                                    )
@@ -579,6 +589,7 @@ def value_add_self_graphs(af: AnalyticsFunction,
                 # Modify chart parameters here
                 chart.process_data(
                     doc_types=CROSSREF_TYPES,
+                    type_column='cr_type',
                     palette=['#FF7F0E', '#C0C0C0']
                 )
 
@@ -716,19 +727,21 @@ def collate_value_add_self_values(df: pd.DataFrame,
     return df
 
 
+
 ## Tables
 
 def generate_tables(af,
                     base_comparison: str = BASE_COMPARISON):
+
     table_json = {}
     #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
     #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
     base_comparison_data = pd.read_csv(CSV_FILE_PATHS[base_comparison])
     summary_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
-    summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
+    #summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
 
     for timeframe in TIME_FRAMES.keys():
-        filtered_comparison = base_comparison_data[base_comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+        filtered_comparison = base_comparison_data[base_comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
         filtered_comparison_sum = filtered_comparison.sum(axis=0)
         filtered_comparison_sum['timeframe'] = timeframe
         summary_table_df = summary_table_df.append(filtered_comparison_sum, ignore_index=True)
@@ -739,24 +752,24 @@ def generate_tables(af,
 
         source_data = pd.read_csv(CSV_FILE_PATHS[source])
 
-        for timeframe in TIME_FRAMES.keys():
-            filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
-            filtered_source_sum = filtered_source.sum(axis=0)
-            filtered_source_sum['timeframe'] = timeframe
-            summary_source_table_df = summary_source_table_df.append(filtered_comparison_sum, ignore_index=True)
+    #    for timeframe in TIME_FRAMES.keys():
+    #        filtered_source = source_data[source_data.published_year.isin(TIME_FRAMES[timeframe])]
+    #        filtered_source_sum = filtered_source.sum(axis=0)
+    #       filtered_source_sum['timeframe'] = timeframe
+    #        summary_source_table_df = summary_source_table_df.append(filtered_comparison_sum, ignore_index=True)
 
-        table_dict = generate_table_data(
-            title=f'{FORMATTED_SOURCE_NAMES[source]} Metadata Coverage of Crossref DOIs',
-            df=summary_table_df,
-            columns=SUMMARY_TABLE_COLUMNS[source]['column_names'],
-            short_column_names=SUMMARY_TABLE_COLUMNS[source]['nice_column_names'],
-            identifier=None,
-            sort_column=None
-        )
+    #    table_dict = generate_table_data(
+    #        title=f'{FORMATTED_SOURCE_NAMES[source]} Metadata Coverage of Crossref DOIs',
+    #       df=summary_table_df,
+    #        columns=SUMMARY_TABLE_COLUMNS[source]['column_names'],
+    #        short_column_names=SUMMARY_TABLE_COLUMNS[source]['nice_column_names'],
+    #        identifier=None,
+    #        sort_column=None
+    #    )
 
-        table_json[source] = {
-            'summary_comparison_table': table_dict
-        }
+    #    table_json[source] = {
+    #        'summary_comparison_table': table_dict
+    #    }
 
     for f in af.generate_file('tables.json'):
         json.dump(table_json, f)

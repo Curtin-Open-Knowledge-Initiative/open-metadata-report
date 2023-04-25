@@ -335,16 +335,19 @@ This section contains tables with summary counts. More tables will be added in a
 Crossref Current = {{ crossref_current[0] }}-{{ crossref_current[2] }}  
 Focus Year = {{ focus_year }}
 
-{% for source in metadata.SOURCES %}
+{# Lines below are not currently run pending refactoring (2023-04-25)
 
+{% for source in metadata.SOURCES %}
+`
 ### {{ graph_metadata.FORMATTED_SOURCE_NAMES[source] }} Coverage
 
 {% set tablenum = tablenum + loop.index0 %}
 {{ helper.tableize(tables[source]["summary_comparison_table"], tablenum) }}
 
+
 {% endfor %}
 
 {% set tablenum = tablenum + metadata.SOURCES|length %}
-
+#}
 
 
