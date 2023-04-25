@@ -73,12 +73,7 @@ ADDITIONAL_TRUTHTABLE_FIELDS = dict(
 )
 
 TABLES = {
-    source:
-        {
-                table_name: f'{TABLE_LOCATIONS.get(source)}.{table_name}{TABLE_DATES.get(source)}'
-                for table_name in TABLE_NAMES
-        }
-    for source in SOURCES
+    source: f'{TABLE_LOCATIONS.get(source)}.{TABLE_NAMES.get(source)}{TABLE_DATES.get(source)}' for source in SOURCES
 }
 
 for source in SOURCES:
