@@ -297,47 +297,47 @@ def value_add_graphs(af: AnalyticsFunction,
                                                                 ALL_COLLATED_COLUMNS,
                                                                 'crossref_dois')
 
-                    # Stacked Bar
-                    chart = ValueAddByCrossrefType(df=collated_sum_by_type,
-                                                   metadata_element=metadata_element,
-                                                   ys=VALUE_ADD_META[base_comparison][source]['ys'],
-                                                   categories=[
-                                                       SOURCES[source_a]["SOURCE_PRINT_NAME"],
-                                                       f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]} Added Value'
-                                                   ],
-                                                   )
-
-                chart.process_data(
-                    doc_types=CROSSREF_TYPES,
-                    type_column='cr_type'
-                )
-
-                    fig = chart.plotly()
-                    filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
-                    filepath = GRAPH_DIR / filename
-                    fig.write_image(filepath.with_suffix('.png'))
-                    af.add_existing_file(filepath.with_suffix('.png'))
-
-                # Side by side bar
+                # Stacked Bar
                 chart = ValueAddByCrossrefType(df=collated_sum_by_type,
                                                metadata_element=metadata_element,
                                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
                                                categories=[
-                                                   FORMATTED_SOURCE_NAMES[base_comparison],
-                                                   f'{FORMATTED_SOURCE_NAMES[source]}'],
-                                               stackedbar=False
+                                                   SOURCES[source_a]["SOURCE_PRINT_NAME"],
+                                                   f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]} Added Value'
+                                               ],
                                                )
 
-                chart.process_data(
-                    doc_types=CROSSREF_TYPES,
-                    type_column='cr_type'
-                )
+            chart.process_data(
+                doc_types=CROSSREF_TYPES,
+                type_column='cr_type'
+            )
 
-                fig = chart.plotly()
-                filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
-                filepath = GRAPH_DIR / filename
-                fig.write_image(filepath.with_suffix('.png'))
-                af.add_existing_file(filepath.with_suffix('.png'))
+            fig = chart.plotly()
+            filename = f'value_add_stacked_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+            filepath = GRAPH_DIR / filename
+            fig.write_image(filepath.with_suffix('.png'))
+            af.add_existing_file(filepath.with_suffix('.png'))
+
+        # Side by side bar
+        chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                       metadata_element=metadata_element,
+                                       ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                       categories=[
+                                           FORMATTED_SOURCE_NAMES[base_comparison],
+                                           f'{FORMATTED_SOURCE_NAMES[source]}'],
+                                       stackedbar=False
+                                       )
+
+        chart.process_data(
+            doc_types=CROSSREF_TYPES,
+            type_column='cr_type'
+        )
+
+        fig = chart.plotly()
+        filename = f'value_add_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+        filepath = GRAPH_DIR / filename
+        fig.write_image(filepath.with_suffix('.png'))
+        af.add_existing_file(filepath.with_suffix('.png'))
 
 
 def source_coverage_by_crossref_type(af: AnalyticsFunction,
@@ -346,8 +346,8 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
     Graph the coverage of the source compared to the base comparison by crossref-type
     """
 
-#    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
+    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
+    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
     base_comparison_data = pd.read_csv(CSV_FILE[base_comparison])
 
@@ -383,7 +383,7 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
             chart.process_data(
                 doc_types=SOURCE_TYPES[base_comparison],
                 type_column='cr_type'
-                palette=['#FF7F0E', '#C0C0C0']
+            palette = ['#FF7F0E', '#C0C0C0']
             )
             fig = chart.plotly()
 
@@ -452,8 +452,6 @@ def calculate_overall_coverage(source_a_df: pd.DataFrame,
 
 def overall_comparison(af: AnalyticsFunction,
                        base_comparison: str = BASE_COMPARISON):
-
-
     for source_a in SOURCES:
         source_a_df = pd.read_csv(CSV_FILE_PATHS[source_a.SOURCE_NAME])
 
@@ -481,7 +479,6 @@ def overall_comparison(af: AnalyticsFunction,
 
 
 def source_in_base_by_pubdate(af: AnalyticsFunction):
-
     for source_a in SOURCES:
         source_a_df = pd.read_csv(CSV_FILE_PATHS[source_a.SOURCE_NAME])
 
@@ -610,8 +607,6 @@ def source_coverage_self_by_type(af: AnalyticsFunction):
     #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
     #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
 
-
-
     for source in SOURCES:
         comparison_data = pd.read_csv(CSV_FILE_PATHS[source.SOURCE_NAME])
         # Replace None (which is not a string) values with string 'none' to include in aggregation
@@ -727,18 +722,16 @@ def collate_value_add_self_values(df: pd.DataFrame,
     return df
 
 
-
 ## Tables
 
 def generate_tables(af,
                     base_comparison: str = BASE_COMPARISON):
-
     table_json = {}
     #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
     #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
     base_comparison_data = pd.read_csv(CSV_FILE_PATHS[base_comparison])
     summary_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
-    #summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
+    # summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
 
     for timeframe in TIME_FRAMES.keys():
         filtered_comparison = base_comparison_data[base_comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
@@ -782,9 +775,9 @@ if __name__ == '__main__':
     # openalex_to_truthtable(af='test',
     #                             rerun=False,
     #                             verbose=True)
-    dois_category_query(af='test',
-                        rerun=False,
-                        verbose=True)
+    comparison_categories_query(af='test',
+                                rerun=False,
+                                verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)

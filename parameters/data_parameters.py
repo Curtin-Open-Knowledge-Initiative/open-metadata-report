@@ -26,7 +26,7 @@ SQL_DIRECTORY = Path('report_data_processing/sql')
 DATA_DIR = Path('data')
 # STORE_ELEMENT = {source.SOURCE_NAME: f'{source.SOURCE_NAME}_categories' for source in SOURCES}
 CSV_FILE_PATHS = {source.SOURCE_NAME: DATA_DIR / f'{source.SOURCE_NAME}_categories.csv' for source in SOURCES}
-CSV_FILE_PATHS.update(dict(comparison=DATA_DIR / 'comparison.csv'))
+CSV_FILE_PATHS.update(dict(comparison=DATA_DIR / 'comparison_categories.csv'))
 ARCHIVE_DIR = Path('reports')
 
 n = 1
