@@ -76,15 +76,15 @@ TABLES = {
     source: f'{TABLE_LOCATIONS.get(source)}.{TABLE_NAMES.get(source)}{TABLE_DATES.get(source)}' for source in SOURCES
 }
 
-for source in SOURCES:
-    TABLES[source].update(dict(
-        additional_source_journal_fields=ADDITIONAL_SOURCE_JOURNAL_FIELDS[source],
-        additional_source_org_fields=ADDITIONAL_SOURCE_ORG_FIELDS[source],
-        additional_truthtable_fields=ADDITIONAL_TRUTHTABLE_FIELDS[source]
-    )
-    )
+# for source in SOURCES:
+#     TABLES[source].update(dict(
+#         additional_source_journal_fields=ADDITIONAL_SOURCE_JOURNAL_FIELDS[source],
+#         additional_source_org_fields=ADDITIONAL_SOURCE_ORG_FIELDS[source],
+#         additional_truthtable_fields=ADDITIONAL_TRUTHTABLE_FIELDS[source]
+#     )
+#     )
 
-TABLES.update(dict(crossref=f'{DOI_TABLE_LOCATION}{CROSSREF_DATE}'))
+# TABLES.update(dict(crossref=f'{DOI_TABLE_LOCATION}{CROSSREF_DATE}'))
 
 ## Intermediate Tables
 
