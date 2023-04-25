@@ -63,75 +63,24 @@ SOURCE_TRUTH_TABLES = {
     for source in SOURCES
 }
 
-## Category Queries Metadata
+####
+#
+# Data Elements by Source and Mappings
+#
+###
 
-# CATEGORY_DATA_ITEMS are required to be present as both has_ and count_ items in all truth tables
-# If necessary a dummy column of FALSE or 0 should be created to ensure this, but ideally this will
-# provide a meaningful comparison to use as a default. count_abstract can be either an array length (eg
-# for different languages or a string length)
-
-CATEGORY_DATA_ITEMS = [
-    'authors',
-    'affiliations',
-    'abstract',
-    'citations',
-    'references',
-    'fields',
-    'venue'
-]
-
-# SOURCE_DATA_ITEMS provide special classes of the standard items. These must be a subclass of a CATEGORY_DATA_ITEM
-# specified in the format `categorydataitem_specialform`
-
-CROSSREF_DATA_ITEMS = [
-    'authors_orcid',
-    'authors_string',
-    'authors_sequence',
-    'affiliations_string',
-    'affiliations_ror',
-    'venue_issn',
-    'venue_string'
-]
-
-OPENALEX_DATA_ITEMS = [
-    'authors_orcid',
-    'authors_sourceid',
-    'authors_string',
-    'authors_sequence',
-    'affiliations_countrycode',
-    'affiliations_sourceid',
-    'affiliations_string',
-    'affiliations_ror',
-    #does fields need to be included here, as it is already in CATEGORY_ITEMS ?
-    'fields',
-    'venue_sourceid',
-    'venue_string',
-    'venue_issn',
-    'venue_issnl'
-]
-
-SOURCE_DATA_ITEMS = {source.SOURCE_NAME: source.SOURCE_DATA_ELEMENTS for source in SOURCES}
-
-
-ALL_DATA_ITEMS = list(set(CATEGORY_DATA_ITEMS + [item for source_list in SOURCE_DATA_ITEMS.values() for item in source_list]))
-
-SOURCE_DATA_ELEMENTS = {
+COMPARISON_ELEMENT_MAPPING = {
 }
 
-for source in SOURCES:
-    data_elements = {(elem, elem, elem) for elem in CATEGORY_DATA_ITEMS}
-    data_elements = data_elements | {
-        (
-            # replaced 'crossref' by base source
-            # elem if elem in SOURCE_DATA_ITEMS['crossref'] else CATEGORY_DATA_ITEMS[
-            elem if elem in SOURCE_DATA_ITEMS[BASE_COMPARISON] else CATEGORY_DATA_ITEMS[
-                CATEGORY_DATA_ITEMS.index(elem.split('_')[0])],
-            elem,
-            elem
-        )
-        for elem in SOURCE_DATA_ITEMS[source.SOURCE_NAME]
-    }
-
-    data_elements = list(data_elements)
-    data_elements.sort()
-    SOURCE_DATA_ELEMENTS[source] = data_elements
+for source_b in SOURCES:
+    COMPARISON_ELEMENT_MAPPING[source_b.SOURCE_NAME] = {}
+    for source_a in SOURCES:
+        if source_a == source_b:
+            continue
+        COMPARISON_ELEMENT_MAPPING[source_b.SOURCE_NAME][source_a.SOURCE_NAME] = {}
+        for element in source_b.SOURCE_DATA_ELEMENTS:
+            if element in source_a.SOURCE_DATA_ELEMENTS:
+                mapped_element = element
+            else:
+                mapped_element = "zeros"
+            COMPARISON_ELEMENT_MAPPING[source_b.SOURCE_NAME][source_a.SOURCE_NAME][element] = mapped_element

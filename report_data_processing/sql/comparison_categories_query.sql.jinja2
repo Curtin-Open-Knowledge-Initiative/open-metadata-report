@@ -26,6 +26,8 @@ SELECT
     , {{ base_comparison }}.type as type
     , cr.type as cr_type
     , cr.published_year as cr_published_year
+    , cr.doi as cr_doi
+    , SELECT(0) as zeros
 
     {% for source_name, truthtable in sources.items() -%}
     , {{ source_name }}
@@ -44,19 +46,38 @@ FROM
 SELECT
     cr_published_year
     , cr_type
-    , COUNT(DISTINCT doi) as {{ base_comparison}}_dois
-    {% for source_name, truthtable in sources.items() %}
-    , COUNT(DISTINCT {{ source_name }}.source_id) as {{ source_name }}_ids
-    , COUNT(DISTINCT IF({{ source_name }}.type is not null, doi, null)) as {{ source_name }}_has_type
-    {% for item in data_items[source_name] -%}
-    , COUNT(DISTINCT IF({{ source_name }}.has_{{ item[1] }}, doi, null)) as {{ source_name }}_has_{{ item[2] }}
+    , COUNT(DISTINCT cr_doi) as cr_dois
+    {% for source_name in sources.keys() %}
+        , COUNT(DISTINCT {{ source_name }}.doi) as {{ source_name }}_dois
+        , COUNT(DISTINCT {{ source_name }}.source_id) as {{ source_name }}_ids
+        {% for item in data_items[source_name] -%}
+            , COUNT(DISTINCT IF({{ source_name }}.has_{{ item[1] }}, cr_doi, null)) as {{ source_name }}_has_{{ item[2] }}
+        {% endfor -%}
     {% endfor -%}
-    {% if source_name != base_comparison -%}
-    {% for item in data_items[source_name] -%}
-    , COUNT(DISTINCT IF((NOT {{ base_comparison}}.has_{{ item[0] }} AND {{ source_name }}.has_{{ item[1] }}), doi, null)) as {{ source_name }}_{{ item[2] }}_adds_presence
-    , COUNT(DISTINCT IF(({{ base_comparison}}.count_{{ item[0] }}  < {{ source_name }}.count_{{ item[1] }}), doi, null)) as {{ source_name }}_{{ item[2] }}_adds_counts
-    {% endfor -%}
-    {% endif -%}
+    {% for source_name_a in sources.keys() %}
+	  {% for source_name_b in sources.keys() %}
+		{% if source_name_a != source_name_b %}
+			, COUNT(DISTINCT IF(({{ source_name_a }}.source_id is not null AND {{ source_name_b }}.source_id is not null), cr_doi, null) as count_{{source_name_a}}_{{source_name_b}}_overlap
+
+            {% for item in data_items[source_name_b] -%}
+			, COUNT(DISTINCT IF(
+							({{ source_name_a }}.source_id is not null) -- Filter down to overlap
+							AND ({{ source_name_b }}.source_id is not null)
+
+							AND ({{ source_name_b }}.has_{{ item[1] }}) -- Does source have item
+						 , cr_doi, null)
+						 as {{ source_name_b }}_has_{{ item[2] }}_in_overlap
+
+                , COUNT(DISTINCT IF((NOT {{ source_name_a}}.has_{{ item[0] }} AND {{ source_name_b }}.has_{{ item[1] }}), cr_doi, null)) as {{ source_name_b }}_{{ item[2] }}_adds_presence
+                , COUNT(DISTINCT IF(
+							({{ source_name_a }}.source_id is not null) -- Filter down to overlap
+							AND ({{ source_name_b }}.source_id is not null)
+
+							AND (NOT {{ source_name_a}}.has_{{ item[0] }} AND {{ source_name_b }}.has_{{ item[1] }}) -- Source_b adds value
+						 , cr_doi, null)) as {{ source_name_b }}_{{ item[2] }}_adds_presence_overlap
+                -- , COUNT(DISTINCT IF(({{ base_comparison}}.count_{{ item[0] }}  < {{ source_name }}.count_{{ item[1] }}), cr_doi, null)) as {{ source_name }}_{{ item[2] }}_adds_counts
+            {% endfor -%}
+        {% endif -%}
     {% endfor -%}
 
 FROM qdoi_table
