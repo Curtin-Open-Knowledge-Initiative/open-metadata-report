@@ -263,8 +263,8 @@ def value_add_graphs(af: AnalyticsFunction,
                 # Stacked Bar
                 chart = ValueAddBar(df=figdata,
                                     categories=[
-                                        SOURCES[source_a]["SOURCE_PRINT_NAME"],
-                                        f'{SOURCES[source_b]["SOURCE_PRINT_NAME"]} Added Value'],
+                                        source_a.SOURCE_PRINT_NAME,
+                                        f'{source_b.SOURCE_PRINT_NAME} Added Value'],
                                     xs=STACKED_BAR_SUMMARY_XS,
                                     ys=VALUE_ADD_META[base_comparison][source]['ys'])
 
