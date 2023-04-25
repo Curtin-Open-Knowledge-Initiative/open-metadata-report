@@ -382,8 +382,8 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
             # Modify chart parameters here
             chart.process_data(
                 doc_types=SOURCE_TYPES[base_comparison],
-                type_column='cr_type'
-            palette = ['#FF7F0E', '#C0C0C0']
+                type_column='cr_type',
+                palette=['#FF7F0E', '#C0C0C0']
             )
             fig = chart.plotly()
 
