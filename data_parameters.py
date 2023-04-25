@@ -42,11 +42,11 @@ OPENALEX_DATE = "20230122" #date of partition to use
 CROSSREF_DATE = "20230107" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
 
 OPENALEX_TABLE_LOCATION = 'academic-observatory.openalex'
-DOI_TABLE_LOCATION = 'academic-observatory.crossref.crossref_metadata'
+DOI_TABLE_LOCATION = 'academic-observatory.crossref'
 
 
 OPENALEX_TABLE_NAMES = 'Work_snapshots'
-DOI_TABLE_NAMES = ''
+DOI_TABLE_NAMES = 'crossref_metadata'
 
 TABLE_NAMES = dict(openalex=OPENALEX_TABLE_NAMES,
                    crossref=DOI_TABLE_NAMES
