@@ -78,8 +78,8 @@ graph_print_names = {
     'Affiliation Strings': 'affiliations_string',
     'Affiliation RORs': 'affiliations_id_ror',
     'Abstract': 'abstract',
-    'Citations': 'citations',
-    'References': 'references',
+    'Citations to': 'citations',
+    'References from': 'references',
     'Fields': 'fields',
     'Venue': 'venue',
     'Venue String': 'venue_string',
@@ -91,73 +91,118 @@ graph_print_names = {
 value_add_meta_xs = {
     'crossref': {
         'openalex': {
-            'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Journals', 'Journals ISSN', 'Fields']
+            'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
+                   'References from', 'Venue', 'Venue ISSN', 'Fields']
+        }
+    },
+    'openalex': {
+        'crossref': {
+            'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
+                   'References from', 'Venue', 'Venue ISSN', 'Fields']
         }
     }
 }
 
-VALUE_ADD_META = {
-    'crossref': {
-        'openalex': {
-            'xs': value_add_meta_xs['crossref']['openalex']['xs'],
-            'ys': {
-                'Crossref': {
-                    x: f'pc_crossref_has_{graph_print_names[x]}'
-                    for x in
-                    value_add_meta_xs['crossref']['openalex']['xs']
-                },
-                'OpenAlex': {
-                    x: f'pc_openalex_has_{graph_print_names[x]}'
-                    for x in
-                    value_add_meta_xs['crossref']['openalex']['xs']
-                },
-                'OpenAlex Added Value': {
-                    x: f'pc_openalex_{graph_print_names[x]}_adds_presence'
-                    for x in
-                    value_add_meta_xs['crossref']['openalex']['xs']
-                },
-                'OpenAlex Added Value (counts)': {
-                    x: f'pc_openalex_{graph_print_names[x]}_adds_counts'
-                    for x in
-                    value_add_meta_xs['crossref']['openalex']['xs']
-                }
-            }
+
+def return_ys_dict(source_a,
+                   source_b) -> dict:
+    return {
+        source_a.SOURCE_PRINT_NAME: {
+            x: f'pc_{source_a.SOURCE_NAME}_has_{graph_print_names[x]}'
+            for x in
+            value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
+        },
+        source_b.SOURCE_PRINT_NAME: {
+            x: f'pc_{source_b.SOURCE_NAME}_has_{graph_print_names[x]}'
+            for x in
+            value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
+        },
+        f'{source_a.SOURCE_PRINT_NAME} Added Value': {
+            x: f'pc_{source_b.SOURCE_NAME}_{graph_print_names[x]}_adds_presence'
+            for x in
+            value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         }
-    },
-    'openalex': {
-        'openalex': {
-            'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
-            'ys': {
-                'OpenAlex DOIs': {
-                    'Affiliations': 'pc_dois_has_affiliations_string',
-                    'Affiliations ROR': 'pc_dois_has_affiliations_ror',
-                    'Authors': 'pc_dois_has_authors',
-                    'Authors ORCIDs': 'pc_dois_has_authors_orcid',
-                    'Abstracts': 'pc_dois_has_abstract',
-                    'Citations to': 'pc_dois_has_citations',
-                    'References from': 'pc_dois_has_references',
-                    'Journals': 'pc_dois_has_venue',
-                    'Journals ISSN': 'pc_dois_has_venue_issn',
-                    'Fields': 'pc_dois_has_fields'
-                },
-                'OpenAlex non-DOIs': {
-                    'Affiliations': 'pc_non_dois_has_affiliations_string',
-                    'Affiliations ROR': 'pc_non_dois_has_affiliations_ror',
-                    'Authors': 'pc_non_dois_has_authors',
-                    'Authors ORCIDs': 'pc_non_dois_has_authors_orcid',
-                    'Abstracts': 'pc_non_dois_has_abstract',
-                    'Citations to': 'pc_non_dois_has_citations',
-                    'References from': 'pc_non_dois_has_references',
-                    'Journals': 'pc_non_dois_has_venue',
-                    'Journals ISSN': 'pc_non_dois_has_venue_issn',
-                    'Fields': 'pc_non_dois_has_fields'
-                }
-            }
-        }
+
     }
-}
+
+
+
+VALUE_ADD_META = {}
+for source_a in SOURCES:
+    for source_b in SOURCES:
+        if source_a == source_b: continue
+
+        VALUE_ADD_META.update(
+            {
+                source_a.SOURCE_NAME: {
+                    source_b.SOURCE_NAME: {
+                        'xs': value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
+                        'ys': return_ys_dict(source_a, source_b)
+
+                        }
+                    }
+                }
+        )
+
+
+
+#
+# VALUE_ADD_META = {
+#     'crossref': {
+#         'openalex': {
+#             'xs': value_add_meta_xs['crossref']['openalex']['xs'],
+#             'ys': {
+#                 'Crossref': {
+#                     x: f'pc_crossref_has_{graph_print_names[x]}'
+#                     for x in
+#                     value_add_meta_xs['crossref']['openalex']['xs']
+#                 },
+#                 'OpenAlex': {
+#                     x: f'pc_openalex_has_{graph_print_names[x]}'
+#                     for x in
+#                     value_add_meta_xs['crossref']['openalex']['xs']
+#                 },
+#                 'OpenAlex Added Value': {
+#                     x: f'pc_openalex_{graph_print_names[x]}_adds_presence'
+#                     for x in
+#                     value_add_meta_xs['crossref']['openalex']['xs']
+#                 }
+#             }
+#         }
+#     },
+#     'openalex': {
+#         'openalex': {
+#             'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
+#                    'References from', 'Journals', 'Journals ISSN', 'Fields'],
+#             'ys': {
+#                 'OpenAlex DOIs': {
+#                     'Affiliations': 'pc_dois_has_affiliations_string',
+#                     'Affiliations ROR': 'pc_dois_has_affiliations_ror',
+#                     'Authors': 'pc_dois_has_authors',
+#                     'Authors ORCIDs': 'pc_dois_has_authors_orcid',
+#                     'Abstracts': 'pc_dois_has_abstract',
+#                     'Citations to': 'pc_dois_has_citations',
+#                     'References from': 'pc_dois_has_references',
+#                     'Journals': 'pc_dois_has_venue',
+#                     'Journals ISSN': 'pc_dois_has_venue_issn',
+#                     'Fields': 'pc_dois_has_fields'
+#                 },
+#                 'OpenAlex non-DOIs': {
+#                     'Affiliations': 'pc_non_dois_has_affiliations_string',
+#                     'Affiliations ROR': 'pc_non_dois_has_affiliations_ror',
+#                     'Authors': 'pc_non_dois_has_authors',
+#                     'Authors ORCIDs': 'pc_non_dois_has_authors_orcid',
+#                     'Abstracts': 'pc_non_dois_has_abstract',
+#                     'Citations to': 'pc_non_dois_has_citations',
+#                     'References from': 'pc_non_dois_has_references',
+#                     'Journals': 'pc_non_dois_has_venue',
+#                     'Journals ISSN': 'pc_non_dois_has_venue_issn',
+#                     'Fields': 'pc_non_dois_has_fields'
+#                 }
+#             }
+#         }
+#     }
+# }
 
 STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstracts', 'Citations to', 'References from',
                           'Journals']
