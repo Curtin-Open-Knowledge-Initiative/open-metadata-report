@@ -17,7 +17,7 @@ ARRAY_LENGTH(description) as description_length,
     ELSE NULL
  END
  as description,
-subjects,
+ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
 instance
 
 FROM `utrecht-university.TEMP.openaire_publication`
