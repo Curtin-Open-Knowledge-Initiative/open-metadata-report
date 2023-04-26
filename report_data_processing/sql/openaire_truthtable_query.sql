@@ -4,8 +4,13 @@ SELECT
 
 id,
 pid,
-author,
-container,
+ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author
+STRUCT(
+        container.name as name,
+        container.issnOnline as issnOnline,
+        container.issnPrinted as issnPrinted,
+        container.issnLinking as issnLinking
+    ) as container,
 ARRAY_LENGTH(description) as description_length,
  CASE
     WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
