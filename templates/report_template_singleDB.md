@@ -8,8 +8,8 @@
 {% set tables = load_json(generate_tables.files["tables.json"].cache_filepath) %}
 {% set name_source = metadata.NON_BASE_SOURCES[0] + "_" %}
 {% set name_base = metadata.BASE_COMPARISON + "_" %}
-{% set name_source_full = graph_metadata.FORMATTED_SOURCE_NAMES[metadata.NON_BASE_SOURCES[0]] %}
-{% set name_base_full = graph_metadata.FORMATTED_SOURCE_NAMES[metadata.BASE_COMPARISON] %}
+{% set name_source_full = metadata.FORMATTED_SOURCE_NAMES[metadata.NON_BASE_SOURCES[0]] %}
+{% set name_base_full = metadata.FORMATTED_SOURCE_NAMES[metadata.BASE_COMPARISON] %}
 {% set focus_year = graph_metadata.FOCUS_YEAR %}
 {% set crossref_current = graph_metadata.CROSSREF_CURRENT %}
 {% set tablenum = 1 %}

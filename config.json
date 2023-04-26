@@ -4,11 +4,7 @@
   "logfile": "logs/precipy.log",
   "loglevel": "DEBUG",
   "constants": {
-    "PROJECT_ID": "utrecht-university",
-    "YEAR_RANGE": [
-      1980,
-      2023
-    ]
+    "PROJECT_ID": "utrecht-university"
   },
   "analytics": [
     [

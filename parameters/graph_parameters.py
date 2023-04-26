@@ -296,11 +296,6 @@ SOURCE_TYPES = dict(
     openalex=OPENALEX_TYPES,
 )
 
-# Sources in Base Crossref Over Time
-SOURCE_IN_BASE_YEAR_RANGE = range(1980, 2023)  # NB Range does not include last number!
-# TODO Align with 'All time' #How does this relate to YEAR_RANGE in config.json?
-# affects bar-line graph
-
 # Tables
 
 SUMMARY_TABLE_COLUMNS = {

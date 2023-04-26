@@ -190,6 +190,7 @@ def save_data_parameters(af):
     Write out JSON for the data parameters
     """
 
+    # pass
     import parameters.data_parameters as params
     for f in af.generate_file('data_parameters.json'):
         json.dump({item: getattr(params, item) for item in dir(params) if not item.startswith('__')},
@@ -351,47 +352,44 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
 
     comparison_data = pd.read_csv(CSV_FILE_PATHS['comparison'])
 
-    for source_a in SOURCES:
-        for source_b in SOURCES:
-            if source_b == source_a:
-                continue
-            # TODO Cleanup variable names here to abstract away from crossref to generalised base comparison
-            figdata = comparison_data.groupby('cr_type').agg(
-                source_a_comparison=pd.NamedAgg(column=f'{source_a.SOURCE_NAME}_dois', aggfunc='sum'),
-                source_b_comparison=pd.NamedAgg(column=f'{source_b.SOURCE_NAME}_ids', aggfunc='sum')
-            )
+    for source in SOURCES:
+        # TODO Cleanup variable names here to abstract away from crossref to generalised base comparison
+        grouped = comparison_data.groupby('cr_type').agg(
+            in_crossref=pd.NamedAgg(column='cr_dois', aggfunc='sum'),
+            in_source=pd.NamedAgg(column=f'{source.SOURCE_NAME}_dois', aggfunc='sum')
+        )
 
-            figdata['not_in_source_b'] = figdata.source_a_comparison - figdata.source_b_comparison
-            figdata = collate_value_add_values(figdata,
-                                               ['source_b_comparison',
-                                                'not_in_source_b'],
-                                               'source_a_comparison')
-            figdata.reset_index(inplace=True)
+        grouped['not_in_source'] = grouped.in_crossref - grouped.in_source
+        figdata = collate_value_add_values(grouped,
+                                           ['in_source',
+                                            'not_in_source'],
+                                           'in_crossref')
+        figdata.reset_index(inplace=True)
 
-            chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
-                                                     categories=[f'DOIs in {source_b.SOURCE_PRINT_NAME}',
-                                                                 f'DOIs not in {source_b.SOURCE_PRINT_NAME}'],
-                                                     metadata_element='dummy',
-                                                     ys={
-                                                         f'DOIs in {source_b.SOURCE_PRINT_NAME}': {
-                                                             'dummy': 'pc_in_source'},
-                                                         f'DOIs not in {source_b.SOURCE_PRINT_NAME}': {
-                                                             'dummy': 'pc_not_in_source'}
-                                                     }
-                                                     )
-            # Modify chart parameters here
-            chart.process_data(
-                doc_types=SOURCE_TYPES[base_comparison],
-                type_column='cr_type',
-                palette=['#FF7F0E', '#C0C0C0']
-            )
-            fig = chart.plotly()
+        chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
+                                                 categories=[f'DOIs in {source.SOURCE_PRINT_NAME}',
+                                                             f'DOIs not in {source.SOURCE_PRINT_NAME}'],
+                                                 metadata_element='dummy',
+                                                 ys={
+                                                     f'DOIs in {source.SOURCE_PRINT_NAME}': {
+                                                         'dummy': 'pc_in_source'},
+                                                     f'DOIs not in {source.SOURCE_PRINT_NAME}': {
+                                                         'dummy': 'pc_not_in_source'}
+                                                 }
+                                                 )
+        # Modify chart parameters here
+        chart.process_data(
+            doc_types=SOURCE_TYPES[source_a.SOURCE_NAME],
+            type_column='cr_type',
+            palette=['#FF7F0E', '#C0C0C0']
+        )
+        fig = chart.plotly()
 
-            # TODO Cleanup file name here (and downstream!) to abstract away from crossref to generalised base comparison
-            filename = f'{source_b}_coverage_of_{source_a}_by_crossref_type'
-            filepath = GRAPH_DIR / filename
-            fig.write_image(filepath.with_suffix('.png'))
-            af.add_existing_file(filepath.with_suffix('.png'))
+        # TODO Cleanup file name here (and downstream!) to abstract away from crossref to generalised base comparison
+        filename = f'{source.SOURCE_NAME}_coverage_of_crossref_by_crossref_type'
+        filepath = GRAPH_DIR / filename
+        fig.write_image(filepath.with_suffix('.png'))
+        af.add_existing_file(filepath.with_suffix('.png'))
 
 
 def collate_value_add_values(df: pd.DataFrame,
@@ -421,15 +419,13 @@ def collate_value_add_values(df: pd.DataFrame,
     return df
 
 
-def calculate_overall_coverage(source_a_df: pd.DataFrame,
-                               source_b_df: pd.DataFrame,
-                               source_a_name: str,
-                               source_b_name: str) -> dict:
-    base_total = source_a_df[f'{source_a_name}_ids'].sum()
-    # TODO Check this reference to source_a_df is correct
-    dois_in_source = source_a_df[f'{source_b_name}_ids'].sum()
-    source_total = source_b_df.num_objects.sum()
-    source_with_doi = source_b_df.num_dois.sum()
+def calculate_overall_coverage(comparison_df: pd.DataFrame,
+                               source_df: pd.DataFrame,
+                               source) -> dict:
+    base_total = comparison_df['cr_dois'].sum()
+    dois_in_source = comparison_df[f'{source.SOURCE_NAME}_ids'].sum()
+    source_total = source_df.num_objects.sum()
+    source_with_doi = source_df.num_dois.sum()
     source_dois_not_base = source_with_doi - dois_in_source
     total_objects = base_total + (source_total - dois_in_source) + source_dois_not_base
     total_dois = base_total + source_dois_not_base
@@ -450,68 +446,68 @@ def calculate_overall_coverage(source_a_df: pd.DataFrame,
     )
 
 
-def overall_comparison(af: AnalyticsFunction,
-                       base_comparison: str = BASE_COMPARISON):
-    for source_a in SOURCES:
-        source_a_df = pd.read_csv(CSV_FILE_PATHS[source_a.SOURCE_NAME])
+def overall_comparison(af: AnalyticsFunction):
+    """
+    Graphs Source coverage of Crossref DOIs
+    :param af:
+    :return:
+    """
 
-        for source_b in SOURCES:
-            if source_b == source_a:
-                continue
+    comparison_df = pd.read_csv(CSV_FILE_PATHS['comparison'])
 
-            source_b_df = pd.read_csv(CSV_FILE_PATHS[source_b.SOURCE_NAME])
+    for source in SOURCES:
 
-            for timeframe in TIME_FRAMES.keys():
-                filtered_base = source_a_df[source_a_df.cr_published_year.isin(TIME_FRAMES[timeframe])]
-                filtered_source = source_b_df[source_b_df.cr_published_year.isin(TIME_FRAMES[timeframe])]
+        source_df = pd.read_csv(CSV_FILE_PATHS[source.SOURCE_NAME])
 
-                figdata = calculate_overall_coverage(filtered_base, filtered_source,
-                                                     source_a.SOURCE_NAME, source_b.SOURCE_NAME)
-                chart = OverallCoverage(source=source_b.SOURCE_PRINT_NAME,
-                                        data_dict=figdata,
-                                        line_offset=0.06)
+        for timeframe in TIME_FRAMES.keys():
+            filtered_base = comparison_df[comparison_df.cr_published_year.isin(TIME_FRAMES[timeframe])]
+            filtered_source = source_df[source_df.published_year.isin(TIME_FRAMES[timeframe])]
 
-                fig = chart.plotly()
-                filename = f'{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_coverage_{timeframe.lower().replace(" ", "_")}'
-                filepath = GRAPH_DIR / filename
-                fig.write_image(filepath.with_suffix('.png'))
-                af.add_existing_file(filepath.with_suffix('.png'))
-
-
-def source_in_base_by_pubdate(af: AnalyticsFunction):
-    for source_a in SOURCES:
-        source_a_df = pd.read_csv(CSV_FILE_PATHS[source_a.SOURCE_NAME])
-
-        for source_b in SOURCES:
-            if source_b == source_a:
-                continue
-
-            source_b_df = pd.read_csv(CSV_FILE_PATHS[source_b.SOURCE_NAME])
-
-            year_range = SOURCE_IN_BASE_YEAR_RANGE
-
-            figdata = pd.DataFrame(index=year_range,
-                                   data=[calculate_overall_coverage(
-                                       source_a_df=source_a_df[source_a_df.cr_published_year == year],
-                                       source_b_df=source_b_df[source_b_df.cr_published_year == year],
-                                       source_a_name=source_a.SOURCE_NAME,
-                                       source_b_name=source_b.SOURCE_NAME
-                                   )
-                                       for year in year_range])
-
-            figdata['pc_source_in_base'] = figdata.cr_in_source / figdata.cr_total * 100
-
-            chart = BarLine(xdata=figdata.index,
-                            bardata=figdata.cr_total,
-                            barname=f'Registered {source_a.SOURCE_PRINT_NAME} DOIs',
-                            linedata=figdata.pc_source_in_base,
-                            linename=f'Crossref DOIs in {source_b.SOURCE_PRINT_NAME} (%)')
+            figdata = calculate_overall_coverage(filtered_base, filtered_source, source)
+            chart = OverallCoverage(source=source.SOURCE_PRINT_NAME,
+                                    data_dict=figdata,
+                                    line_offset=0.06)
 
             fig = chart.plotly()
-            filename = f'{source_a.SOURCE_NAME}_in_{source_b.SOURCE_NAME}_by_pubdate'
+            filename = f'{source.SOURCE_NAME}_crossref_coverage_{timeframe.lower().replace(" ", "_")}'
             filepath = GRAPH_DIR / filename
             fig.write_image(filepath.with_suffix('.png'))
             af.add_existing_file(filepath.with_suffix('.png'))
+
+
+def source_in_base_by_pubdate(af: AnalyticsFunction):
+    """
+    Graphs the overall coverage of Crossref by source
+    :param af:
+    :return:
+    """
+
+    comparison_df = pd.read_csv(CSV_FILE_PATHS['comparison'])
+    year_range = TIME_FRAMES['All Time']
+
+    for source in SOURCES:
+        source_df = pd.read_csv(CSV_FILE_PATHS[source.SOURCE_NAME])
+        figdata = pd.DataFrame(index=year_range,
+                               data=[
+                                   calculate_overall_coverage(
+                                       comparison_df=comparison_df[comparison_df.cr_published_year == year],
+                                       source_df=source_df[source_df.published_year == year],
+                                       source=source)
+                                   for year in year_range])
+
+        figdata['pc_source_in_base'] = figdata.cr_in_source / figdata.cr_total * 100
+
+        chart = BarLine(xdata=figdata.index,
+                        bardata=figdata.cr_total,
+                        barname=f'Registered {source_a.SOURCE_PRINT_NAME} DOIs',
+                        linedata=figdata.pc_source_in_base,
+                        linename=f'Crossref DOIs in {source_b.SOURCE_PRINT_NAME} (%)')
+
+        fig = chart.plotly()
+        filename = f'{source.SOURCE_NAME}_in_crossref_by_pubdate'
+        filepath = GRAPH_DIR / filename
+        fig.write_image(filepath.with_suffix('.png'))
+        af.add_existing_file(filepath.with_suffix('.png'))
 
 
 ## Graphs for comparing source database with itself (eg dois vs non-dois)
@@ -623,30 +619,30 @@ def source_coverage_self_by_type(af: AnalyticsFunction):
         figdata.reset_index(inplace=True)
 
         chart = ValueAddByCrossrefTypeHorizontal(df=figdata,
-                                                 categories=[f'{FORMATTED_SOURCE_NAMES[source]} DOIs',
-                                                             f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs'],
+                                                 categories=[f'{source.SOURCE_PRINT_NAME} DOIs',
+                                                             f'{source.SOURCE_PRINT_NAME} non-DOIs'],
                                                  metadata_element='dummy',
                                                  ys={
-                                                     f'{FORMATTED_SOURCE_NAMES[source]} DOIs': {
+                                                     f'{source.SOURCE_PRINT_NAME} DOIs': {
                                                          'dummy': 'pc_source_dois'},
-                                                     f'{FORMATTED_SOURCE_NAMES[source]} non-DOIs': {
+                                                     f'{source.SOURCE_PRINT_NAME} non-DOIs': {
                                                          'dummy': 'pc_source_non_dois'}
                                                  }
                                                  )
         # Modify chart parameters here
         chart.process_data(
-            doc_types=OPENALEX_TYPES, #TODO fix this
+            doc_types=SOURCE_TYPES[source.SOURCE_NAME],  # TODO fix this
             palette=['#FF7F0E', '#C0C0C0']
         )
         fig = chart.plotly()
-        filename = f'{source}_coverage_self_by_type'
+        filename = f'{source.SOURCE_NAME}_coverage_self_by_type'
         filepath = GRAPH_DIR / filename
         fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))
 
 
 def dois_in_source_by_pubdate(af,
-                              base_comparison: str = BASE_COMPARISON):
+                              base_comparison: str = 'comparison'):
     """
        Graph the coverage of dois in source by year of publication
        Adapted from source_in_base_by_pubdate
@@ -658,20 +654,15 @@ def dois_in_source_by_pubdate(af,
     base_comparison_data = pd.read_csv(CSV_FILE_PATHS[base_comparison])
 
     for source in SOURCES:
-        if source == base_comparison:
-            continue
 
-        #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        #            source_data = store[STORE_ELEMENT[source]]
+        source_data = pd.read_csv(CSV_FILE_PATHS[source.SOURCE_NAME])
 
-        source_data = pd.read_csv(CSV_FILE_PATHS[source])
-
-        year_range = SOURCE_IN_BASE_YEAR_RANGE
+        year_range = TIME_FRAMES['All Time']
 
         figdata = pd.DataFrame(index=year_range,
                                data=[calculate_overall_coverage(
-                                   source_a_df=base_comparison_data[base_comparison_data.cr_published_year == year],
-                                   source_b_df=source_data[source_data.cr_published_year == year],
+                                   comparison_df=base_comparison_data[base_comparison_data.cr_published_year == year],
+                                   source_df=source_data[source_data.published_year == year],
                                    source=source
                                )
                                    for year in year_range])
@@ -680,12 +671,12 @@ def dois_in_source_by_pubdate(af,
 
         chart = BarLine(xdata=figdata.index,
                         bardata=figdata.source_total,
-                        barname=f'All {FORMATTED_SOURCE_NAMES[source]} records',
+                        barname=f'All {source.SOURCE_NAME} records',
                         linedata=figdata.pc_dois_in_source,
-                        linename=f'{FORMATTED_SOURCE_NAMES[source]} with DOIs (%)')
+                        linename=f'{source.SOURCE_NAME} with DOIs (%)')
 
         fig = chart.plotly()
-        filename = f'dois_in_{source}_by_pubdate'
+        filename = f'dois_in_{source.SOURCE_NAME}_by_pubdate'
         filepath = GRAPH_DIR / filename
         fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))
@@ -722,26 +713,22 @@ def collate_value_add_self_values(df: pd.DataFrame,
 
 ## Tables
 
-def generate_tables(af,
-                    base_comparison: str = BASE_COMPARISON):
+def generate_tables(af: AnalyticsFunction):
     table_json = {}
-    #    with pd.HDFStore(LOCAL_DATA_PATH) as store:
-    #        base_comparison_data = store[STORE_ELEMENT[base_comparison]]
-    base_comparison_data = pd.read_csv(CSV_FILE_PATHS[base_comparison])
+
+    base_comparison_data = pd.read_csv(CSV_FILE_PATHS['comparison'])
     summary_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
+    summary_table_df.set_index('timeframe')
     # summary_source_table_df = pd.DataFrame(columns=['timeframe'] + ALL_COLLATED_COLUMNS)
 
     for timeframe in TIME_FRAMES.keys():
         filtered_comparison = base_comparison_data[base_comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
-        filtered_comparison_sum = filtered_comparison.sum(axis=0)
-        filtered_comparison_sum['timeframe'] = timeframe
-        summary_table_df = summary_table_df.append(filtered_comparison_sum, ignore_index=True)
+        filtered_comparison_sum = filtered_comparison.sum(axis=0, numeric_only=True)
+        # filtered_comparison_sum['timeframe'] = timeframe
+        summary_table_df[timeframe] = filtered_comparison_sum
 
     for source in SOURCES:
-        #        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-        #            source_data = store[STORE_ELEMENT[source]]
-
-        source_data = pd.read_csv(CSV_FILE_PATHS[source])
+        source_data = pd.read_csv(CSV_FILE_PATHS[source.SOURCE_NAME])
 
     #    for timeframe in TIME_FRAMES.keys():
     #        filtered_source = source_data[source_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
