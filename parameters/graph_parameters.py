@@ -117,7 +117,7 @@ def return_ys_dict(source_a,
             for x in
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         },
-        f'{source_a.SOURCE_PRINT_NAME} Added Value': {
+        f'{source_b.SOURCE_PRINT_NAME} Added Value': {
             x: f'pc_{source_b.SOURCE_NAME}_{graph_print_names[x]}_adds_presence'
             for x in
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
@@ -204,11 +204,11 @@ for source_a in SOURCES:
 #     }
 # }
 
-STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstracts', 'Citations to', 'References from',
-                          'Journals']
+STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract', 'Citations to', 'References from',
+                          'Venue']
 
-SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstracts', 'Citations to', 'References from',
-                             'Journals', 'Fields']
+SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract', 'Citations to', 'References from',
+                             'Venue', 'Fields']
 
 # SOURCE_TYPES is used to specify which metadata types to include for a given source in charts by metadata type
 CROSSREF_TYPES = ['journal-article',

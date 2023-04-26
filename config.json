@@ -31,7 +31,7 @@
         "depends": [
           "openalex_to_truthtable"
         ],
-        "rerun": true
+        "rerun": false
       }
     ],
     [
@@ -41,7 +41,7 @@
           "crossref_to_truthtable",
           "openalex_to_truthtable"
         ],
-        "rerun": true
+        "rerun": false
       }
     ],
     [
