@@ -4,7 +4,7 @@ SELECT
 
 id,
 pid,
-ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author
+ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
 STRUCT(
         container.name as name,
         container.issnOnline as issnOnline,
