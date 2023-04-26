@@ -27,3 +27,13 @@ SOURCE_DATA_ELEMENTS = [
     'venue_id_issn'
 ]
 
+DATA_ELEMENT_MAPPING = dict(
+    authors='authors_string',
+    affiliations='affiliations_string',
+    venue='venue_string'
+)
+
+DATA_ELEMENT_MAPPING.update(
+    {element: element for element in SOURCE_DATA_ELEMENTS if element not in DATA_ELEMENT_MAPPING.keys()}
+)
+

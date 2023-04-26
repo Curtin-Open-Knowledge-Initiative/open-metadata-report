@@ -14,7 +14,7 @@ FOCUS_YEAR = FOCUS
 
 TIME_FRAMES = {
 
-    'All Time': range(1980, 2023), # NB Range does not include last number!
+    'All Time': range(1980, 2023),  # NB Range does not include last number!
     # TODO align with SOURCE_IN_BASE_YEAR_RANGE
     # All time here effects value add graphs, venn graph, but not bar/line graph or coverage bar graph!
     'Crossref Current': CROSSREF_CURRENT,
@@ -33,7 +33,6 @@ PRESENCE_COLUMNS_SELF = [
     f'{source_self}_has_{item}' for item in all_data_elems for source_self in SOURCES_SELF
 ]
 
-
 ADDED_VALUE_COLUMNS = [
     f'{source.SOURCE_NAME}_{item}_adds_presence' for item in all_data_elems for source in SOURCES
 ]
@@ -44,60 +43,84 @@ ADDED_VALUE_COUNTS_COLUMNS = [
 
 ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS + ADDED_VALUE_COUNTS_COLUMNS
 
-#TODO create values names more dynamically
-VALUE_ADD_META = {
+# TODO create values names more dynamically
+
+# graph_print_names = {
+#     'authors': 'Authors',
+#     'authors_id_orcid': 'Author ORCIDs',
+#     'authors_id_source': 'Author Source IDs',
+#     'authors_string': 'Author Strings',
+#     'affiliations_id_source': 'Affiliation Source IDs',
+#     'authors_sequence': 'Authors Sequence',
+#     'affiliations': 'Affiliations',
+#     'affiliations_string': 'Affiliation Strings',
+#     'affiliations_id_ror': 'Affiliation RORs',
+#     'affiliations_id_source': 'Affiliation Source IDs',
+#     'abstract': 'Abstract',
+#     'citations': 'Citations',
+#     'references': 'References',
+#     'fields': 'Fields',
+#     'venue': 'Venue',
+#     'venue_string': 'Venue String',
+#     'venue_id_issn': 'Venue ISSN',
+#     'venue_id_issnl': 'Venue ISSN-L',
+#     'venue_id_source': 'Venue Source ID'
+# }
+
+graph_print_names = {
+    'Authors': 'authors',
+    'Author ORCIDs': 'authors_id_orcid',
+    'Author Source IDs': 'authors_id_source',
+    'Author Strings': 'authors_string',
+    'Affiliation Source IDs': 'affiliations_id_source',
+    'Authors Sequence': 'authors_sequence',
+    'Affiliations': 'affiliations',
+    'Affiliation Strings': 'affiliations_string',
+    'Affiliation RORs': 'affiliations_id_ror',
+    'Abstract': 'abstract',
+    'Citations': 'citations',
+    'References': 'references',
+    'Fields': 'fields',
+    'Venue': 'venue',
+    'Venue String': 'venue_string',
+    'Venue ISSN': 'venue_id_issn',
+    'Venue ISSN-L': 'venue_id_issnl',
+    'Venue Source ID': 'venue_id_source'
+}
+
+value_add_meta_xs = {
     'crossref': {
         'openalex': {
             'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-                   'References from', 'Journals', 'Journals ISSN', 'Fields'],
+                   'References from', 'Journals', 'Journals ISSN', 'Fields']
+        }
+    }
+}
+
+VALUE_ADD_META = {
+    'crossref': {
+        'openalex': {
+            'xs': value_add_meta_xs['crossref']['openalex']['xs'],
             'ys': {
                 'Crossref': {
-                    'Affiliations': 'pc_crossref_has_affiliations_string',
-                    'Affiliations ROR': 'pc_crossref_has_affiliations_ror',
-                    'Authors': 'pc_crossref_has_authors',
-                    'Authors ORCIDs': 'pc_crossref_has_authors_orcid',
-                    'Abstracts': 'pc_crossref_has_abstract',
-                    'Citations to': 'pc_crossref_has_citations',
-                    'References from': 'pc_crossref_has_references',
-                    'Journals': 'pc_crossref_has_venue',
-                    'Journals ISSN': 'pc_crossref_has_venue_issn',
-                    'Fields': 'pc_crossref_has_fields'
+                    x: f'pc_crossref_has_{graph_print_names[x]}'
+                    for x in
+                    value_add_meta_xs['crossref']['openalex']['xs']
                 },
                 'OpenAlex': {
-                    'Affiliations': 'pc_openalex_has_affiliations_string',
-                    'Affiliations ROR': 'pc_openalex_has_affiliations_ror',
-                    'Authors': 'pc_openalex_has_authors',
-                    'Authors ORCIDs': 'pc_openalex_has_authors_orcid',
-                    'Abstracts': 'pc_openalex_has_abstract',
-                    'Citations to': 'pc_openalex_has_citations',
-                    'References from': 'pc_openalex_has_references',
-                    'Journals': 'pc_openalex_has_venue',
-                    'Journals ISSN': 'pc_openalex_has_venue_issn',
-                    'Fields': 'pc_openalex_has_fields'
+                    x: f'pc_openalex_has_{graph_print_names[x]}'
+                    for x in
+                    value_add_meta_xs['crossref']['openalex']['xs']
                 },
                 'OpenAlex Added Value': {
-                    'Affiliations': 'pc_openalex_affiliations_string_adds_presence',
-                    'Affiliations ROR': 'pc_openalex_affiliations_ror_adds_presence',
-                    'Authors': 'pc_openalex_authors_adds_presence',
-                    'Authors ORCIDs': 'pc_openalex_authors_orcid_adds_presence',
-                    'Abstracts': 'pc_openalex_abstract_adds_presence',
-                    'Citations to': 'pc_openalex_citations_adds_presence',
-                    'References from': 'pc_openalex_references_adds_presence',
-                    'Journals': 'pc_openalex_venue_adds_presence',
-                    'Journals ISSN': 'pc_openalex_venue_issn_adds_presence',
-                    'Fields': 'pc_openalex_fields_adds_presence'
+                    x: f'pc_openalex_{graph_print_names[x]}_adds_presence'
+                    for x in
+                    value_add_meta_xs['crossref']['openalex']['xs']
                 },
                 'OpenAlex Added Value (counts)': {
-                    'Affiliations': 'pc_openalex_affiliations_string_adds_counts',
-                    'Affiliations ROR': 'pc_openalex_affiliations_ror_adds_counts',
-                    'Authors': 'pc_openalex_authors_adds_counts',
-                    'Authors ORCIDs': 'pc_openalex_authors_orcid_adds_counts',
-                    'Abstracts': 'pc_openalex_abstract_adds_counts',
-                    'Citations to': 'pc_openalex_citations_adds_counts',
-                    'References from': 'pc_openalex_references_adds_counts',
-                    'Journals': 'pc_openalex_venue_adds_counts',
-                    'Journals ISSN': 'pc_openalex_venue_issn_adds_counts',
-                    'Fields': 'pc_openalex_fields_adds_counts'
+                    x: f'pc_openalex_{graph_print_names[x]}_adds_counts'
+                    for x in
+                    value_add_meta_xs['crossref']['openalex']['xs']
                 }
             }
         }
@@ -160,15 +183,14 @@ OPENALEX_TYPES = ['journal-article',
                   'monograph',
                   'none']
 
-#check where this is used in cwts version and adapt here
+# check where this is used in cwts version and adapt here
 SOURCE_TYPES = dict(
     crossref=CROSSREF_TYPES,
     openalex=OPENALEX_TYPES,
 )
 
-
 # Sources in Base Crossref Over Time
-SOURCE_IN_BASE_YEAR_RANGE = range(1980, 2023) #NB Range does not include last number!
+SOURCE_IN_BASE_YEAR_RANGE = range(1980, 2023)  # NB Range does not include last number!
 # TODO Align with 'All time' #How does this relate to YEAR_RANGE in config.json?
 # affects bar-line graph
 
@@ -199,7 +221,7 @@ SUMMARY_TABLE_COLUMNS = {
             'Venue Names',
             'ISSNs']
     },
-#TODO reconsider this as it presupposes comparison with Crossref - needs generalizing
+    # TODO reconsider this as it presupposes comparison with Crossref - needs generalizing
     'openalex': {
         'column_names': [
             'timeframe',

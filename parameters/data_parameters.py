@@ -70,6 +70,9 @@ SOURCE_TRUTH_TABLES = {
 #
 ###
 
+# TODO Set up set of minimial data elements here and assert they are all found in
+# TODO DATA_ELEMENT_MAPPING for every source
+
 COMPARISON_ELEMENT_MAPPING = {
 }
 
