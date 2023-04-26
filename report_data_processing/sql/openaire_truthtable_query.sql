@@ -17,7 +17,8 @@ STRUCT(
  END
  as description,
 ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-instance
+ARRAY(SELECT AS STRUCT publicationdate, type, pid FROM unnest(instance)) as instance
+
 
 FROM `utrecht-university.TEMP.openaire_publication`
 )
