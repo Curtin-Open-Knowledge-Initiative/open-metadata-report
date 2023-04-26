@@ -126,7 +126,6 @@ def return_ys_dict(source_a,
     }
 
 
-
 VALUE_ADD_META = {}
 for source_a in SOURCES:
     for source_b in SOURCES:
@@ -139,12 +138,75 @@ for source_a in SOURCES:
                         'xs': value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
                         'ys': return_ys_dict(source_a, source_b)
 
-                        }
                     }
                 }
+            }
         )
 
-
+INTERNAL_COMPARISON_META = {
+    'openalex': {
+        'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstract', 'Citations to',
+               'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields'],
+        'ys': {
+            'OpenAlex DOIs': {
+                'Affiliations': 'pc_dois_has_affiliations_string',
+                'Affiliations ROR': 'pc_dois_has_affiliations_id_ror',
+                'Authors': 'pc_dois_has_authors',
+                'Authors ORCIDs': 'pc_dois_has_authors_id_orcid',
+                'Abstract': 'pc_dois_has_abstract',
+                'Citations to': 'pc_dois_has_citations',
+                'References from': 'pc_dois_has_references',
+                'Venue': 'pc_dois_has_venue',
+                'Venue ISSN': 'pc_dois_has_venue_id_issn',
+                'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
+                'Fields': 'pc_dois_has_fields'
+            },
+            'OpenAlex non-DOIs': {
+                'Affiliations': 'pc_non_dois_has_affiliations_string',
+                'Affiliations ROR': 'pc_non_dois_has_affiliations_id_ror',
+                'Authors': 'pc_non_dois_has_authors',
+                'Authors ORCIDs': 'pc_non_dois_has_authors_id_orcid',
+                'Abstract': 'pc_non_dois_has_abstract',
+                'Citations to': 'pc_non_dois_has_citations',
+                'References from': 'pc_non_dois_has_references',
+                'Venue': 'pc_non_dois_has_venue',
+                'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
+                'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
+                'Fields': 'pc_non_dois_has_fields'
+            }
+        }
+    },
+    'crossref': {
+        'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstract', 'Citations to',
+               'References from', 'Venue', 'Venue ISSN', 'Fields'],
+        'ys': {
+            'Crossref DOIs': {
+                'Affiliations': 'pc_dois_has_affiliations_string',
+                'Affiliations ROR': 'pc_dois_has_affiliations_id_ror',
+                'Authors': 'pc_dois_has_authors',
+                'Authors ORCIDs': 'pc_dois_has_authors_id_orcid',
+                'Abstract': 'pc_dois_has_abstract',
+                'Citations to': 'pc_dois_has_citations',
+                'References from': 'pc_dois_has_references',
+                'Venue': 'pc_dois_has_venue',
+                'Venue ISSN': 'pc_dois_has_venue_id_issn',
+                'Fields': 'pc_dois_has_fields'
+            },
+            'Crossref non-DOIs': {
+                'Affiliations': 'pc_non_dois_has_affiliations_string',
+                'Affiliations ROR': 'pc_non_dois_has_affiliations_id_ror',
+                'Authors': 'pc_non_dois_has_authors',
+                'Authors ORCIDs': 'pc_non_dois_has_authors_id_orcid',
+                'Abstract': 'pc_non_dois_has_abstract',
+                'Citations to': 'pc_non_dois_has_citations',
+                'References from': 'pc_non_dois_has_references',
+                'Venue': 'pc_non_dois_has_venue',
+                'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
+                'Fields': 'pc_non_dois_has_fields'
+            }
+        }
+    }
+}
 
 #
 # VALUE_ADD_META = {

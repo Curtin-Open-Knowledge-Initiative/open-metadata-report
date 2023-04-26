@@ -290,54 +290,54 @@ def value_add_graphs(af: AnalyticsFunction,
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
 
-            # Details graph for each metadata element
-            for metadata_element in VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']:
-                sum_by_type = filtered.groupby('cr_type').sum().reset_index()
-                collated_sum_by_type = collate_value_add_values(sum_by_type,
-                                                                ALL_COLLATED_COLUMNS,
-                                                                'crossref_dois')
+                # Details graph for each metadata element
+                for metadata_element in VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']:
+                    sum_by_type = filtered.groupby('cr_type').sum().reset_index()
+                    collated_sum_by_type = collate_value_add_values(sum_by_type,
+                                                                    ALL_COLLATED_COLUMNS,
+                                                                    'crossref_dois')
 
-                # Stacked Bar
-                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
-                                               metadata_element=metadata_element,
-                                               ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
-                                               categories=[
-                                                   source_a.SOURCE_PRINT_NAME,
-                                                   f'{source_b.SOURCE_PRINT_NAME} Added Value'
-                                               ],
-                                               )
+                    # Stacked Bar
+                    chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                                   metadata_element=metadata_element,
+                                                   ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
+                                                   categories=[
+                                                       source_a.SOURCE_PRINT_NAME,
+                                                       f'{source_b.SOURCE_PRINT_NAME} Added Value'
+                                                   ],
+                                                   )
 
-                chart.process_data(
-                    doc_types=CROSSREF_TYPES,
-                    type_column='cr_type'
-                )
+                    chart.process_data(
+                        doc_types=CROSSREF_TYPES,
+                        type_column='cr_type'
+                    )
 
-                fig = chart.plotly()
-                filename = f'value_add_stacked_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
-                filepath = GRAPH_DIR / filename
-                fig.write_image(filepath.with_suffix('.png'))
-                af.add_existing_file(filepath.with_suffix('.png'))
+                    fig = chart.plotly()
+                    filename = f'value_add_stacked_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                    filepath = GRAPH_DIR / filename
+                    fig.write_image(filepath.with_suffix('.png'))
+                    af.add_existing_file(filepath.with_suffix('.png'))
 
-                # Side by side bar
-                chart = ValueAddByCrossrefType(df=collated_sum_by_type,
-                                               metadata_element=metadata_element,
-                                               ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
-                                               categories=[
-                                                   source_a.SOURCE_PRINT_NAME,
-                                                   f'{source_b.SOURCE_PRINT_NAME}'],
-                                               stackedbar=False
-                                               )
+                    # Side by side bar
+                    chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                                   metadata_element=metadata_element,
+                                                   ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
+                                                   categories=[
+                                                       source_a.SOURCE_PRINT_NAME,
+                                                       f'{source_b.SOURCE_PRINT_NAME}'],
+                                                   stackedbar=False
+                                                   )
 
-                chart.process_data(
-                    doc_types=CROSSREF_TYPES,
-                    type_column='cr_type'
-                )
+                    chart.process_data(
+                        doc_types=CROSSREF_TYPES,
+                        type_column='cr_type'
+                    )
 
-                fig = chart.plotly()
-                filename = f'value_add_sidebyside_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
-                filepath = GRAPH_DIR / filename
-                fig.write_image(filepath.with_suffix('.png'))
-                af.add_existing_file(filepath.with_suffix('.png'))
+                    fig = chart.plotly()
+                    filename = f'value_add_sidebyside_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                    filepath = GRAPH_DIR / filename
+                    fig.write_image(filepath.with_suffix('.png'))
+                    af.add_existing_file(filepath.with_suffix('.png'))
 
 
 def source_coverage_by_crossref_type(af: AnalyticsFunction,
@@ -540,8 +540,8 @@ def value_add_self_graphs(af: AnalyticsFunction,
         # base_comparison_data[['type']] = base_comparison_data[['type']].fillna(value='none')
 
         for timeframe in TIME_FRAMES.keys():
-            filtered = comparison_data[comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
-            filtered_sum = filtered.sum(axis=0)
+            filtered = comparison_data[comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
+            filtered_sum = filtered.sum(axis=0, numeric_only=True)
             # TODO fix this to use collate_value_add in two cycles and cleanup PRESENCE_COLUMNS_SELF
             figdata = collate_value_add_self_values(filtered_sum,
                                                     PRESENCE_COLUMNS_SELF)
@@ -550,8 +550,8 @@ def value_add_self_graphs(af: AnalyticsFunction,
             chart = ValueAddBar(df=figdata,
                                 categories=[f'{source.SOURCE_PRINT_NAME} DOIs',
                                             f'{source.SOURCE_PRINT_NAME} non-DOIs'],
-                                xs=SIDEBYSIDE_BAR_SUMMARY_XS,
-                                ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                xs=INTERNAL_COMPARISON_META[source.SOURCE_NAME]['xs'],
+                                ys=INTERNAL_COMPARISON_META[source.SOURCE_NAME]['ys'],
                                 stackedbar=False)
 
             # Modify chart parameters here
@@ -560,24 +560,22 @@ def value_add_self_graphs(af: AnalyticsFunction,
             )
 
             fig = chart.plotly()
-            filename = f'value_add_self_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}'
+            filename = f'value_add_self_sidebyside_{source.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}'
             filepath = GRAPH_DIR / filename
             fig.write_image(filepath.with_suffix('.png'))
             af.add_existing_file(filepath.with_suffix('.png'))
 
             # Detailed graphs per metadata element
 
-            for metadata_element in VALUE_ADD_META[base_comparison][source]['xs']:
+            for metadata_element in INTERNAL_COMPARISON_META[source.SOURCE_NAME]['xs']:
                 sum_by_type = filtered.groupby('type').sum().reset_index()
                 collated_sum_by_type = collate_value_add_self_values(sum_by_type,
                                                                      PRESENCE_COLUMNS_SELF)
 
                 # Side by side bar
-                # TODO Remove use of base_comparison in this context - not totally clear how
-                # TODO or alternately this is an appropriate use of crossref as the base comparison
                 chart = ValueAddByCrossrefType(df=collated_sum_by_type,
                                                metadata_element=metadata_element,
-                                               ys=VALUE_ADD_META[base_comparison][source]['ys'],
+                                               ys=INTERNAL_COMPARISON_META[source.SOURCE_NAME]['ys'],
                                                categories=[f'{source.SOURCE_PRINT_NAME} DOIs',
                                                            f'{source.SOURCE_PRINT_NAME} non-DOIs'],
                                                stackedbar=False
@@ -586,12 +584,12 @@ def value_add_self_graphs(af: AnalyticsFunction,
                 # Modify chart parameters here
                 chart.process_data(
                     doc_types=CROSSREF_TYPES,
-                    type_column='cr_type',
+                    type_column='type',
                     palette=['#FF7F0E', '#C0C0C0']
                 )
 
                 fig = chart.plotly()
-                filename = f'value_add_self_sidebyside_{source}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_type'
+                filename = f'value_add_self_sidebyside_{source.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_type'
                 filepath = GRAPH_DIR / filename
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
