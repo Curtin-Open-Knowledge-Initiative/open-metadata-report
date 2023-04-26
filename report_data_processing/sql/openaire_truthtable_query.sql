@@ -1,9 +1,10 @@
-WITH TABLE AS (
+WITH INTERMEDIATE AS (
 
 SELECT
 
 id,
 pid,
+publicationdate,
 ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
 STRUCT(
         container.name as name,
@@ -22,4 +23,4 @@ ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM 
 FROM `utrecht-university.TEMP.openaire_publication`
 )
 
-SELECT * FROM TABLE
+SELECT * FROM INTERMEDIATE
