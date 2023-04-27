@@ -54,16 +54,10 @@ INTERMEDIATE AS (
 --- author.fullname has no empty strings
 --- description can contain, but is not limited to abstracts - proceed to use with caution
 --- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future
---- issn fields do have empty strings
---- issnLinking contains only empty strings (and NULLs)
-
---- Notes:
---- author.fullname has no empty strings
---- description can contain, but is not limited to abstracts - proceed to use with caution
---- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future
 --- container is not nested
 --- container.name has no empty strings
 --- issn fields do have empty strings
+--- issnOnline and issnPrinting have varying string length, but 99.8/99.9% of non-empty strings have length 8-9, so 1 ISSN
 --- issnLinking contains only empty strings (and NULLs)
 
 SELECT
@@ -171,8 +165,10 @@ SELECT
     ELSE FALSE
   END as has_venue_issn,
   CASE
-    WHEN (CHAR_LENGTH(container.issnOnline)  > 0 OR CHAR_LENGTH(container.issnPrinted) > 0)
- THEN 1
+    WHEN (CHAR_LENGTH(container.issnOnline)  > 0) IS FALSE AND (CHAR_LENGTH(container.issnPrinted) > 0) IS FALSE THEN 0
+    WHEN (CHAR_LENGTH(container.issnOnline)  > 0) IS TRUE AND (CHAR_LENGTH(container.issnPrinted) > 0) IS FALSE THEN 1
+    WHEN (CHAR_LENGTH(container.issnOnline)  > 0) IS FALSE AND (CHAR_LENGTH(container.issnPrinted) > 0) IS TRUE THEN 1
+    WHEN (CHAR_LENGTH(container.issnOnline)  > 0) IS TRUE AND (CHAR_LENGTH(container.issnPrinted) > 0) IS TRUE THEN 2
     ELSE 0
   END as count_venue_issn,
   CASE
@@ -187,4 +183,3 @@ SELECT
 
 
  FROM `utrecht-university.TEMP.openaire_publications_intermediate`
-
