@@ -80,8 +80,8 @@ and disciplines.
 
 This report was run using the following tables as source data:
 
-* {{ name_base_full }}: {{ metadata.TABLES.crossref }}
-* {{ name_source_full }}: {{ metadata.TABLES.openalex.Work_snapshots }}
+* {{ name_base_full }}: {{ metadata.TABLES[source_a] }}
+* {{ name_source_full }}: {{ metadata.TABLES[source_b] }}
 
 
 Complete data and code are available on Github:
@@ -156,76 +156,13 @@ Metadata coverage in {{ name_source_full }} and {{ name_base_full }} by publicat
 <br>
 
 {% set data_element_array = graph_metadata.VALUE_ADD_META[source_a][source_b]['xs'] %}
-
-{% set data_element = data_element_array[0] %}
+{% for data_element in data_element_array %}
 ### {{ data_element }}
 
 {{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
-
-{% set data_element = data_element_array[1] %}
-### {{ data_element }}
-
-{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[2] %}
-### {{ data_element }}
-
-{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[3] %}
-### {{ data_element }}
-
-{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[4] %}
-### {{ data_element }}
-
-{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[5] %}
-### {{ data_element }}
-
-{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[6] %}
-### {{ data_element }}
-
-{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[7] %}
-### {{ data_element }}
-
-{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[8] %}
-### {{ data_element }}
-
-{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[9] %}
-### {{ data_element }}
-
-{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
-
-<pdf:nextpage>
+{% endfor %}
 
 # {{ name_source_full }} Coverage Beyond {{ name_base_full }}
 <br>
@@ -270,67 +207,13 @@ Comparing coverage of metadata types for DOIs and non-DOIs in OpenAlex
 Metadata coverage for DOIs and non-DOIs by publication type
 <br>
 
-{% set data_element = data_element_array[0] %}
+{% set data_element_array = graph_metadata.INTERNAL_COMPARISON_META[source_b]['xs'] %}
+{% for data_element in data_element_array %}
 ### {{ data_element }}
 
 {{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
-
-
-{% set data_element = data_element_array[1] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[2] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
-
-
-{% set data_element = data_element_array[3] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[4] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[5] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
-
-
-{% set data_element = data_element_array[6] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
-
-<pdf:nextpage>
-
-{% set data_element = data_element_array[8] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
-
-
-{% set data_element = data_element_array[9] %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
-
-
-<pdf:nextpage>
-
-
+{{ loop.cycle("", "<pdf:nextpage>") }}
+{% endfor %}
 
 ## Appendix A - Tables
 
