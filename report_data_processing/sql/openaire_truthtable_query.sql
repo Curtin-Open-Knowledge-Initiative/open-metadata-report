@@ -92,6 +92,27 @@ FROM `utrecht-university.TEMP.openaire_publications_intermediate` as a
 LEFT JOIN `academic-observatory.openaire.relation` as b
 ON a.id = b.source.id
 
+--- joining in 2 steps
+WITH TABLE AS (
+
+  SELECT
+
+a.id,
+STRUCT(b.id,	b.legalname, b.country,	b.pid, b.ror) as organization
+
+ FROM `utrecht-university.TEMP.openaire_relations_results_organizations_sample` as a
+ LEFT JOIN `utrecht-university.TEMP.openaire_organizations`as b
+ ON a.organization_id = b.id
+)
+
+SELECT
+
+id,
+ARRAY_AGG(organization) as organization
+
+FROM TABLE
+GROUP BY id
+
 
 --- TRUTHTABLE
 
