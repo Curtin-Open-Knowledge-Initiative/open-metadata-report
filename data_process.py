@@ -190,27 +190,20 @@ def save_data_parameters(af):
     Write out JSON for the data parameters
     """
 
-    # pass
+    # Force
     import parameters.data_parameters as params
-    for f in af.generate_file('data_parameters.json'):
+    with open(DATA_DIR / 'data_parameters.json', 'w') as f:
         json.dump({item: getattr(params, item) for item in dir(params) if not item.startswith('__')},
                   f,
                   default=str)
+    af.add_existing_file(DATA_DIR / 'data_parameters.json')
 
     import parameters.graph_parameters as params
-    for f in af.generate_file('graph_parameters.json'):
+    with open(DATA_DIR /'graph_parameters.json', 'w') as f:
         json.dump({item: getattr(params, item) for item in dir(params) if not item.startswith('__')},
                   f,
                   default=str)
-
-
-#   for source in SOURCES:
-#        with pd.HDFStore(LOCAL_DATA_PATH) as store:
-#            categories = store[STORE_ELEMENT[source]]
-
-#        categories.to_csv(CSV_FILE[source])
-#        af.add_existing_file(CSV_FILE[source])
-
+    af.add_existing_file(DATA_DIR / 'graph_parameters.json')
 
 def git_status(af):
     """
@@ -250,6 +243,7 @@ def value_add_graphs(af: AnalyticsFunction,
 
     comparison_data = pd.read_csv(CSV_FILE_PATHS['comparison'])
 
+    # Force
     for source_a in SOURCES:
         for source_b in SOURCES:
             if source_b == source_a:
@@ -314,7 +308,7 @@ def value_add_graphs(af: AnalyticsFunction,
                     )
 
                     fig = chart.plotly()
-                    filename = f'value_add_stacked_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                    filename = f'value_add_stacked_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{GRAPH_PRINT_NAMES[metadata_element]}_by_cr_type'
                     filepath = GRAPH_DIR / filename
                     fig.write_image(filepath.with_suffix('.png'))
                     af.add_existing_file(filepath.with_suffix('.png'))
@@ -335,7 +329,7 @@ def value_add_graphs(af: AnalyticsFunction,
                     )
 
                     fig = chart.plotly()
-                    filename = f'value_add_sidebyside_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_cr_type'
+                    filename = f'value_add_sidebyside_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{GRAPH_PRINT_NAMES[metadata_element]}_by_cr_type'
                     filepath = GRAPH_DIR / filename
                     fig.write_image(filepath.with_suffix('.png'))
                     af.add_existing_file(filepath.with_suffix('.png'))
@@ -423,11 +417,11 @@ def calculate_overall_coverage(comparison_df: pd.DataFrame,
                                source_df: pd.DataFrame,
                                source) -> dict:
     base_total = comparison_df['cr_dois'].sum()
-    dois_in_source = comparison_df[f'{source.SOURCE_NAME}_ids'].sum()
+    crdois_in_source = comparison_df[f'{source.SOURCE_NAME}_ids'].sum()
     source_total = source_df.num_objects.sum()
     source_with_doi = source_df.num_dois.sum()
-    source_dois_not_base = source_with_doi - dois_in_source
-    total_objects = base_total + (source_total - dois_in_source) + source_dois_not_base
+    source_dois_not_base = source_with_doi - crdois_in_source
+    total_objects = base_total + (source_total - crdois_in_source) + source_dois_not_base
     total_dois = base_total + source_dois_not_base
     objects_wo_dois = total_objects - total_dois
 
@@ -437,10 +431,10 @@ def calculate_overall_coverage(comparison_df: pd.DataFrame,
         objects_wo_dois=objects_wo_dois,
         source_no_doi=source_total - source_with_doi,
         source_dois_not_cr=source_dois_not_base,
-        cr_in_source=dois_in_source,
-        cr_not_in_source=base_total - dois_in_source,
+        cr_in_source=crdois_in_source,
+        cr_not_in_source=base_total - crdois_in_source,
         cr_total=base_total,
-        # Added for dois_in_source_by_pubdate
+        # Added for crdois_in_source_by_pubdate
         source_total=source_total,
         source_dois=source_with_doi
     )
@@ -532,9 +526,6 @@ def value_add_self_graphs(af: AnalyticsFunction,
     for source in SOURCES:
         comparison_data = pd.read_csv(CSV_FILE_PATHS[source.SOURCE_NAME])
 
-        # Replace None (which is not a string) values with string 'none' to include in aggregation
-        # base_comparison_data[['type']] = base_comparison_data[['type']].fillna(value='none')
-
         for timeframe in TIME_FRAMES.keys():
             filtered = comparison_data[comparison_data.published_year.isin(TIME_FRAMES[timeframe])]
             filtered_sum = filtered.sum(axis=0, numeric_only=True)
@@ -585,7 +576,8 @@ def value_add_self_graphs(af: AnalyticsFunction,
                 )
 
                 fig = chart.plotly()
-                filename = f'value_add_self_sidebyside_{source.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{metadata_element.replace(" ", "_").lower()}_by_type'
+                #TODO This filenaming is super ugly and fragile - need to fix at this end and template end
+                filename = f'value_add_self_sidebyside_{source.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{GRAPH_PRINT_NAMES[metadata_element]}_by_type'
                 filepath = GRAPH_DIR / filename
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
@@ -641,7 +633,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction):
         af.add_existing_file(filepath.with_suffix('.png'))
 
 
-def dois_in_source_by_pubdate(af,
+def crdois_in_source_by_pubdate(af,
                               base_comparison: str = 'comparison'):
     """
        Graph the coverage of dois in source by year of publication
@@ -667,16 +659,16 @@ def dois_in_source_by_pubdate(af,
                                )
                                    for year in year_range])
 
-        figdata['pc_dois_in_source'] = figdata.source_dois / figdata.source_total * 100
+        figdata['pc_crdois_in_source'] = figdata.source_dois / figdata.source_total * 100
 
         chart = BarLine(xdata=figdata.index,
                         bardata=figdata.source_total,
                         barname=f'All {source.SOURCE_NAME} records',
-                        linedata=figdata.pc_dois_in_source,
+                        linedata=figdata.pc_crdois_in_source,
                         linename=f'{source.SOURCE_NAME} with DOIs (%)')
 
         fig = chart.plotly()
-        filename = f'dois_in_{source.SOURCE_NAME}_by_pubdate'
+        filename = f'crdois_in_{source.SOURCE_NAME}_by_pubdate'
         filepath = GRAPH_DIR / filename
         fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))

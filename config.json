@@ -91,7 +91,7 @@
       }
     ],
     [
-      "dois_in_source_by_pubdate",
+      "crdois_in_source_by_pubdate",
       {
         "depends": [
           "comparison_categories_query",

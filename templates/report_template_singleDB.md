@@ -1,3 +1,6 @@
+{% set source_a = "crossref" %}
+{% set source_b = "openalex" %}
+
 {% import "report_macros.md" as helper with context %}
 {% include "report_css.html" %}
 
@@ -6,10 +9,11 @@
 {% set metadata = load_json(save_data_parameters.files["data_parameters.json"].cache_filepath) %}
 {% set graph_metadata = load_json(save_data_parameters.files["graph_parameters.json"].cache_filepath) %}
 {% set tables = load_json(generate_tables.files["tables.json"].cache_filepath) %}
-{% set name_source = metadata.NON_BASE_SOURCES[0] + "_" %}
-{% set name_base = metadata.BASE_COMPARISON + "_" %}
-{% set name_source_full = metadata.FORMATTED_SOURCE_NAMES[metadata.NON_BASE_SOURCES[0]] %}
-{% set name_base_full = metadata.FORMATTED_SOURCE_NAMES[metadata.BASE_COMPARISON] %}
+{% set name_source_full = metadata.SOURCE_JSON[source_b].SOURCE_NAME %}
+{% set name_base_full = metadata.SOURCE_JSON[source_a].SOURCE_NAME %}
+{% set name_source = name_source_full  + "_" %}
+{% set name_base = name_base_full + "_" %}
+
 {% set focus_year = graph_metadata.FOCUS_YEAR %}
 {% set crossref_current = graph_metadata.CROSSREF_CURRENT %}
 {% set tablenum = 1 %}
@@ -108,8 +112,8 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <table>
   <tr>
-    <td valign="top"><img src="{{ source_in_base_by_pubdate.files[name_base + "in_" + name_source + "by_pubdate.png"].cache_filepath }}"></td>
-    <td valign="top"><img src="{{ source_coverage_by_crossref_type.files[name_source + "coverage_by_" + name_base + "type.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ crdois_in_source_by_pubdate.files[ "crdois_in_" + name_source + "by_pubdate.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ source_coverage_by_crossref_type.files[name_source + "coverage_of_crossref_by_crossref_type.png"].cache_filepath }}"></td>
   </tr>
   <tr>
     <td>coverage by publication date - all time</td>
@@ -151,75 +155,75 @@ Comparing coverage of metadata types in {{ name_base_full }} and {{ name_source_
 Metadata coverage in {{ name_source_full }} and {{ name_base_full }} by publication type
 <br>
 
-{% set data_element_array = graph_metadata.VALUE_ADD_META[metadata.BASE_COMPARISON][metadata.NON_BASE_SOURCES[0]]['xs'] %}
+{% set data_element_array = graph_metadata.VALUE_ADD_META[source_a][source_b]['xs'] %}
 
 {% set data_element = data_element_array[0] %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[1] %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[2] %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[3] %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[4] %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[5] %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[6] %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[7] %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[8] %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[9] %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 
@@ -231,7 +235,7 @@ Metadata coverage in {{ name_source_full }} and {{ name_base_full }} by publicat
 
 <table>
   <tr>
-    <td valign="top"><img src="{{ dois_in_source_by_pubdate.files["dois_in_" + name_source + "by_pubdate.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ crdois_in_source_by_pubdate.files["crdois_in_" + name_source + "by_pubdate.png"].cache_filepath }}"></td>
     <td valign="top"><img src="{{ source_coverage_self_by_type.files[name_source + "coverage_self_by_type.png"].cache_filepath }}"></td>
   </tr>
   <tr>
@@ -269,59 +273,59 @@ Metadata coverage for DOIs and non-DOIs by publication type
 {% set data_element = data_element_array[0] %}
 ### {{ data_element }}
 
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
 
 
 {% set data_element = data_element_array[1] %}
 ### {{ data_element }}
 
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[2] %}
 ### {{ data_element }}
 
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
 
 
 {% set data_element = data_element_array[3] %}
 ### {{ data_element }}
 
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[4] %}
 ### {{ data_element }}
 
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[5] %}
 ### {{ data_element }}
 
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
 
 
 {% set data_element = data_element_array[6] %}
 ### {{ data_element }}
 
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
 
 <pdf:nextpage>
 
 {% set data_element = data_element_array[8] %}
 ### {{ data_element }}
 
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
 
 
 {% set data_element = data_element_array[9] %}
 ### {{ data_element }}
 
-{{ helper.value_add_self_tableize(name_source, data_element, focus_year) }}
+{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
 
 
 <pdf:nextpage>

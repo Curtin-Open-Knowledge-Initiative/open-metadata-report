@@ -3,6 +3,7 @@ Main Location for Storing Parameters for Report
 """
 
 import datetime
+import json
 from pathlib import Path
 import parameters.sourceparams_openalex as openalex
 import parameters.sourceparams_crossref as crossref
@@ -12,6 +13,12 @@ VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
 SOURCES = [openalex, crossref]
+SOURCE_JSON = {
+    source.SOURCE_NAME:
+        {item: getattr(source, item) for item in dir(source) if not item.startswith('__')}
+    for source in SOURCES
+}
+
 COMPARISON = [crossref, openalex]
 SOURCE_NAMES = [source.SOURCE_NAME for source in COMPARISON]
 FORMATTED_SOURCE_NAMES = [source.SOURCE_PRINT_NAME for source in SOURCES]

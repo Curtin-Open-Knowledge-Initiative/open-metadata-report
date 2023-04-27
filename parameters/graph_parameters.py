@@ -67,7 +67,7 @@ ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS + ADDED_VALUE_COUN
 #     'venue_id_source': 'Venue Source ID'
 # }
 
-graph_print_names = {
+GRAPH_PRINT_NAMES = {
     'Authors': 'authors',
     'Author ORCIDs': 'authors_id_orcid',
     'Author Source IDs': 'authors_id_source',
@@ -108,17 +108,17 @@ def return_ys_dict(source_a,
                    source_b) -> dict:
     return {
         source_a.SOURCE_PRINT_NAME: {
-            x: f'pc_{source_a.SOURCE_NAME}_has_{graph_print_names[x]}'
+            x: f'pc_{source_a.SOURCE_NAME}_has_{GRAPH_PRINT_NAMES[x]}'
             for x in
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         },
         source_b.SOURCE_PRINT_NAME: {
-            x: f'pc_{source_b.SOURCE_NAME}_has_{graph_print_names[x]}'
+            x: f'pc_{source_b.SOURCE_NAME}_has_{GRAPH_PRINT_NAMES[x]}'
             for x in
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         },
         f'{source_b.SOURCE_PRINT_NAME} Added Value': {
-            x: f'pc_{source_b.SOURCE_NAME}_{graph_print_names[x]}_adds_presence'
+            x: f'pc_{source_b.SOURCE_NAME}_{GRAPH_PRINT_NAMES[x]}_adds_presence'
             for x in
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         }
@@ -145,14 +145,14 @@ for source_a in SOURCES:
 
 INTERNAL_COMPARISON_META = {
     'openalex': {
-        'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstract', 'Citations to',
+        'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
                'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields'],
         'ys': {
             'OpenAlex DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
-                'Affiliations ROR': 'pc_dois_has_affiliations_id_ror',
+                'Affiliation RORs': 'pc_dois_has_affiliations_id_ror',
                 'Authors': 'pc_dois_has_authors',
-                'Authors ORCIDs': 'pc_dois_has_authors_id_orcid',
+                'Author ORCIDs': 'pc_dois_has_authors_id_orcid',
                 'Abstract': 'pc_dois_has_abstract',
                 'Citations to': 'pc_dois_has_citations',
                 'References from': 'pc_dois_has_references',
@@ -163,9 +163,9 @@ INTERNAL_COMPARISON_META = {
             },
             'OpenAlex non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
-                'Affiliations ROR': 'pc_non_dois_has_affiliations_id_ror',
+                'Affiliation RORs': 'pc_non_dois_has_affiliations_id_ror',
                 'Authors': 'pc_non_dois_has_authors',
-                'Authors ORCIDs': 'pc_non_dois_has_authors_id_orcid',
+                'Author ORCIDs': 'pc_non_dois_has_authors_id_orcid',
                 'Abstract': 'pc_non_dois_has_abstract',
                 'Citations to': 'pc_non_dois_has_citations',
                 'References from': 'pc_non_dois_has_references',
@@ -177,14 +177,14 @@ INTERNAL_COMPARISON_META = {
         }
     },
     'crossref': {
-        'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstract', 'Citations to',
+        'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
                'References from', 'Venue', 'Venue ISSN', 'Fields'],
         'ys': {
             'Crossref DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
-                'Affiliations ROR': 'pc_dois_has_affiliations_id_ror',
+                'Affiliation RORs': 'pc_dois_has_affiliations_id_ror',
                 'Authors': 'pc_dois_has_authors',
-                'Authors ORCIDs': 'pc_dois_has_authors_id_orcid',
+                'Author ORCIDs': 'pc_dois_has_authors_id_orcid',
                 'Abstract': 'pc_dois_has_abstract',
                 'Citations to': 'pc_dois_has_citations',
                 'References from': 'pc_dois_has_references',
@@ -194,9 +194,9 @@ INTERNAL_COMPARISON_META = {
             },
             'Crossref non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
-                'Affiliations ROR': 'pc_non_dois_has_affiliations_id_ror',
+                'Affiliation RORs': 'pc_non_dois_has_affiliations_id_ror',
                 'Authors': 'pc_non_dois_has_authors',
-                'Authors ORCIDs': 'pc_non_dois_has_authors_id_orcid',
+                'Author ORCIDs': 'pc_non_dois_has_authors_id_orcid',
                 'Abstract': 'pc_non_dois_has_abstract',
                 'Citations to': 'pc_non_dois_has_citations',
                 'References from': 'pc_non_dois_has_references',
