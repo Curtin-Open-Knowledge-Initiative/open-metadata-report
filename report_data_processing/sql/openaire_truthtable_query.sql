@@ -82,6 +82,7 @@ INTERMEDIATE AS (
  )
 
 --- add Affilations
+--- all relations between result and organization have reltype.type 'affiliation'
 SELECT
 
 a.id,
