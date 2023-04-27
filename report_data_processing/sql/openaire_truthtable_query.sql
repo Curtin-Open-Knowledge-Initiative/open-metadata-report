@@ -48,6 +48,15 @@ INTERMEDIATE AS (
  ON publications.id = dois.id
  )
 
+--- TRUTHTABLE
+
+--- Notes:
+--- author.fullname has no empty strings
+--- description can contain, but is not limited to abstracts - proceed to use with caution
+--- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future
+--- issn fields do have empty strings
+--- issnLinking contains only empty strings (and NULLs)
+
 SELECT
 
   UPPER(TRIM(doi)) as doi,
@@ -83,7 +92,7 @@ SELECT
   END
   as has_pid_arxiv,
 
----- continue to regular T/F columns
+--- Authors
   CASE
     WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.fullname is not null) > 0 THEN TRUE
     ELSE FALSE
@@ -94,7 +103,6 @@ SELECT
     ELSE FALSE
   END as has_authors_string,
   (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.fullname is not null) as count_authors_string,
-  --- currently, only ids are orcid/orcid_pending, and id field is not nested.
   CASE
     WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.id.scheme LIKE '%orcid%') > 0 THEN TRUE
     ELSE FALSE
@@ -106,7 +114,48 @@ SELECT
   END as has_authors_sequence,
   (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.rank is not null) as count_authors_sequence,
   ---
-
+  --- Affiliations
+  ---
+  CASE
+    WHEN (description is not null) THEN TRUE
+    ELSE FALSE
+  END as has_abstract,
+  LENGTH(description) as count_abstract,
+  ---
+  --- Citations
+  --- References
+  ---
+  --- Fields
+  CASE
+    WHEN ARRAY_LENGTH(subject) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_fields,
+  CASE
+    WHEN ARRAY_LENGTH(subject) > 0 THEN ARRAY_LENGTH(subject)
+    ELSE null
+  END as count_fields,
+--- top_field
+--- Venue
+  CASE
+    WHEN container.name is not null
+    THEN TRUE
+    ELSE FALSE
+  END as has_venue,
+  CASE
+    WHEN container.name is not null
+    THEN 0
+    ELSE 1
+    END as count_venue,
+  CASE
+    WHEN container.name is not null
+    THEN TRUE
+    ELSE FALSE
+  END as has_venue_string,
+  CASE
+    WHEN container.name is not null
+    THEN 0
+    ELSE 1
+  END as count_venue_string,
 
 
  FROM `utrecht-university.TEMP.openaire_publications_intermediate`
