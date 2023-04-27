@@ -57,6 +57,15 @@ INTERMEDIATE AS (
 --- issn fields do have empty strings
 --- issnLinking contains only empty strings (and NULLs)
 
+--- Notes:
+--- author.fullname has no empty strings
+--- description can contain, but is not limited to abstracts - proceed to use with caution
+--- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future
+--- container is not nested
+--- container.name has no empty strings
+--- issn fields do have empty strings
+--- issnLinking contains only empty strings (and NULLs)
+
 SELECT
 
   UPPER(TRIM(doi)) as doi,
@@ -143,8 +152,8 @@ SELECT
   END as has_venue,
   CASE
     WHEN container.name is not null
-    THEN 0
-    ELSE 1
+    THEN 1
+    ELSE 0
     END as count_venue,
   CASE
     WHEN container.name is not null
@@ -153,9 +162,29 @@ SELECT
   END as has_venue_string,
   CASE
     WHEN container.name is not null
-    THEN 0
-    ELSE 1
+    THEN 1
+    ELSE 0
   END as count_venue_string,
+  CASE
+    WHEN (CHAR_LENGTH(container.issnOnline)  > 0 OR CHAR_LENGTH(container.issnPrinted) > 0)
+    THEN TRUE
+    ELSE FALSE
+  END as has_venue_issn,
+  CASE
+    WHEN (CHAR_LENGTH(container.issnOnline)  > 0 OR CHAR_LENGTH(container.issnPrinted) > 0)
+ THEN 1
+    ELSE 0
+  END as count_venue_issn,
+  CASE
+    WHEN CHAR_LENGTH(container.issnLinking) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_venue_issnl,
+  CASE
+    WHEN CHAR_LENGTH(container.issnLinking) > 0 THEN 1
+    ELSE 0
+  END as count_venue_issnl
+-- Funder
 
 
  FROM `utrecht-university.TEMP.openaire_publications_intermediate`
+
