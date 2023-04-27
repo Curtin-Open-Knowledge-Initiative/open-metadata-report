@@ -98,7 +98,7 @@ WITH TABLE AS (
   SELECT
 
 a.id,
-STRUCT(b.id,	b.legalname, b.country,	b.pid, b.ror) as organization
+STRUCT(b.id, b.legalname, b.country,	b.pid, b.ror) as organization
 
  FROM `utrecht-university.TEMP.openaire_relations_results_organizations_sample` as a
  LEFT JOIN `utrecht-university.TEMP.openaire_organizations`as b
