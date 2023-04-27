@@ -790,15 +790,15 @@ def generate_tables(af,
 
 
 if __name__ == '__main__':
-    crossref_to_truthtable(af='test',
-                           rerun=False,
-                           verbose=True)
+    #crossref_to_truthtable(af='test',
+    #                       rerun=False,
+    #                       verbose=True)
     #openalex_to_truthtable(af='test',
     #                             rerun=False,
     #                             verbose=True)
-    #dois_category_query(af='test',
-    #                   rerun=False,
-    #                    verbose=True)
+    dois_category_query(af='test',
+                       rerun=False,
+                        verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
