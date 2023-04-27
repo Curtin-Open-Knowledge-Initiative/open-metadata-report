@@ -81,6 +81,17 @@ INTERMEDIATE AS (
  ON publications.id = dois.id
  )
 
+--- add Affilations
+SELECT
+
+a.id,
+b.target.id as organization_id
+
+FROM `utrecht-university.TEMP.openaire_publications_intermediate` as a
+LEFT JOIN `academic-observatory.openaire.relation` as b
+ON a.id = b.source.id
+
+
 --- TRUTHTABLE
 
 --- Notes:
