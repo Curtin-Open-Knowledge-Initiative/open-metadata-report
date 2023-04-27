@@ -183,3 +183,14 @@ SELECT
 
 
  FROM `utrecht-university.TEMP.openaire_publications_intermediate`
+
+---- prep for affilitations
+SELECT
+
+id,
+legalname,
+country.code as country,
+pid,
+---something for ror
+
+ FROM `academic-observatory.openaire.organization`
