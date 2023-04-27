@@ -84,5 +84,29 @@ SELECT
   as has_pid_arxiv,
 
 ---- continue to regular T/F columns
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.fullname is not null) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_authors,
+  ARRAY_LENGTH(author) as count_authors,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.fullname is not null) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_authors_string,
+  (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.fullname is not null) as count_authors_string,
+  --- currently, only ids are orcid/orcid_pending, and id field is not nested.
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.id.scheme LIKE '%orcid%') > 0 THEN TRUE
+    ELSE FALSE
+  END as has_authors_orcid,
+  (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.id.scheme  LIKE '%orcid%') as count_authors_orcid,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.rank is not null) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_authors_sequence,
+  (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.rank is not null) as count_authors_sequence,
+  ---
+
+
 
  FROM `utrecht-university.TEMP.openaire_publications_intermediate`
