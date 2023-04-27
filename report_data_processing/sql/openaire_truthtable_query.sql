@@ -48,4 +48,41 @@ INTERMEDIATE AS (
  ON publications.id = dois.id
  )
 
-SELECT * FROM INTERMEDIATE
+SELECT
+
+  UPPER(TRIM(doi)) as doi,
+  id as source_id,
+  null as type, --- revisit for use in self-comparison (dois vs non-dois)
+  EXTRACT(YEAR FROM publicationdate) as published_year,
+  ---RANK() OVER (ORDER BY some_variable DESC) as deduplication_rank,
+
+  --- extra columns to indicate presence of PID types
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(pid) AS pids WHERE pids.scheme = 'doi') > 0 THEN TRUE
+    ELSE FALSE
+  END
+  as has_pid_doi,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(pid) AS pids WHERE pids.scheme = 'hanlde') > 0 THEN TRUE
+    ELSE FALSE
+  END
+  as has_pid_handle,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(pid) AS pids WHERE pids.scheme = 'pmid') > 0 THEN TRUE
+    ELSE FALSE
+  END
+  as has_pid_pmid,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(pid) AS pids WHERE pids.scheme = 'pmc') > 0 THEN TRUE
+    ELSE FALSE
+  END
+  as has_pid_pmc,
+    CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(pid) AS pids WHERE pids.scheme = 'arXiv') > 0 THEN TRUE
+    ELSE FALSE
+  END
+  as has_pid_arxiv,
+
+---- continue to regular T/F columns
+
+ FROM `utrecht-university.TEMP.openaire_publications_intermediate`
