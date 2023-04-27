@@ -31,10 +31,11 @@ CSV_FILE_PATHS.update(dict(comparison=DATA_DIR / 'comparison_categories.csv'))
 ARCHIVE_DIR = Path('reports')
 
 n = 1
-output_store_path = ARCHIVE_DIR / f'run_{TODAY_STR}_1'
-output_store_dir = f'run_{TODAY_STR}_{str(n)}'
+
+output_store_dir = f'run_{TODAY_STR}_{"_".join([source.SOURCE_NAME for source in SOURCES])}_{str(n)}'
+output_store_path = ARCHIVE_DIR / output_store_dir
 while output_store_path.exists():
-    output_store_dir = f'run_{TODAY_STR}_{str(n)}'
+    output_store_dir = f'run_{TODAY_STR}_{"_".join([source.SOURCE_NAME for source in SOURCES])}_{str(n)}'
     output_store_path = ARCHIVE_DIR / output_store_dir
     n = n + 1
 ARCHIVE_REPORT_DIR = output_store_path
