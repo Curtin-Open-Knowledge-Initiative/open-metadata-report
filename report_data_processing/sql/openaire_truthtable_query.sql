@@ -1,5 +1,38 @@
 --- adding information from OpenAIRE tables
-WITH TABLE_FROM_SOURCE AS (
+
+---Affiliatons
+--- generate column with unique RORs from organizations table
+--- Note: a handful of RORs (n=26) is in the table without url-prefix or other errors
+WITH RORS_EXTRACTED AS (
+SELECT DISTINCT
+  id,
+  pid_check.value as rors,
+
+ FROM `academic-observatory.openaire.organization`,
+ UNNEST (pid) as pid_check
+ WHERE pid_check.scheme = 'ROR'
+),
+--- aggregate into array
+RORS_ARRAY AS (
+  SELECT
+    id,
+    ARRAY_AGG(rors) as ror
+  FROM RORS_EXTRACTED
+  GROUP BY id
+),
+--- collect other information from organizations table and join with RORs
+AFFILIATIONS AS (
+SELECT
+o.id,
+o.legalname,
+o.country.code as country,
+o.pid,
+r.ror
+FROM `academic-observatory.openaire.organization` as o
+LEFT JOIN RORS_ARRAY as r ON o.id = r.id
+),
+
+TABLE_FROM_SOURCE AS (
 
 SELECT
 
