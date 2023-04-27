@@ -1,4 +1,5 @@
-WITH INTERMEDIATE AS (
+--- adding information from OpenAIRE tables
+WITH TABLE_FROM_SOURCE AS (
 
 SELECT
 
@@ -23,18 +24,18 @@ ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM 
 FROM `utrecht-university.TEMP.openaire_publication`
 ),
 
------ extract dois from nested column pids
+---- extract dois from nested column pids
 DOIS AS (
 
  SELECT
   id,
   pid_check.value as doi,
- FROM `utrecht-university.TEMP.openaire_publication_intermediate`,
+ FROM TABLE_FROM_SOURCE,
  UNNEST (pid) as pid_check
  WHERE pid_check.scheme = 'doi'
  ),
 
- TABLE_EXPANDED AS (
+INTERMEDIATE AS (
 
  SELECT
 
@@ -42,9 +43,9 @@ DOIS AS (
  dois.doi,
  publications.* EXCEPT (id)
 
- FROM `utrecht-university.TEMP.openaire_publication_intermediate` as publications
+ FROM TABLE_FROM_SOURCE as publications
  LEFT JOIN DOIS as dois
  ON publications.id = dois.id
  )
 
-SELECT * FROM TABLE_EXPANDED
+SELECT * FROM INTERMEDIATE
