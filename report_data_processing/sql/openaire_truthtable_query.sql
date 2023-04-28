@@ -98,6 +98,7 @@ INTERMEDIATE AS (
 --- author.fullname has no empty strings
 --- description can contain, but is not limited to abstracts - proceed to use with caution
 --- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future
+--- no empty fields for affiliations, so ARRAY_LENGTH taken as not all affiliations have string field
 --- container is not nested
 --- container.name has no empty strings
 --- issn fields do have empty strings
@@ -134,9 +135,34 @@ SELECT
     ELSE FALSE
   END as has_authors_sequence,
   (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.rank is not null) as count_authors_sequence,
-  ---
+
   --- Affiliations
-  ---
+   CASE
+    WHEN ARRAY_LENGTH(organization) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_affiliations,
+  ARRAY_LENGTH(organization) as count_affiliations,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.legalname is not null) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_affiliations_string,
+  (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.legalname is not null) as count_affiliations_string,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.id is not null) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_affiliations_sourceid,
+  (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.id is not null) as count_affiliations_sourceid,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.ror is not null) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_affiliations_ror,
+  (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.ror is not null) as count_affiliations_ror,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.country is not null) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_affiliations_country,
+
+  --- Abstract
   CASE
     WHEN (description is not null) THEN TRUE
     ELSE FALSE
@@ -199,5 +225,5 @@ SELECT
   END as count_venue_issnl
 -- Funder
 
-FROM INTERMEDIATE
---- FROM `utrecht-university.TEMP.openaire_publications_intermediate`
+---FROM INTERMEDIATE
+FROM `utrecht-university.TEMP.openaire_publications_intermediate`
