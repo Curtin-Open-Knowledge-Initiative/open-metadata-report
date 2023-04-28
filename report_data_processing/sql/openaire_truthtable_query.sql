@@ -134,8 +134,8 @@ SELECT
   CASE
     WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.id.scheme LIKE '%orcid%') > 0 THEN TRUE
     ELSE FALSE
-  END as has_authors_orcid,
-  (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.id.scheme  LIKE '%orcid%') as count_authors_orcid,
+  END as has_authors_id_orcid,
+  (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.id.scheme  LIKE '%orcid%') as count_authors_id_orcid,
   CASE
     WHEN (SELECT COUNT(1) FROM UNNEST(author) AS authors WHERE authors.rank is not null) > 0 THEN TRUE
     ELSE FALSE
@@ -156,18 +156,18 @@ SELECT
   CASE
     WHEN (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.id is not null) > 0 THEN TRUE
     ELSE FALSE
-  END as has_affiliations_sourceid,
-  (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.id is not null) as count_affiliations_sourceid,
+  END as has_affiliations_id_source,
+  (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.id is not null) as count_affiliations_id_source,
   CASE
     WHEN (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.ror is not null) > 0 THEN TRUE
     ELSE FALSE
-  END as has_affiliations_ror,
-  (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.ror is not null) as count_affiliations_ror,
+  END as has_affiliations_id_ror,
+  (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.ror is not null) as count_affiliations_id_ror,
   CASE
     WHEN (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.country is not null) > 0 THEN TRUE
     ELSE FALSE
-  END as has_affiliations_country,
-
+  END as has_affiliations_id_countrycode,
+  (SELECT COUNT(1) FROM UNNEST(organization) AS affiliations WHERE affiliations.country is not null) as count_affiliations_id_countrycode,
   --- Abstract
   CASE
     WHEN (description is not null) THEN TRUE
@@ -213,22 +213,22 @@ SELECT
     WHEN (CHAR_LENGTH(container.issnOnline)  > 0 OR CHAR_LENGTH(container.issnPrinted) > 0)
     THEN TRUE
     ELSE FALSE
-  END as has_venue_issn,
+  END as has_venue_id_issn,
   CASE
     WHEN (CHAR_LENGTH(container.issnOnline)  > 0) IS FALSE AND (CHAR_LENGTH(container.issnPrinted) > 0) IS FALSE THEN 0
     WHEN (CHAR_LENGTH(container.issnOnline)  > 0) IS TRUE AND (CHAR_LENGTH(container.issnPrinted) > 0) IS FALSE THEN 1
     WHEN (CHAR_LENGTH(container.issnOnline)  > 0) IS FALSE AND (CHAR_LENGTH(container.issnPrinted) > 0) IS TRUE THEN 1
     WHEN (CHAR_LENGTH(container.issnOnline)  > 0) IS TRUE AND (CHAR_LENGTH(container.issnPrinted) > 0) IS TRUE THEN 2
     ELSE 0
-  END as count_venue_issn,
+  END as count_venue_id_issn,
   CASE
     WHEN CHAR_LENGTH(container.issnLinking) > 0 THEN TRUE
     ELSE FALSE
-  END as has_venue_issnl,
+  END as has_venue_id_issnl,
   CASE
     WHEN CHAR_LENGTH(container.issnLinking) > 0 THEN 1
     ELSE 0
-  END as count_venue_issnl
+  END as count_venue_id_issnl
 -- Funder
 
 FROM INTERMEDIATE
