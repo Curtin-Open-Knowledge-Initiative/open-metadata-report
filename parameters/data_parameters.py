@@ -5,6 +5,7 @@ Main Location for Storing Parameters for Report
 import datetime
 import json
 from pathlib import Path
+import parameters.sourceparams_openalex as openaire
 import parameters.sourceparams_openalex as openalex
 import parameters.sourceparams_crossref as crossref
 
