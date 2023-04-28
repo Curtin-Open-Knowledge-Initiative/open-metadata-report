@@ -1,5 +1,5 @@
 {% set source_a = "crossref" %}
-{% set source_b = "openalex" %}
+{% set source_b = "openaire" %}
 
 {% import "report_macros.md" as helper with context %}
 {% include "report_css.html" %}
