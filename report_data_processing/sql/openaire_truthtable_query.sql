@@ -1,42 +1,35 @@
---- adding information from OpenAIRE tables
+---adding information from OpenAIRE tables
 
----Affiliatons
---- generate column with unique RORs from organizations table
---- Note: a handful of RORs (n=26) is in the table without url-prefix or other errors
-WITH RORS_EXTRACTED AS (
-SELECT DISTINCT
-  id,
-  pid_check.value as rors,
-
- FROM `academic-observatory.openaire.organization`,
- UNNEST (pid) as pid_check
- WHERE pid_check.scheme = 'ROR'
-),
---- aggregate into array
-RORS_ARRAY AS (
+--- Affiliatons
+--- generate column with unique RORs per id from organizations table
+--- note: a handful of RORs (n=26) is in the table without url-prefix or other errors - leave as is for now
+WITH RORS_ARRAY AS (
   SELECT
     id,
     ARRAY_AGG(rors) as ror
-  FROM RORS_EXTRACTED
+  FROM (
+    SELECT DISTINCT id, pid_check.value as rors,
+    FROM `academic-observatory.openaire.organization`,
+    UNNEST (pid) as pid_check
+    WHERE pid_check.scheme = 'ROR')
   GROUP BY id
 ),
 --- collect other information from organizations table and join with RORs
 AFFILIATIONS AS (
 SELECT
 o.id,
-o.legalname,
-o.country.code as country,
-o.pid,
-r.ror
+STRUCT(o.id, o.legalname, o.country.code as country, o.pid, r.ror) as organization
 FROM `academic-observatory.openaire.organization` as o
 LEFT JOIN RORS_ARRAY as r ON o.id = r.id
 ),
 
+--- Publications
+--- collect information from publications table
 TABLE_FROM_SOURCE AS (
 
 SELECT
 
-id,
+publications.id,
 pid,
 publicationdate,
 ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
@@ -52,9 +45,27 @@ STRUCT(
  END
  as description,
 ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance
+ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
+affiliations.organization as organization
 
-FROM `utrecht-university.TEMP.openaire_publication`
+FROM `utrecht-university.TEMP.openaire_publication` as publications
+
+---- add affiliations
+--- use temporary relations table for now
+--- note: all relations between result and organization have reltype.type 'affiliation'
+--- for later: all relations between results and project have relype.type 'outcome'
+
+LEFT JOIN (SELECT
+  publications.id as id,
+  ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
+  FROM `utrecht-university.TEMP.openaire_publication` as publications
+  LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'organization') as relations
+  ON publications.id = relations.source.id
+  LEFT JOIN AFFILIATIONS as organizations
+  ON relations.target.id = organizations.id
+  GROUP BY publications.id) as affiliations
+ON publications.id = affiliations.id
+
 ),
 
 ---- extract dois from nested column pids
@@ -81,39 +92,6 @@ INTERMEDIATE AS (
  ON publications.id = dois.id
  )
 
---- add Affilations
---- all relations between result and organization have reltype.type 'affiliation'
-SELECT
-
-a.id,
-b.target.id as organization_id
-
-FROM `utrecht-university.TEMP.openaire_publications_intermediate` as a
-LEFT JOIN `academic-observatory.openaire.relation` as b
-ON a.id = b.source.id
-
---- joining in 2 steps
-WITH TABLE AS (
-
-  SELECT
-
-a.id,
-STRUCT(b.id, b.legalname, b.country,	b.pid, b.ror) as organization
-
- FROM `utrecht-university.TEMP.openaire_relations_results_organizations_sample` as a
- LEFT JOIN `utrecht-university.TEMP.openaire_organizations`as b
- ON a.organization_id = b.id
-)
-
-SELECT
-
-id,
-ARRAY_AGG(organization) as organization
-
-FROM TABLE
-GROUP BY id
-
-
 --- TRUTHTABLE
 
 --- Notes:
@@ -134,32 +112,6 @@ SELECT
   EXTRACT(YEAR FROM publicationdate) as published_year,
   ---RANK() OVER (ORDER BY some_variable DESC) as deduplication_rank,
 
-  --- extra columns to indicate presence of PID types
-  CASE
-    WHEN (SELECT COUNT(1) FROM UNNEST(pid) AS pids WHERE pids.scheme = 'doi') > 0 THEN TRUE
-    ELSE FALSE
-  END
-  as has_pid_doi,
-  CASE
-    WHEN (SELECT COUNT(1) FROM UNNEST(pid) AS pids WHERE pids.scheme = 'hanlde') > 0 THEN TRUE
-    ELSE FALSE
-  END
-  as has_pid_handle,
-  CASE
-    WHEN (SELECT COUNT(1) FROM UNNEST(pid) AS pids WHERE pids.scheme = 'pmid') > 0 THEN TRUE
-    ELSE FALSE
-  END
-  as has_pid_pmid,
-  CASE
-    WHEN (SELECT COUNT(1) FROM UNNEST(pid) AS pids WHERE pids.scheme = 'pmc') > 0 THEN TRUE
-    ELSE FALSE
-  END
-  as has_pid_pmc,
-    CASE
-    WHEN (SELECT COUNT(1) FROM UNNEST(pid) AS pids WHERE pids.scheme = 'arXiv') > 0 THEN TRUE
-    ELSE FALSE
-  END
-  as has_pid_arxiv,
 
 --- Authors
   CASE
@@ -247,16 +199,5 @@ SELECT
   END as count_venue_issnl
 -- Funder
 
-
- FROM `utrecht-university.TEMP.openaire_publications_intermediate`
-
----- prep for affilitations
-SELECT
-
-id,
-legalname,
-country.code as country,
-pid,
----something for ror
-
- FROM `academic-observatory.openaire.organization`
+FROM INTERMEDIATE
+--- FROM `utrecht-university.TEMP.openaire_publications_intermediate`
