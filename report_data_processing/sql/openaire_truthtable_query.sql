@@ -1,4 +1,8 @@
----adding information from OpenAIRE tables
+--- collating information from OpenAIRE tables
+--- note: currently, an (explicitly declared) subset of relations table is used that contains only relations between results and organizations+projects
+--- #TODO create paths to source tables i.s.o. explicitly declaring them
+--- #TODO add funders from project table
+--- #TODO add datasets, software and other research outputs?
 
 --- Affiliatons
 --- generate column with unique RORs per id from organizations table
