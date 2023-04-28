@@ -16,7 +16,6 @@ SOURCE_TABLE_LOCATION = f"{SOURCE_GBQ_LOCATION}.{SOURCE_TABLE_NAME}"
 
 SOURCE_DATA_ELEMENTS = [
     'authors',
-    'authors_id_source',
     'authors_id_orcid',
     'authors_string',
     'authors_sequence',
@@ -26,13 +25,10 @@ SOURCE_DATA_ELEMENTS = [
     'affiliations_id_source',
     'affiliations_id_countrycode',
     'abstract',
-    'citations',
-    'references',
     'fields',
     'venue',
     'venue_string',
     'venue_id_issn',
-    'venue_id_issnl',
-    'venue_id_source'
+    'venue_id_issnl'
 ]
 
