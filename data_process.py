@@ -746,15 +746,15 @@ def generate_tables(af: AnalyticsFunction):
 
 
 if __name__ == '__main__':
-    # crossref_to_truthtable(af='test',
-    #                       rerun=False,
-    #                       verbose=True)
+    crossref_to_truthtable(af='test',
+                           rerun=False,
+                           verbose=True)
     # openalex_to_truthtable(af='test',
     #                             rerun=False,
     #                             verbose=True)
-    comparison_categories_query(af='test',
-                                rerun=False,
-                                verbose=True)
+    # comparison_categories_query(af='test',
+    #                            rerun=False,
+    #                            verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
