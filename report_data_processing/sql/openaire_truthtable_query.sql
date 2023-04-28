@@ -48,7 +48,7 @@ ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as s
 ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 affiliations.organization as organization
 
-FROM `utrecht-university.TEMP.openaire_publication` as publications
+FROM `academic-observatory.openaire.organization` as publications
 
 ---- add affiliations
 --- use temporary relations table for now
@@ -58,7 +58,7 @@ FROM `utrecht-university.TEMP.openaire_publication` as publications
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
-  FROM `utrecht-university.TEMP.openaire_publication` as publications
+  FROM `academic-observatory.openaire.organization` as publications
   LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'organization') as relations
   ON publications.id = relations.source.id
   LEFT JOIN AFFILIATIONS as organizations
@@ -95,6 +95,7 @@ INTERMEDIATE AS (
 --- TRUTHTABLE
 
 --- Notes:
+--- currently rank arbitrarily by hashing OpenAIRE id - consider choice of hash method?
 --- author.fullname has no empty strings
 --- description can contain, but is not limited to abstracts - proceed to use with caution
 --- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future
@@ -111,7 +112,7 @@ SELECT
   id as source_id,
   null as type, --- revisit for use in self-comparison (dois vs non-dois)
   EXTRACT(YEAR FROM publicationdate) as published_year,
-  ---RANK() OVER (ORDER BY some_variable DESC) as deduplication_rank,
+  RANK() OVER (ORDER BY FARM_FINGERPRINT(id)) as deduplication_rank,
 
 
 --- Authors
@@ -225,5 +226,5 @@ SELECT
   END as count_venue_issnl
 -- Funder
 
----FROM INTERMEDIATE
-FROM `utrecht-university.TEMP.openaire_publications_intermediate`
+FROM INTERMEDIATE
+---FROM `utrecht-university.TEMP.openaire_publications_intermediate`
