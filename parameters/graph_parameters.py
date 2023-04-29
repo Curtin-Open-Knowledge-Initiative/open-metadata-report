@@ -194,6 +194,38 @@ INTERNAL_COMPARISON_META = {
             }
         }
     },
+'openaire': {
+        'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
+               'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields'],
+        'ys': {
+            'OpenAIRE DOIs': {
+                'Affiliations': 'pc_dois_has_affiliations_string',
+                'Affiliation RORs': 'pc_dois_has_affiliations_id_ror',
+                'Authors': 'pc_dois_has_authors',
+                'Author ORCIDs': 'pc_dois_has_authors_id_orcid',
+                'Abstract': 'pc_dois_has_abstract',
+                'Citations to': 'pc_dois_has_citations',
+                'References from': 'pc_dois_has_references',
+                'Venue': 'pc_dois_has_venue',
+                'Venue ISSN': 'pc_dois_has_venue_id_issn',
+                'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
+                'Fields': 'pc_dois_has_fields'
+            },
+            'OpenAIRE non-DOIs': {
+                'Affiliations': 'pc_non_dois_has_affiliations_string',
+                'Affiliation RORs': 'pc_non_dois_has_affiliations_id_ror',
+                'Authors': 'pc_non_dois_has_authors',
+                'Author ORCIDs': 'pc_non_dois_has_authors_id_orcid',
+                'Abstract': 'pc_non_dois_has_abstract',
+                'Citations to': 'pc_non_dois_has_citations',
+                'References from': 'pc_non_dois_has_references',
+                'Venue': 'pc_non_dois_has_venue',
+                'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
+                'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
+                'Fields': 'pc_non_dois_has_fields'
+            }
+        }
+    },
     'crossref': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
                'References from', 'Venue', 'Venue ISSN', 'Fields'],
