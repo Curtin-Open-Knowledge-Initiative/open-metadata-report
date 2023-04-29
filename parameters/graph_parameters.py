@@ -93,10 +93,28 @@ value_add_meta_xs = {
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
                    'References from', 'Venue', 'Venue ISSN', 'Fields']
+        },
+        'openaire': {
+            'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
+                   'References from', 'Venue', 'Venue ISSN', 'Fields']
         }
     },
     'openalex': {
         'crossref': {
+            'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
+                   'References from', 'Venue', 'Venue ISSN', 'Fields']
+        },
+        'openaire': {
+            'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
+                   'References from', 'Venue', 'Venue ISSN', 'Fields']
+        }
+    },
+    'openaire': {
+        'crossref': {
+            'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
+                   'References from', 'Venue', 'Venue ISSN', 'Fields']
+        },
+        'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
                    'References from', 'Venue', 'Venue ISSN', 'Fields']
         }
