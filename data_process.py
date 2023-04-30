@@ -373,7 +373,9 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
                                                  )
         # Modify chart parameters here
         chart.process_data(
-            doc_types=SOURCE_TYPES[source_a.SOURCE_NAME],
+            #since this supposes crossref types (using type column 'cr_type', also hard set doc_types as CROSSREF_TYPES
+            #doc_types=SOURCE_TYPES[source_a.SOURCE_NAME],
+            doc_types=CROSSREF_TYPES,
             type_column='cr_type',
             palette=['#FF7F0E', '#C0C0C0']
         )
