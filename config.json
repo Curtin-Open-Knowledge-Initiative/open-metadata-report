@@ -8,36 +8,28 @@
   },
   "analytics": [
     [
-      "openalex_to_truthtable",
+      "source_to_truthtable",
       {
         "depends": [],
-        "rerun": false
-      }
-    ],
-    [
-      "crossref_to_truthtable",
-      {
-        "source": "crossref",
-        "rerun": false
+        "rerun": true
       }
     ],
     [
       "source_category_query",
       {
         "depends": [
-          "openalex_to_truthtable"
+          "source_to_truthtable"
         ],
-        "rerun": false
+        "rerun": true
       }
     ],
     [
       "comparison_categories_query",
       {
         "depends": [
-          "crossref_to_truthtable",
-          "openalex_to_truthtable"
+          "source_to_truthtable"
         ],
-        "rerun": false
+        "rerun": true
       }
     ],
     [

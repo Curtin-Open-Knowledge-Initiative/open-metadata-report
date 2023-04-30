@@ -40,42 +40,6 @@ from report_graphs import (
 )
 from observatory.reports.report_utils import generate_table_data
 
-def source_to_truthtable(af: AnalyticsFunction,
-                           source: str = 'openalex',
-                           rerun: bool = RERUN,
-                           verbose: bool = VERBOSE):
-    #    pass
-
-    """
-    Generalize creating truthtable from source using source-specific sql query
-    """
-
-    query = load_sql_to_string('openalex_truthtable.sql',
-                               parameters=dict(table=TABLES[source]),
-                               directory=SQL_DIRECTORY)
-
-    if not report_utils.bigquery_rerun(af, rerun, verbose, source):
-        print(f"""Query is:
-+
-    {query}
-
-    """)
-        print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
-        return
-
-    with bigquery.Client() as client:
-        job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
-                                             create_disposition='CREATE_IF_NEEDED',
-                                             write_disposition=WRITE_DISPOSITION)
-
-        query_job = client.query(query, job_config=job_config)  # Make an API request.
-        query_job.result()  # Wait for the job to complete.
-
-    if verbose:
-        print('...completed')
-
-
-
 def openalex_to_truthtable(af: AnalyticsFunction,
                            source: str = 'openalex',
                            rerun: bool = RERUN,
@@ -137,6 +101,40 @@ def crossref_to_truthtable(af: AnalyticsFunction,
 
     with bigquery.Client() as client:
         job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
+                                             create_disposition='CREATE_IF_NEEDED',
+                                             write_disposition=WRITE_DISPOSITION)
+
+        query_job = client.query(query, job_config=job_config)  # Make an API request.
+        query_job.result()  # Wait for the job to complete.
+
+    if verbose:
+        print('...completed')
+
+def source_to_truthtable(af: AnalyticsFunction,
+                           rerun: bool = RERUN,
+                           verbose: bool = VERBOSE):
+    """
+    Calculate truthtable for Crossref
+    """
+
+
+    for source in SOURCES:
+           #query = load_sql_to_string('crossref_truthtable_query.sql',
+            query=load_sql_to_string(f'{source.SOURCE_NAME}_truthtable_query.sql',
+                               parameters=dict(table=TABLES[source.SOURCE_NAME]),
+                               directory=SQL_DIRECTORY)
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose):
+        print(f"""Query is:
+
+    {query}
+
+""")
+        print(f'Destination Table: {SOURCE_TRUTH_TABLES[source.SOURCE_NAME]}')
+        #continue
+
+    with bigquery.Client() as client:
+        job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source.SOURCE_NAME],
                                              create_disposition='CREATE_IF_NEEDED',
                                              write_disposition=WRITE_DISPOSITION)
 
