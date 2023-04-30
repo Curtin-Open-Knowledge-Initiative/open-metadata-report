@@ -36,6 +36,7 @@ SELECT
 
 publications.id,
 pid,
+type, --- this is 'publication' for all records
 publicationdate,
 ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
 STRUCT(
@@ -115,7 +116,7 @@ SELECT
 
   UPPER(TRIM(doi)) as doi,
   id as source_id,
-  null as type, --- revisit for use in self-comparison (dois vs non-dois)
+  type, --- this is 'publication' for all records
   EXTRACT(YEAR FROM publicationdate) as published_year,
   RANK() OVER (ORDER BY FARM_FINGERPRINT(id)) as deduplication_rank,
 
@@ -176,7 +177,9 @@ SELECT
   LENGTH(description) as count_abstract,
   ---
   --- Citations
+  null as has_citations, --- revisit how missing columns are handled
   --- References
+  null as has_references, --- revisit how missing columns are handled
   ---
   --- Fields
   CASE
