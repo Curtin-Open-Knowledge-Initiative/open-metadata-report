@@ -114,9 +114,8 @@ def source_to_truthtable(af: AnalyticsFunction,
                            rerun: bool = RERUN,
                            verbose: bool = VERBOSE):
     """
-    Calculate truthtable for Crossref
+    Create source tables dynamically in loop
     """
-
 
     for source in SOURCES:
            #query = load_sql_to_string('crossref_truthtable_query.sql',
@@ -124,14 +123,16 @@ def source_to_truthtable(af: AnalyticsFunction,
                                parameters=dict(table=TABLES[source.SOURCE_NAME]),
                                directory=SQL_DIRECTORY)
 
-    if not report_utils.bigquery_rerun(af, rerun, verbose):
-        print(f"""Query is:
+            if not report_utils.bigquery_rerun(af, rerun, verbose):
+                print(f"""Query is:
 
     {query}
 
-""")
-        print(f'Destination Table: {SOURCE_TRUTH_TABLES[source.SOURCE_NAME]}')
-        #continue
+    """)
+
+                print(f'Destination Table: {SOURCE_TRUTH_TABLES[source.SOURCE_NAME]}')
+                continue
+
 
     with bigquery.Client() as client:
         job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source.SOURCE_NAME],
