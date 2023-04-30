@@ -34,6 +34,3 @@ SOURCE_DATA_ELEMENTS = [
     'venue_id_issnl'
 ]
 
-SOURCE_TYPES = [
-    'publication'
-]

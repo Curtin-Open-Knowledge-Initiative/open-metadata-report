@@ -32,12 +32,3 @@ SOURCE_DATA_ELEMENTS = [
     'venue_id_source'
 ]
 
-SOURCE_TYPES = [
-    'journal-article',
-    'proceedings-article',
-    'book-chapter',
-    'posted-content',
-    'book',
-    'report',
-    'monograph',
-    'none']
