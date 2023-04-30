@@ -570,7 +570,7 @@ def value_add_self_graphs(af: AnalyticsFunction,
 
                 # Modify chart parameters here
                 chart.process_data(
-                    doc_types=CROSSREF_TYPES,
+                    doc_types=SOURCE_TYPES[source.SOURCE_NAME],
                     type_column='type',
                     palette=['#FF7F0E', '#C0C0C0']
                 )

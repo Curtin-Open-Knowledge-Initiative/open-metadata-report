@@ -333,6 +333,7 @@ SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
                              'Venue', 'Fields']
 
 # SOURCE_TYPES is used to specify which metadata types to include for a given source in charts by metadata type
+# TODO consider moving this to source_params and call from there (but take into account using cr as default mapping for value add comparisons)
 CROSSREF_TYPES = ['journal-article',
                   'proceedings-article',
                   'book-chapter',
@@ -352,7 +353,6 @@ OPENALEX_TYPES = ['journal-article',
 
 OPENAIRE_TYPES = ['publication']
 
-# check where this is used in cwts version and adapt here
 SOURCE_TYPES = dict(
     crossref=CROSSREF_TYPES,
     openalex=OPENALEX_TYPES,
