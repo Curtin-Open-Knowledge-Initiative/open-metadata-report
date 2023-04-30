@@ -40,6 +40,41 @@ from report_graphs import (
 )
 from observatory.reports.report_utils import generate_table_data
 
+def source_to_truthtable(af: AnalyticsFunction,
+                           source: str = 'openalex',
+                           rerun: bool = RERUN,
+                           verbose: bool = VERBOSE):
+    #    pass
+
+    """
+    Generalize creating truthtable from source using source-specific sql query
+    """
+
+    query = load_sql_to_string('openalex_truthtable.sql',
+                               parameters=dict(table=TABLES[source]),
+                               directory=SQL_DIRECTORY)
+
+    if not report_utils.bigquery_rerun(af, rerun, verbose, source):
+        print(f"""Query is:
++
+    {query}
+
+    """)
+        print(f'Destination Table: {SOURCE_TRUTH_TABLES[source]}')
+        return
+
+    with bigquery.Client() as client:
+        job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source],
+                                             create_disposition='CREATE_IF_NEEDED',
+                                             write_disposition=WRITE_DISPOSITION)
+
+        query_job = client.query(query, job_config=job_config)  # Make an API request.
+        query_job.result()  # Wait for the job to complete.
+
+    if verbose:
+        print('...completed')
+
+
 
 def openalex_to_truthtable(af: AnalyticsFunction,
                            source: str = 'openalex',
@@ -746,9 +781,12 @@ def generate_tables(af: AnalyticsFunction):
 
 
 if __name__ == '__main__':
-    crossref_to_truthtable(af='test',
+     source_to_truthtable(af='test',
                            rerun=False,
                            verbose=True)
+    # crossref_to_truthtable(af='test',
+    #                       rerun=False,
+    #                       verbose=True)
     # openalex_to_truthtable(af='test',
     #                             rerun=False,
     #                             verbose=True)
@@ -758,4 +796,4 @@ if __name__ == '__main__':
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
-    pass
+     pass
