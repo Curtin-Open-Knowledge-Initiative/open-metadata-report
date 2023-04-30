@@ -570,7 +570,7 @@ def value_add_self_graphs(af: AnalyticsFunction,
 
                 # Modify chart parameters here
                 chart.process_data(
-                    doc_types=CROSSREF_TYPES,
+                    doc_types=source_a.SOURCE_TYPES,
                     type_column='type',
                     palette=['#FF7F0E', '#C0C0C0']
                 )
@@ -746,16 +746,16 @@ def generate_tables(af: AnalyticsFunction):
 
 
 if __name__ == '__main__':
-    crossref_to_truthtable(af='test',
-                           rerun=False,
-                           verbose=True)
+    # crossref_to_truthtable(af='test',
+    #                      rerun=False,
+    #                      verbose=True)
     # openalex_to_truthtable(af='test',
     #                             rerun=False,
     #                             verbose=True)
-    # comparison_categories_query(af='test',
-    #                            rerun=False,
-    #                            verbose=True)
+     comparison_categories_query(af='test',
+                                rerun=False,
+                                verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
-    pass
+     pass

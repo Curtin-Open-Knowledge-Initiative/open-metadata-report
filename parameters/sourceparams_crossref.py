@@ -37,3 +37,12 @@ DATA_ELEMENT_MAPPING.update(
     {element: element for element in SOURCE_DATA_ELEMENTS if element not in DATA_ELEMENT_MAPPING.keys()}
 )
 
+SOURCE_TYPES = [
+    'journal-article',
+    'proceedings-article',
+    'book-chapter',
+    'posted-content',
+    'book',
+    'report',
+    'monograph'
+]
