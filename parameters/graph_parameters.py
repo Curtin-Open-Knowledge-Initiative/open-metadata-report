@@ -350,14 +350,7 @@ OPENALEX_TYPES = ['journal-article',
                   'monograph',
                   'none']
 
-OPENAIRE_TYPES = ['journal-article',
-                  'proceedings-article',
-                  'book-chapter',
-                  'posted-content',
-                  'book',
-                  'report',
-                  'monograph',
-                  'none']
+OPENAIRE_TYPES = ['publication']
 
 # check where this is used in cwts version and adapt here
 SOURCE_TYPES = dict(
