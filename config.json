@@ -8,36 +8,15 @@
   },
   "analytics": [
     [
-      "openalex_to_truthtable",
-      {
-        "depends": [],
-        "rerun": false
-      }
-    ],
-    [
-      "crossref_to_truthtable",
-      {
-        "source": "crossref",
-        "rerun": true
-      }
-    ],
-    [
       "source_category_query",
       {
-        "depends": [
-          "openalex_to_truthtable"
-        ],
-        "rerun": true
+        "rerun": false
       }
     ],
     [
       "comparison_categories_query",
       {
-        "depends": [
-          "crossref_to_truthtable",
-          "openalex_to_truthtable"
-        ],
-        "rerun": true
+        "rerun": false
       }
     ],
     [
@@ -112,7 +91,6 @@
       "save_data_parameters",
       {
         "depends": [
-          "crossref_to_truthtable",
           "source_category_query",
           "comparison_categories_query",
           "value_add_graphs",
@@ -126,7 +104,6 @@
       "git_status",
       {
         "depends": [
-          "crossref_to_truthtable",
           "source_category_query",
           "comparison_categories_query",
           "value_add_graphs",
