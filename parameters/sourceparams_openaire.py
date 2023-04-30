@@ -25,6 +25,8 @@ SOURCE_DATA_ELEMENTS = [
     'affiliations_id_source',
     'affiliations_id_countrycode',
     'abstract',
+    'citations',
+    'references',
     'fields',
     'venue',
     'venue_string',
