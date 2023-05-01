@@ -53,7 +53,7 @@ def openalex_to_truthtable(af: AnalyticsFunction,
     See the query for details.
     """
 
-    query = load_sql_to_string('openalex_truthtable.sql',
+    query = load_sql_to_string('openalex_truthtable_query.sql',
                                parameters=dict(table=TABLES[source]),
                                directory=SQL_DIRECTORY)
 
@@ -131,7 +131,7 @@ def source_to_truthtable(af: AnalyticsFunction,
     """)
 
                 print(f'Destination Table: {SOURCE_TRUTH_TABLES[source.SOURCE_NAME]}')
-                continue
+            continue
 
 
     with bigquery.Client() as client:
