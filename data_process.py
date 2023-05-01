@@ -458,11 +458,15 @@ def source_in_base_by_pubdate(af: AnalyticsFunction):
 
         figdata['pc_source_in_base'] = figdata.cr_in_source / figdata.cr_total * 100
 
+        #TODO Check whether this is indeed always comparing to Crossref DOIs (also when comparing multiple DBs)
+        #Code now adapted to only reference Crossref (fixed) and source
         chart = BarLine(xdata=figdata.index,
                         bardata=figdata.cr_total,
-                        barname=f'Registered {source_a.SOURCE_PRINT_NAME} DOIs',
+                        #barname=f'Registered {source_a.SOURCE_PRINT_NAME} DOIs',
+                        barname=f'Crossref DOIs',
                         linedata=figdata.pc_source_in_base,
-                        linename=f'Crossref DOIs in {source_b.SOURCE_PRINT_NAME} (%)')
+                        #linename=f'Crossref DOIs in {source_b.SOURCE_PRINT_NAME} (%)')
+                        linename=f'Crossref DOIs in {source.SOURCE_PRINT_NAME} (%)')
 
         fig = chart.plotly()
         filename = f'{source.SOURCE_NAME}_in_crossref_by_pubdate'
@@ -630,9 +634,9 @@ def crdois_in_source_by_pubdate(af,
 
         chart = BarLine(xdata=figdata.index,
                         bardata=figdata.source_total,
-                        barname=f'All {source.SOURCE_NAME} records',
+                        barname=f'All {source.SOURCE_PRINT_NAME} records',
                         linedata=figdata.pc_crdois_in_source,
-                        linename=f'{source.SOURCE_NAME} with DOIs (%)')
+                        linename=f'{source.SOURCE_PRINT_NAME} with DOIs (%)')
 
         fig = chart.plotly()
         filename = f'crdois_in_{source.SOURCE_NAME}_by_pubdate'
