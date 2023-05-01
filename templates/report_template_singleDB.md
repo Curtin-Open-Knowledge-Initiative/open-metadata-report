@@ -112,7 +112,7 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <table>
   <tr>
-    <td valign="top"><img src="{{ source_in_base_by_pubdate.files[ "name_source + "in_crossref_by_pubdate.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ source_in_base_by_pubdate.files[ name_source + "in_crossref_by_pubdate.png"].cache_filepath }}"></td>
     <td valign="top"><img src="{{ source_coverage_by_crossref_type.files[name_source + "coverage_of_crossref_by_crossref_type.png"].cache_filepath }}"></td>
   </tr>
   <tr>
