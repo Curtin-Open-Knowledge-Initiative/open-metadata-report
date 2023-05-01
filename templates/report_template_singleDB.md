@@ -215,14 +215,14 @@ Metadata coverage for DOIs and non-DOIs by publication type
 {{ loop.cycle("", "<pdf:nextpage>") }}
 {% endfor %}
 
+
+{# Lines below are not currently run pending refactoring (2023-04-25)
 ## Appendix A - Tables
 
 This section contains tables with summary counts. More tables will be added in a later version. 
 
 Crossref Current = {{ crossref_current[0] }}-{{ crossref_current[2] }}  
 Focus Year = {{ focus_year }}
-
-{# Lines below are not currently run pending refactoring (2023-04-25)
 
 {% for source in metadata.SOURCES %}
 `
