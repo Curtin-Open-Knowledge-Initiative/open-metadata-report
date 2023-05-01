@@ -54,7 +54,7 @@ ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as s
 ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 affiliations.organization as organization
 
-FROM {table} as publications
+FROM `academic-observatory.openaire.publication` as publications
 
 ---- add affiliations
 --- use temporary relations table for now
@@ -64,7 +64,7 @@ FROM {table} as publications
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
-  FROM {table} as publications
+  FROM `academic-observatory.openaire.publication` as publications
   LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'organization') as relations
   ON publications.id = relations.source.id
   LEFT JOIN AFFILIATIONS as organizations
