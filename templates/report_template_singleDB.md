@@ -9,6 +9,8 @@
 {% set metadata = load_json(save_data_parameters.files["data_parameters.json"].cache_filepath) %}
 {% set graph_metadata = load_json(save_data_parameters.files["graph_parameters.json"].cache_filepath) %}
 {% set tables = load_json(generate_tables.files["tables.json"].cache_filepath) %}
+{% set name_source_print = metadata.SOURCE_JSON[source_b].SOURCE_PRINT_NAME %}
+{% set name_base_print = metadata.SOURCE_JSON[source_a].SOURCE_PRINT_NAME %}
 {% set name_source_full = metadata.SOURCE_JSON[source_b].SOURCE_NAME %}
 {% set name_base_full = metadata.SOURCE_JSON[source_a].SOURCE_NAME %}
 {% set name_source = name_source_full  + "_" %}
@@ -39,11 +41,11 @@ DATE: {{ helper.created_at()|upper }}</p>
 
 # Executive Summary
 
-In this project, we assess and compare the value added by {{ name_source_full }} to {{ name_base_full }} metadata, both in coverage of publications and other research output 
+In this project, we assess and compare the value added by {{ name_source_print }} to {{ name_base_print }} metadata, both in coverage of publications and other research output 
 (with and without DOIs) as well as in coverage of metadata (including identifiers) for authors, institutions, publication venues 
 and disciplines. 
 
-The report currently contains all the graphs comparing metadata coverage of {{ name_source_full }} compared to {{ name_base_full }}, and of DOIs vs non-DOIs in {{ name_source_full }}. 
+The report currently contains all the graphs comparing metadata coverage of {{ name_source_print }} compared to {{ name_base_print }}, and of DOIs vs non-DOIs in {{ name_source_full }}. 
 More explanatory text, tables and interpretation of findings will be added in a later version.
 
 Complete data and code are available on Github:
@@ -67,7 +69,7 @@ Unlike metadata from closed sources, open metadata can be combined and enriched 
 landscape. Transparency and provenance allow identifying and addressing existing gaps and biases in coverage and 
 quality. 
 
-In this project, we assess and compare the value added by {{ name_source_full }} to {{ name_base_full }} metadata, both in coverage of publications and other research output 
+In this project, we assess and compare the value added by {{ name_source_print }} to {{ name_base_print }} metadata, both in coverage of publications and other research output 
 (with and without DOIs) as well as in coverage of metadata (including identifiers) for authors, institutions, publication venues 
 and disciplines. 
 
