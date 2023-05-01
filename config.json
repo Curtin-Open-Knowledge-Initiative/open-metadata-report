@@ -7,15 +7,29 @@
     "PROJECT_ID": "utrecht-university"
   },
   "analytics": [
+
+    [
+      "source_to_truthtable",
+      {
+        "depends": [],
+        "rerun": false
+      }
+    ],
     [
       "source_category_query",
       {
+        "depends": [
+          "source_to_truthtable"
+        ],
         "rerun": false
       }
     ],
     [
       "comparison_categories_query",
       {
+        "depends": [
+          "source_to_truthtable"
+        ],
         "rerun": false
       }
     ],
@@ -91,6 +105,7 @@
       "save_data_parameters",
       {
         "depends": [
+          "source_to_truthtable",
           "source_category_query",
           "comparison_categories_query",
           "value_add_graphs",
@@ -104,6 +119,7 @@
       "git_status",
       {
         "depends": [
+          "source_to_truthtable",
           "source_category_query",
           "comparison_categories_query",
           "value_add_graphs",
