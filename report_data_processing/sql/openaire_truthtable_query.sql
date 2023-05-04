@@ -2,6 +2,7 @@
 --- note: currently, an (explicitly declared) subset of relations table is used that contains only relations between results and organizations+projects
 --- #TODO create paths to source tables i.s.o. explicitly declaring them
 --- #TODO replace subset of relations table with the real deal
+--- #TODO add funders from project table
 
 --- Affiliatons
 --- generate column with unique RORs per id from organizations table
@@ -24,20 +25,6 @@ o.id,
 STRUCT(o.id, o.legalname, o.country.code as country, o.pid, r.ror) as organization
 FROM `academic-observatory.openaire.organization` as o
 LEFT JOIN RORS_ARRAY as r ON o.id = r.id
-),
-
---- Projects
---- only collecting funder names at the moment - these are harmonized and can be used as ids
---- note: project id also encodes funders - could be useful as well
-PROJECTS AS (
-  SELECT
-    id,
-    STRUCT(id, ARRAY_AGG(funder) as funder) as project,
-  FROM (
-    SELECT DISTINCT id, funding.shortname as funder
-    FROM `academic-observatory.openaire.project`,
-    UNNEST(funding) as funding)
-  GROUP BY id
 ),
 
 --- Collect information from each table (publication, dataset, software, otherresearchproduct)
@@ -132,20 +119,19 @@ UNION ALL
    FROM `academic-observatory.openaire.otherresearchproduct` as publications
 ),
 
----- add affiliations and projects
+---- add affiliations
+--- use temporary relations table for now
+--- note: all relations between result and organization have reltype.type 'affiliation'
+--- for later: all relations between results and project have relype.type 'outcome'
 TABLE_FROM_SOURCE AS (
 
 SELECT
 
 publications.*,
-affiliations.organization as organization,
-projects.project as project
-
+affiliations.organization as organization
 FROM SOURCES as publications
 
----- add affiliations and projects
---- use temporary relations table for now
---- note: all relations between result and organization have reltype.type 'affiliation'
+
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
@@ -156,20 +142,6 @@ LEFT JOIN (SELECT
   ON relations.target.id = organizations.id
   GROUP BY publications.id) as affiliations
 ON publications.id = affiliations.id
-
---- add projects
---- use temporary relations table for now
---- note: all relations between results and project have relype.type 'outcome'
-LEFT JOIN (SELECT
-  publications.id as id,
-  ARRAY_AGG(p.project IGNORE NULLS) as project
-  FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'project') as relations
-  ON publications.id = relations.source.id
-  LEFT JOIN PROJECTS as p
-  ON relations.target.id = p.id
-  GROUP BY publications.id) as projects
-ON publications.id = projects.id
 
 ),
 
@@ -342,9 +314,8 @@ SELECT
   CASE
     WHEN CHAR_LENGTH(container.issnLinking) > 0 THEN 1
     ELSE 0
-  END as count_venue_id_issnl,
-
---- Funders
+  END as count_venue_id_issnl
+-- Funder
   CASE
     WHEN ARRAY_LENGTH(project) > 0 THEN TRUE
     ELSE FALSE
