@@ -27,6 +27,7 @@ SOURCE_DATA_ELEMENTS = [
     'venue_id_issn',
     'funders',
     'funders_string',
+    'funders_id_source',
     'funders_id_doi',
 ]
 
@@ -34,7 +35,7 @@ DATA_ELEMENT_MAPPING = dict(
     authors='authors_string',
     affiliations='affiliations_string',
     venue='venue_string',
-    funders='funders_string'
+    funders='funders'
 )
 
 DATA_ELEMENT_MAPPING.update(
