@@ -122,7 +122,13 @@ SELECT
     ARRAY_LENGTH(ISSN) as count_venue_id_issn,
 
     -- Funder
+    -- use ARRAY_LENGTH for funders as not all funder records have funder name
     -- also include Funder DOIs as source ids (to enable comparison with Funder IDs in other systems)
+    CASE
+    WHEN ARRAY_LENGTH(funder) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_funders,
+  ARRAY_LENGTH(funder) as count_funders,
     CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(funder) AS funders WHERE funders.name is not null) > 0 THEN TRUE
         ELSE FALSE
