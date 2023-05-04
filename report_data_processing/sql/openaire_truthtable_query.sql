@@ -2,6 +2,8 @@
 --- note: currently, an (explicitly declared) subset of relations table is used that contains only relations between results and organizations+projects
 --- #TODO create paths to source tables i.s.o. explicitly declaring them
 --- #TODO replace subset of relations table with the real deal
+--- #TODO add funders from project table
+--- #TODO add datasets, software and other research outputs?
 
 --- Affiliatons
 --- generate column with unique RORs per id from organizations table
@@ -27,8 +29,8 @@ LEFT JOIN RORS_ARRAY as r ON o.id = r.id
 ),
 
 --- Projects
---- only collecting funder names at the moment - these are harmonized and can be used as ids
---- note: project id also encodes funders - could be useful as well
+--- only collecting funder names at the moment
+--- project id also encodes funders - could be useful as well
 PROJECTS AS (
   SELECT
     id,
@@ -40,116 +42,45 @@ PROJECTS AS (
   GROUP BY id
 ),
 
---- Collect information from each table (publication, dataset, software, otherresearchproduct)
-SOURCES AS (
 
-   SELECT
-
-   publications.id,
-   pid,
-   type, --- publication, dataset, software or other
-   publicationdate,
-   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
-   STRUCT(
-      container.name as name,
-      container.issnOnline as issnOnline,
-       container.issnPrinted as issnPrinted,
-       container.issnLinking as issnLinking
-   ) as container,
-   publisher,
-   CASE
-      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
-      ELSE NULL
-   END
-   as description,
-   ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
-
-   FROM `academic-observatory.openaire.publication` as publications
-
-UNION ALL
-
-   SELECT
-
-   publications.id,
-   pid,
-   type, --- publication, dataset, software or other
-   publicationdate,
-   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
-   null as container, --- tables dataset, software, otherresearchproduct have no variable container
-   publisher,
-   CASE
-      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
-      ELSE NULL
-   END
-   as description,
-   ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
-
-   FROM `academic-observatory.openaire.dataset` as publications
-
-UNION ALL
-
-   SELECT
-
-   publications.id,
-   pid,
-   type, --- publication, dataset, software or other
-   publicationdate,
-   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
-   null as container, --- tables dataset, software, otherresearchproduct have no variable container
-   publisher,
-   CASE
-      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
-      ELSE NULL
-   END
-   as description,
-   ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
-
-   FROM `academic-observatory.openaire.software` as publications
-
-
-UNION ALL
-
-   SELECT
-
-   publications.id,
-   pid,
-   type, --- publication, dataset, software or other
-   publicationdate,
-   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
-   null as container, --- tables dataset, software, otherresearchproduct have no variable container
-   publisher,
-   CASE
-      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
-      ELSE NULL
-   END
-   as description,
-   ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
-
-   FROM `academic-observatory.openaire.otherresearchproduct` as publications
-),
-
---- add affiliations and projects
+--- Publications
+--- collect information from publications table
 TABLE_FROM_SOURCE AS (
 
 SELECT
 
-publications.*,
+publications.id,
+pid,
+type, --- this is 'publication' for all records
+publicationdate,
+ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
+STRUCT(
+        container.name as name,
+        container.issnOnline as issnOnline,
+        container.issnPrinted as issnPrinted,
+        container.issnLinking as issnLinking
+    ) as container,
+ CASE
+    WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
+    ELSE NULL
+ END
+ as description,
+ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
+ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 affiliations.organization as organization,
 projects.project as project
 
-FROM SOURCES as publications
+FROM `academic-observatory.openaire.publication` as publications
 
----- add affiliations and projects
+---- add affiliations
 --- use temporary relations table for now
 --- note: all relations between result and organization have reltype.type 'affiliation'
+--- for later: all relations between results and project have relype.type 'outcome'
+
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
-  FROM SOURCES as publications
+  FROM `academic-observatory.openaire.publication` as publications
   LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'organization') as relations
   ON publications.id = relations.source.id
   LEFT JOIN AFFILIATIONS as organizations
@@ -163,7 +94,7 @@ ON publications.id = affiliations.id
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(p.project IGNORE NULLS) as project
-  FROM SOURCES as publications
+  FROM `academic-observatory.openaire.publication` as publications
   LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'project') as relations
   ON publications.id = relations.source.id
   LEFT JOIN PROJECTS as p
@@ -173,21 +104,15 @@ ON publications.id = projects.id
 
 ),
 
---- extract dois from nested column pids
---- note: tables other than publication have pid.value and pid.scheme inversed...
+---- extract dois from nested column pids
 DOIS AS (
 
  SELECT
   id,
-  CASE
-    WHEN pid_check.scheme = 'doi' THEN pid_check.value
-    WHEN pid_check.value = 'doi' THEN pid_check.scheme
-    ELSE null
-  END as doi
+  pid_check.value as doi,
  FROM TABLE_FROM_SOURCE,
  UNNEST (pid) as pid_check
- --- WHERE clause below is probably superfluous now
- WHERE pid_check.scheme = 'doi' OR pid_check.value = 'doi'
+ WHERE pid_check.scheme = 'doi'
  ),
 
 INTERMEDIATE AS (
@@ -216,13 +141,12 @@ INTERMEDIATE AS (
 --- issn fields do have empty strings
 --- issnOnline and issnPrinting have varying string length, but 99.8/99.9% of non-empty strings have length 8-9, so 1 ISSN
 --- issnLinking contains only empty strings (and NULLs)
---- funder names (also short names as used here) are harmonized so can be used as source ids
 
 SELECT
 
   UPPER(TRIM(doi)) as doi,
   id as source_id,
-  type,
+  type, --- this is 'publication' for all records
   EXTRACT(YEAR FROM publicationdate) as published_year,
   RANK() OVER (ORDER BY FARM_FINGERPRINT(id)) as deduplication_rank,
 
@@ -298,27 +222,22 @@ SELECT
   END as count_fields,
 --- top_field
 --- Venue
---- for non-publication type, use publisher as proxy for venue (string only)
   CASE
-    WHEN type != 'publication' AND publisher is not null THEN TRUE
     WHEN container.name is not null
     THEN TRUE
     ELSE FALSE
   END as has_venue,
   CASE
-    WHEN type != 'publication' AND publisher is not null THEN 1
     WHEN container.name is not null
     THEN 1
     ELSE 0
     END as count_venue,
   CASE
-    WHEN type != 'publication' AND publisher is not null THEN TRUE
     WHEN container.name is not null
     THEN TRUE
     ELSE FALSE
   END as has_venue_string,
   CASE
-    WHEN type != 'publication' AND publisher is not null THEN 1
     WHEN container.name is not null
     THEN 1
     ELSE 0
@@ -342,24 +261,8 @@ SELECT
   CASE
     WHEN CHAR_LENGTH(container.issnLinking) > 0 THEN 1
     ELSE 0
-  END as count_venue_id_issnl,
-
---- Funders
-  CASE
-    WHEN ARRAY_LENGTH(project) > 0 THEN TRUE
-    ELSE FALSE
-  END as has_funders,
-  ARRAY_LENGTH(project) as count_funders,
-  CASE
-    WHEN (SELECT COUNT(1) FROM UNNEST(project) AS funders WHERE  funders.funder is not null) > 0 THEN TRUE
-    ELSE FALSE
-  END as has_funders_string,
-  (SELECT COUNT(1) FROM UNNEST(project) AS  funders WHERE  funders.funder is not null) as count_funders_string,
-  CASE
-    WHEN (SELECT COUNT(1) FROM UNNEST(project) AS  funders WHERE  funders.funder is not null) > 0 THEN TRUE
-    ELSE FALSE
-  END as has_funders_id_source,
-  (SELECT COUNT(1) FROM UNNEST(project) AS  funders WHERE funders.funder is not null) as count_funders_id_source
+  END as count_venue_id_issnl
+-- Funder
 
 FROM INTERMEDIATE
 ---FROM `utrecht-university.TEMP.openaire_publications_intermediate`
