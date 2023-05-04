@@ -85,7 +85,11 @@ GRAPH_PRINT_NAMES = {
     'Venue String': 'venue_string',
     'Venue ISSN': 'venue_id_issn',
     'Venue ISSN-L': 'venue_id_issnl',
-    'Venue Source ID': 'venue_id_source'
+    'Venue Source ID': 'venue_id_source',
+    'Funders': 'funders',
+    'Funder Strings': 'funders_string',
+    'Funder Source IDs': 'funders_id_source',
+
 }
 
 value_add_meta_xs = {
