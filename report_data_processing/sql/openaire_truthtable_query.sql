@@ -141,6 +141,7 @@ INTERMEDIATE AS (
 --- issn fields do have empty strings
 --- issnOnline and issnPrinting have varying string length, but 99.8/99.9% of non-empty strings have length 8-9, so 1 ISSN
 --- issnLinking contains only empty strings (and NULLs)
+--- funder names (also short names as used here) are harmonized so can be used as source ids
 
 SELECT
 
@@ -263,6 +264,21 @@ SELECT
     ELSE 0
   END as count_venue_id_issnl
 -- Funder
+  CASE
+    WHEN ARRAY_LENGTH(project) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_funders,
+  ARRAY_LENGTH(project) as count_funders,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(project) AS funders WHERE  funders.funder is not null) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_funders_string,
+  (SELECT COUNT(1) FROM UNNEST(project) AS  funders WHERE  funders.funder is not null) as count_funders_string,
+  CASE
+    WHEN (SELECT COUNT(1) FROM UNNEST(project) AS  funders WHERE  funders.funder is not null) > 0 THEN TRUE
+    ELSE FALSE
+  END as has_funders_id_source,
+  (SELECT COUNT(1) FROM UNNEST(project) AS  funders WHERE funders.funder is not null) as count_funders_id_source
 
 FROM INTERMEDIATE
 ---FROM `utrecht-university.TEMP.openaire_publications_intermediate`
