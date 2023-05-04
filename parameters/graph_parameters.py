@@ -102,7 +102,7 @@ value_add_meta_xs = {
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    'Citations to','References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Venue', 'Venue ISSN', 'Fields', 'Funders']
         }
     },
     'openalex': {
@@ -121,7 +121,7 @@ value_add_meta_xs = {
         'crossref': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Venue', 'Venue ISSN', 'Fields', 'Funders']
         },
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
@@ -207,7 +207,7 @@ INTERNAL_COMPARISON_META = {
     'openaire': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                'Citations to', 'References from',
-               'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields'],
+               'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields', 'Funders', 'Funder String'],
         'ys': {
             'OpenAIRE DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -220,7 +220,10 @@ INTERNAL_COMPARISON_META = {
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
-                'Fields': 'pc_dois_has_fields'
+                'Fields': 'pc_dois_has_fields',
+                'Funders': 'pc_dois_has_funders',
+                'Funder String': 'pc_dois_has_funders'
+
             },
             'OpenAIRE non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
@@ -233,14 +236,16 @@ INTERNAL_COMPARISON_META = {
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
-                'Fields': 'pc_non_dois_has_fields'
+                'Fields': 'pc_non_dois_has_fields',
+                'Funders': 'pc_non_dois_has_funders',
+                'Funder String': 'pc_non_dois_has_funders',
             }
         }
     },
     'crossref': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                'Citations to', 'References from',
-               'Venue', 'Venue ISSN', 'Fields'],
+               'Venue', 'Venue ISSN', 'Fields', 'Funders', 'Funder String', 'Funder DOI'],
         'ys': {
             'Crossref DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -252,7 +257,10 @@ INTERNAL_COMPARISON_META = {
                 'References from': 'pc_dois_has_references',
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
-                'Fields': 'pc_dois_has_fields'
+                'Fields': 'pc_dois_has_fields',
+                'Funders': 'pc_dois_has_funders',
+                'Funder String': 'pc_dois_has_funders_string',
+                'Funder DOI': 'pc_dois_has_funders_id_source',
             },
             'Crossref non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
@@ -264,7 +272,10 @@ INTERNAL_COMPARISON_META = {
                 'References from': 'pc_non_dois_has_references',
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
-                'Fields': 'pc_non_dois_has_fields'
+                'Fields': 'pc_non_dois_has_fields',
+                'Funders': 'pc_non_dois_has_funders',
+                'Funder String': 'pc_non_dois_has_funders_string',
+                'Funder DOI': 'pc_non_dois_has_funders_id_source',
             }
         }
     }
@@ -330,11 +341,11 @@ INTERNAL_COMPARISON_META = {
 
 STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
                           'Citations to', 'References from',
-                          'Venue']
+                          'Venue', 'Funders']
 
 SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
                              'Citations to', 'References from',
-                             'Venue', 'Fields']
+                             'Venue', 'Fields', 'Funders']
 
 # SOURCE_TYPES is used to specify which metadata types to include for a given source in charts by metadata type
 # TODO consider moving this to source_params and call from there (but take into account using cr as default mapping for value add comparisons)
