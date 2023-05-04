@@ -102,7 +102,7 @@ value_add_meta_xs = {
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    'Citations to','References from',
-                   'Venue', 'Venue ISSN', 'Fields', 'Funders']
+                   'Venue', 'Venue ISSN', 'Fields', 'Funders', 'Funder Strings', 'Funder Source IDs']
         }
     },
     'openalex': {
@@ -121,7 +121,7 @@ value_add_meta_xs = {
         'crossref': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields', 'Funders']
+                   'Venue', 'Venue ISSN', 'Fields', 'Funders', 'Funder Strings', 'Funder Source IDs']
         },
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
@@ -207,7 +207,7 @@ INTERNAL_COMPARISON_META = {
     'openaire': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                'Citations to', 'References from',
-               'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields', 'Funders', 'Funder String'],
+               'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields', 'Funders', 'Funder Strings'],
         'ys': {
             'OpenAIRE DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -222,7 +222,7 @@ INTERNAL_COMPARISON_META = {
                 'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
                 'Fields': 'pc_dois_has_fields',
                 'Funders': 'pc_dois_has_funders',
-                'Funder Strings': 'pc_dois_has_funders'
+                'Funder Strings': 'pc_dois_has_funders_string'
 
             },
             'OpenAIRE non-DOIs': {
@@ -238,14 +238,14 @@ INTERNAL_COMPARISON_META = {
                 'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
                 'Fields': 'pc_non_dois_has_fields',
                 'Funders': 'pc_non_dois_has_funders',
-                'Funder Strings': 'pc_non_dois_has_funders',
+                'Funder Strings': 'pc_non_dois_has_funders_string',
             }
         }
     },
     'crossref': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                'Citations to', 'References from',
-               'Venue', 'Venue ISSN', 'Fields', 'Funders', 'Funder String', 'Funder DOI'],
+               'Venue', 'Venue ISSN', 'Fields', 'Funders', 'Funder Strings', 'Funder Source IDs'],
         'ys': {
             'Crossref DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
