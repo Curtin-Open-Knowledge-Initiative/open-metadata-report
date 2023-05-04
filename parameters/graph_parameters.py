@@ -222,7 +222,7 @@ INTERNAL_COMPARISON_META = {
                 'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
                 'Fields': 'pc_dois_has_fields',
                 'Funders': 'pc_dois_has_funders',
-                'Funder String': 'pc_dois_has_funders'
+                'Funder Strings': 'pc_dois_has_funders'
 
             },
             'OpenAIRE non-DOIs': {
@@ -238,7 +238,7 @@ INTERNAL_COMPARISON_META = {
                 'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
                 'Fields': 'pc_non_dois_has_fields',
                 'Funders': 'pc_non_dois_has_funders',
-                'Funder String': 'pc_non_dois_has_funders',
+                'Funder Strings': 'pc_non_dois_has_funders',
             }
         }
     },
@@ -259,8 +259,8 @@ INTERNAL_COMPARISON_META = {
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Fields': 'pc_dois_has_fields',
                 'Funders': 'pc_dois_has_funders',
-                'Funder String': 'pc_dois_has_funders_string',
-                'Funder DOI': 'pc_dois_has_funders_id_source',
+                'Funder Strings': 'pc_dois_has_funders_string',
+                'Funder Source IDs': 'pc_dois_has_funders_id_source',
             },
             'Crossref non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
@@ -274,8 +274,8 @@ INTERNAL_COMPARISON_META = {
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Fields': 'pc_non_dois_has_fields',
                 'Funders': 'pc_non_dois_has_funders',
-                'Funder String': 'pc_non_dois_has_funders_string',
-                'Funder DOI': 'pc_non_dois_has_funders_id_source',
+                'Funder Strings': 'pc_non_dois_has_funders_string',
+                'Funder Source IDs': 'pc_non_dois_has_funders_id_source',
             }
         }
     }
