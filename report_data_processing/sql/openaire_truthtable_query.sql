@@ -45,6 +45,7 @@ STRUCT(
         container.issnPrinted as issnPrinted,
         container.issnLinking as issnLinking
     ) as container,
+publisher,
  CASE
     WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
     ELSE NULL
