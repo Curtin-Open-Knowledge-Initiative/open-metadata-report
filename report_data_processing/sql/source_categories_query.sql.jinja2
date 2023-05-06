@@ -1,20 +1,20 @@
 SELECT
     published_year
     , type
-    , COUNT(DISTINCT source_id) as num_objects
-    , COUNT(DISTINCT doi) as num_dois
-    , COUNT(DISTINCT source_id) - COUNT(DISTINCT doi) as num_non_dois
+    , COUNT(source_id) as num_objects
+    , COUNT(doi) as num_dois
+    , COUNT(source_id) - COUNT(doi) as num_non_dois
 
     {% for item in data_items -%}
-    , COUNT(DISTINCT IF(has_{{ item }}, source_id, null)) as objects_has_{{ item }}
+    , COUNT(IF(has_{{ item }}, source_id, null)) as objects_has_{{ item }}
     {% endfor %}
 
     {% for item in data_items -%}
-    , COUNT(DISTINCT IF(has_{{ item }}, doi, null)) as dois_has_{{ item }}
+    , COUNT(IF(has_{{ item }}, doi, null)) as dois_has_{{ item }}
     {% endfor -%}
 
     {% for item in data_items -%}
-    , COUNT(DISTINCT IF(has_{{ item }}, source_id, null)) - COUNT(DISTINCT IF(has_{{ item }}, doi, null)) as non_dois_has_{{ item }}
+   , COUNT(IF(has_{{ item }}, source_id, null)) - COUNT(IF(has_{{ item }}, doi, null)) as non_dois_has_{{ item }}
     {% endfor %}
 
 FROM {{ table }}
