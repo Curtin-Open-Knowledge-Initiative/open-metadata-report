@@ -1,0 +1,22 @@
+SELECT
+    published_year
+    , type
+    , COUNT(DISTINCT source_id) as num_objects
+    , COUNT(DISTINCT IF(doi is not null, source_id, null)) as num_dois
+    , COUNT(DISTINCT IF(doi is null, source_id, null)) as num_non_dois
+
+    {% for item in data_items -%}
+    , COUNT(DISTINCT IF(has_{{ item }}, source_id, null)) as objects_has_{{ item }}
+    {% endfor %}
+
+    {% for item in data_items -%}
+    , COUNT(DISTINCT IF((has_{{ item }} and doi is not null), source_id, null)) as dois_has_{{ item }}
+    {% endfor -%}
+
+    {% for item in data_items -%}
+    , COUNT(DISTINCT IF((has_{{ item }} and doi is null), source_id, null)) as non_dois_has_{{ item }}
+    {% endfor %}
+
+FROM {{ table }}
+GROUP BY published_year, type
+ORDER BY published_year DESC, type ASC
