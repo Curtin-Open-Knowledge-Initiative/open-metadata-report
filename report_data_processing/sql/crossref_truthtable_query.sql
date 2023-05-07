@@ -121,5 +121,31 @@ SELECT
     as has_venue_id_issn,
     ARRAY_LENGTH(ISSN) as count_venue_id_issn,
 
+    -- Funder
+    -- use ARRAY_LENGTH for funders as not all funder records have funder name
+    -- also include Funder DOIs as source ids (to enable comparison with Funder IDs in other systems)
+    CASE
+        WHEN ARRAY_LENGTH(funder) > 0 THEN TRUE
+        ELSE FALSE
+    END as has_funders,
+    ARRAY_LENGTH(funder) as count_funders,
+    CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(funder) AS funders WHERE funders.name is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_funders_string,
+    (SELECT COUNT(1) FROM UNNEST(funder) AS funders WHERE funders.name is not null) as count_funders_string,
+    CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(funder) AS funders WHERE funders.DOI is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END as has_funders_id_source,
+    (SELECT COUNT(1) FROM UNNEST(funder) AS funders WHERE funders.DOI is not null) as count_funders_id_source,
+    CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(funder) AS funders WHERE funders.DOI is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END as has_funders_id_doi,
+    (SELECT COUNT(1) FROM UNNEST(funder) AS funders WHERE funders.DOI is not null) as count_funders_id_doi,
+
+
 FROM table_cleaned
 
