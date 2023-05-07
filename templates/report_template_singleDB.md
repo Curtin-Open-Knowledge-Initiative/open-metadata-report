@@ -28,7 +28,7 @@
 <p class="subtitle">OPEN METADATA SOURCES</p>
 <p class="titlemeta">
 <br>
-COMPARING {{ name_source_full|upper }} TO {{ name_base_full|upper }} <br>
+COMPARING {{ name_source_print|upper }} TO {{ name_base_print|upper }} <br>
 <br>
 DATE: {{ helper.created_at()|upper }}</p>
 <br>
@@ -78,8 +78,8 @@ and disciplines.
 
 This report was run using the following tables as source data:
 
-* {{ name_base_full }}: {{ metadata.TABLES[source_a] }}
-* {{ name_source_full }}: {{ metadata.TABLES[source_b] }}
+* {{ name_base_print }}: {{ metadata.TABLES[source_a] }}
+* {{ name_source_print }}: {{ metadata.TABLES[source_b] }}
 
 
 Complete data and code are available on Github:
@@ -88,7 +88,7 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <pdf:nextpage> 
 
-# Coverage of {{ name_source_full }} vs {{ name_base_full }}
+# Coverage of {{ name_source_print }} vs {{ name_base_print }}
 <br>   
 ## Comparing coverage
 
@@ -121,11 +121,11 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <pdf:nextpage>
 
-## Value Add of {{ name_source_full }} to {{ name_base_full }}
+## Value Add of {{ name_source_print }} to {{ name_base_print }}
 
 ### Overview
 
-Comparing coverage of metadata types in {{ name_base_full }} and {{ name_source_full }}
+Comparing coverage of metadata types in {{ name_base_print }} and {{ name_source_print }}
 
 <table>
   <tr>
@@ -150,7 +150,7 @@ Comparing coverage of metadata types in {{ name_base_full }} and {{ name_source_
 
 ### Details
 
-Metadata coverage in {{ name_source_full }} and {{ name_base_full }} by publication type
+Metadata coverage in {{ name_source_print }} and {{ name_base_print }} by publication type
 <br>
 
 {% set data_element_array = graph_metadata.VALUE_ADD_META[source_a][source_b]['xs'] %}
@@ -162,7 +162,7 @@ Metadata coverage in {{ name_source_full }} and {{ name_base_full }} by publicat
 <pdf:nextpage>
 {% endfor %}
 
-# {{ name_source_full }} Coverage Beyond {{ name_base_full }}
+# {{ name_source_print }} Coverage Beyond DOIs
 <br>
 ## DOIs vs non-DOIs
 
@@ -185,7 +185,7 @@ Metadata coverage in {{ name_source_full }} and {{ name_base_full }} by publicat
 
 ### Overview
 
-Comparing coverage of metadata types for DOIs and non-DOIs in OpenAlex
+Comparing coverage of metadata types for DOIs and non-DOIs in {{ name_source_print }}
 
 <table>
   <tr>
