@@ -351,7 +351,10 @@ OPENALEX_TYPES = ['journal-article',
                   'monograph',
                   'none']
 
-OPENAIRE_TYPES = ['publication']
+OPENAIRE_TYPES = ['publication',
+                  'dataset',
+                  'software',
+                  'other']
 
 SOURCE_TYPES = dict(
     crossref=CROSSREF_TYPES,
