@@ -145,15 +145,21 @@ ON publications.id = affiliations.id
 
 ),
 
----- extract dois from nested column pids
+--- extract dois from nested column pids
+--- note: tables other than publication have pid.value and pid.scheme inversed...
 DOIS AS (
 
  SELECT
   id,
-  pid_check.value as doi,
+  CASE
+    WHEN pid_check.scheme = 'doi' THEN pid_check.value
+    WHEN pid_check.value = 'doi' THEN pid_check.scheme
+    ELSE null
+  END as doi
  FROM TABLE_FROM_SOURCE,
  UNNEST (pid) as pid_check
- WHERE pid_check.scheme = 'doi'
+ --- WHERE clause below is probably superfluous now
+ WHERE pid_check.scheme = 'doi' OR pid_check.value = 'doi'
  ),
 
 INTERMEDIATE AS (
