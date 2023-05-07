@@ -3,7 +3,6 @@
 --- #TODO create paths to source tables i.s.o. explicitly declaring them
 --- #TODO replace subset of relations table with the real deal
 --- #TODO add funders from project table
---- #TODO add datasets, software and other research outputs?
 
 --- Affiliatons
 --- generate column with unique RORs per id from organizations table
@@ -28,44 +27,115 @@ FROM `academic-observatory.openaire.organization` as o
 LEFT JOIN RORS_ARRAY as r ON o.id = r.id
 ),
 
---- Publications
---- collect information from publications table
-TABLE_FROM_SOURCE AS (
+--- Collect information from each table (publication, dataset, software, otherresearchproduct)
+SOURCES AS (
 
-SELECT
+   SELECT
 
-publications.id,
-pid,
-type, --- this is 'publication' for all records
-publicationdate,
-ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
-STRUCT(
-        container.name as name,
-        container.issnOnline as issnOnline,
-        container.issnPrinted as issnPrinted,
-        container.issnLinking as issnLinking
-    ) as container,
-publisher,
- CASE
-    WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
-    ELSE NULL
- END
- as description,
-ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
-affiliations.organization as organization
+   publications.id,
+   pid,
+   type, --- publication, dataset, software or other
+   publicationdate,
+   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
+   STRUCT(
+      container.name as name,
+      container.issnOnline as issnOnline,
+       container.issnPrinted as issnPrinted,
+       container.issnLinking as issnLinking
+   ) as container,
+   publisher,
+   CASE
+      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
+      ELSE NULL
+   END
+   as description,
+   ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
+   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 
-FROM `academic-observatory.openaire.publication` as publications
+   FROM `academic-observatory.openaire.publication` as publications
+
+UNION ALL
+
+   SELECT
+
+   publications.id,
+   pid,
+   type, --- publication, dataset, software or other
+   publicationdate,
+   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
+   null as container, --- tables dataset, software, otherresearchproduct have no variable container
+   publisher,
+   CASE
+      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
+      ELSE NULL
+   END
+   as description,
+   ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
+   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
+
+   FROM `academic-observatory.openaire.dataset` as publications
+
+UNION ALL
+
+   SELECT
+
+   publications.id,
+   pid,
+   type, --- publication, dataset, software or other
+   publicationdate,
+   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
+   null as container, --- tables dataset, software, otherresearchproduct have no variable container
+   publisher,
+   CASE
+      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
+      ELSE NULL
+   END
+   as description,
+   ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
+   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
+
+   FROM `academic-observatory.openaire.software` as publications
+
+
+UNION ALL
+
+   SELECT
+
+   publications.id,
+   pid,
+   type, --- publication, dataset, software or other
+   publicationdate,
+   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
+   null as container, --- tables dataset, software, otherresearchproduct have no variable container
+   publisher,
+   CASE
+      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
+      ELSE NULL
+   END
+   as description,
+   ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
+   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
+
+   FROM `academic-observatory.openaire.otherresearchproduct` as publications
+),
 
 ---- add affiliations
 --- use temporary relations table for now
 --- note: all relations between result and organization have reltype.type 'affiliation'
 --- for later: all relations between results and project have relype.type 'outcome'
+TABLE_FROM_SOURCE AS (
+
+SELECT
+
+publications.*,
+affiliations.organization as organization
+FROM SOURCES as publications
+
 
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
-  FROM `academic-observatory.openaire.publication` as publications
+  FROM SOURCES as publications
   LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'organization') as relations
   ON publications.id = relations.source.id
   LEFT JOIN AFFILIATIONS as organizations
