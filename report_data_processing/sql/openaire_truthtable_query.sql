@@ -187,7 +187,7 @@ SELECT
 
   UPPER(TRIM(doi)) as doi,
   id as source_id,
-  type, --- this is 'publication' for all records
+  type,
   EXTRACT(YEAR FROM publicationdate) as published_year,
   RANK() OVER (ORDER BY FARM_FINGERPRINT(id)) as deduplication_rank,
 
@@ -263,22 +263,27 @@ SELECT
   END as count_fields,
 --- top_field
 --- Venue
+--- for non-publication type, use publisher as proxy for venue (string only)
   CASE
+    WHEN type != 'publication' AND publisher is not null THEN TRUE
     WHEN container.name is not null
     THEN TRUE
     ELSE FALSE
   END as has_venue,
   CASE
+    WHEN type != 'publication' AND publisher is not null THEN 1
     WHEN container.name is not null
     THEN 1
     ELSE 0
     END as count_venue,
   CASE
+    WHEN type != 'publication' AND publisher is not null THEN TRUE
     WHEN container.name is not null
     THEN TRUE
     ELSE FALSE
   END as has_venue_string,
   CASE
+    WHEN type != 'publication' AND publisher is not null THEN 1
     WHEN container.name is not null
     THEN 1
     ELSE 0
