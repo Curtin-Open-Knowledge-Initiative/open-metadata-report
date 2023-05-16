@@ -13,14 +13,14 @@ RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
-SOURCES = [crossref, openaire]
+SOURCES = [crossref, openalex, openaire]
 SOURCE_JSON = {
     source.SOURCE_NAME:
         {item: getattr(source, item) for item in dir(source) if not item.startswith('__')}
     for source in SOURCES
 }
 
-COMPARISON = [crossref, openaire]
+COMPARISON = [crossref, openalex, openaire]
 SOURCE_NAMES = [source.SOURCE_NAME for source in COMPARISON]
 FORMATTED_SOURCE_NAMES = [source.SOURCE_PRINT_NAME for source in SOURCES]
 BASE_COMPARISON = 'crossref'
