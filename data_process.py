@@ -220,6 +220,9 @@ def value_add_graphs(af: AnalyticsFunction,
                                                    ALL_COLLATED_COLUMNS,
                                                    'cr_dois')
 
+                #TEMP for troubleshooting 20230517
+                check = VALUE_ADD_META
+
                 # Stacked Bar
                 chart = ValueAddBar(df=figdata,
                                     categories=[
