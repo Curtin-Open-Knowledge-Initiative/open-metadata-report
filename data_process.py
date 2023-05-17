@@ -571,6 +571,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction):
         comparison_data = pd.read_csv(CSV_FILE_PATHS[source.SOURCE_NAME])
         # Replace None (which is not a string) values with string 'none' to include in aggregation
         figdata = comparison_data
+        #TODO reconsider how 'none' is propagated
         figdata[['type']] = comparison_data[['type']].fillna(value='none')
 
         figdata = comparison_data.groupby('type').agg(
