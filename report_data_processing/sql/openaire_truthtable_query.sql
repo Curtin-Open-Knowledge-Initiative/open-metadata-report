@@ -342,7 +342,7 @@ SELECT
   CASE
     WHEN CHAR_LENGTH(container.issnLinking) > 0 THEN 1
     ELSE 0
-  END as count_venue_id_issnl
+  END as count_venue_id_issnl,
 
 --- Funders
   CASE
