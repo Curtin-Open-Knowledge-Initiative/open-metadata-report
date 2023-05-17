@@ -21,7 +21,7 @@
         "depends": [
           "source_to_truthtable"
         ],
-        "rerun": false
+        "rerun": true
       }
     ],
     [
