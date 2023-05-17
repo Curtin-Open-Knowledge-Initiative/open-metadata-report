@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import itertools
 
 from parameters.data_parameters import SOURCES, SOURCES_SELF, CURRENT, FOCUS
 
@@ -151,20 +152,13 @@ def return_ys_dict(source_a,
 
 
 VALUE_ADD_META = {}
-for source_a in SOURCES:
-    for source_b in SOURCES:
-        if source_a == source_b: continue
+for source_a, source_b in itertools.permutations(SOURCES, 2):
 
-        VALUE_ADD_META.update(
-            {
-                source_a.SOURCE_NAME: {
-                    source_b.SOURCE_NAME: {
-                        'xs': value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
-                        'ys': return_ys_dict(source_a, source_b)
-
-                    }
-                }
-            }
+        if not VALUE_ADD_META.get(source_a.SOURCE_NAME):
+            VALUE_ADD_META[source_a.SOURCE_NAME] = {}
+        VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME] = dict(
+                        xs=value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
+                        ys=return_ys_dict(source_a, source_b)
         )
 
 INTERNAL_COMPARISON_META = {
