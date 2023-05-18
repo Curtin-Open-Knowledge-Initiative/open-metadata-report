@@ -58,12 +58,13 @@ SELECT
 
 							AND ({{ source_name_b }}.has_{{ item }}) -- Does source have item
 						 , cr_doi, null))
-						 as {{ source_name_b }}_has_{{ item }}_in_overlap
+						 as {{ source_name_b }}_has_{{ item }}_in_overlap_{{ source_name_a }}
+
 
                 , COUNT(DISTINCT IF(
                             (NOT {{ source_name_a }}.has_{{ comparison_element_mapping[source_name_b][source_name_a][item] }}
                             AND {{ source_name_b }}.has_{{ item }})
-                        , cr_doi, null)) as {{ source_name_b }}_{{ item }}_adds_presence
+                        , cr_doi, null)) as {{ source_name_b }}_{{ item }}_adds_presence_{{ source_name_a }}
 
                 , COUNT(DISTINCT IF(
 							({{ source_name_a }}.source_id is not null) -- Filter down to overlap
@@ -71,7 +72,7 @@ SELECT
 
 							AND (NOT {{ source_name_a }}.has_{{ comparison_element_mapping[source_name_b][source_name_a][item] }})
                             AND ({{ source_name_b }}.has_{{ item }}) -- Source_b adds value
-						 , cr_doi, null)) as {{ source_name_b }}_{{ item }}_adds_presence_overlap
+						 , cr_doi, null)) as {{ source_name_b }}_{{ item }}_adds_presence_overlap_{{ source_name_a }}
             {% endfor -%}
         {% endif -%}
       {% endfor -%}
