@@ -50,28 +50,6 @@ ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS + ADDED_VALUE_COUN
 
 # TODO create values names more dynamically
 
-# graph_print_names = {
-#     'authors': 'Authors',
-#     'authors_id_orcid': 'Author ORCIDs',
-#     'authors_id_source': 'Author Source IDs',
-#     'authors_string': 'Author Strings',
-#     'affiliations_id_source': 'Affiliation Source IDs',
-#     'authors_sequence': 'Authors Sequence',
-#     'affiliations': 'Affiliations',
-#     'affiliations_string': 'Affiliation Strings',
-#     'affiliations_id_ror': 'Affiliation RORs',
-#     'affiliations_id_source': 'Affiliation Source IDs',
-#     'abstract': 'Abstract',
-#     'citations': 'Citations',
-#     'references': 'References',
-#     'fields': 'Fields',
-#     'venue': 'Venue',
-#     'venue_string': 'Venue String',
-#     'venue_id_issn': 'Venue ISSN',
-#     'venue_id_issnl': 'Venue ISSN-L',
-#     'venue_id_source': 'Venue Source ID'
-# }
-
 GRAPH_PRINT_NAMES = {
     'Authors': 'authors',
     'Author ORCIDs': 'authors_id_orcid',
