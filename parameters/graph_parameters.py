@@ -24,10 +24,9 @@ TIME_FRAMES = {
 
 # Value Add Graphs
 
-# TODO expand these to append source_a name to adds_presence columns.
+# TODO add presence and add value columns for overlap.
 
 # only keep unique values in all_data_elems
-#all_data_elems = [element for elems in [source.SOURCE_DATA_ELEMENTS for source in SOURCES] for element in elems]
 all_data_elems = (list(set([element for elems in [source.SOURCE_DATA_ELEMENTS for source in SOURCES] for element in elems])))
 
 PRESENCE_COLUMNS = [
@@ -38,14 +37,6 @@ PRESENCE_COLUMNS_SELF = [
     f'{source_self}_has_{item}' for item in all_data_elems for source_self in SOURCES_SELF
 ]
 
-#ADDED_VALUE_COLUMNS = [
-#    f'{source.SOURCE_NAME}_{item}_adds_presence' for item in all_data_elems for source in SOURCES
-#]
-
-ADDED_VALUE_COUNTS_COLUMNS = [
-    f'{source.SOURCE_NAME}_{item}_adds_counts' for item in all_data_elems for source in SOURCES
-]
-
 ADDED_VALUE_COLUMNS_LIST = []
 for source_a in SOURCES:
     for source_b in SOURCES:
@@ -53,11 +44,14 @@ for source_a in SOURCES:
 
         ADDED_VALUE_COLUMNS_LIST.append(
             [f'{source_a.SOURCE_NAME}_{item}_adds_presence_{source_b.SOURCE_NAME}' for item in all_data_elems]
-            #    return_added_value_columns(source_a, source_b)
         )
 
 ADDED_VALUE_COLUMNS = [element for sublist in ADDED_VALUE_COLUMNS_LIST for element in sublist]
 
+#TODO convert this to iteration as well when counts are added back in
+ADDED_VALUE_COUNTS_COLUMNS = [
+    f'{source.SOURCE_NAME}_{item}_adds_counts' for item in all_data_elems for source in SOURCES
+]
 
 ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS + ADDED_VALUE_COUNTS_COLUMNS
 
