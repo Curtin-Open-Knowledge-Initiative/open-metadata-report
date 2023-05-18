@@ -24,7 +24,11 @@ TIME_FRAMES = {
 
 # Value Add Graphs
 
-all_data_elems = [element for elems in [source.SOURCE_DATA_ELEMENTS for source in SOURCES] for element in elems]
+# TODO expand these to append source_a name to adds_presence columns.
+
+# only keep unique values in all_data_elems
+#all_data_elems = [element for elems in [source.SOURCE_DATA_ELEMENTS for source in SOURCES] for element in elems]
+all_data_elems = (list(set([element for elems in [source.SOURCE_DATA_ELEMENTS for source in SOURCES] for element in elems])))
 
 PRESENCE_COLUMNS = [
     f'{source.SOURCE_NAME}_has_{item}' for item in all_data_elems for source in SOURCES
@@ -143,7 +147,7 @@ def return_ys_dict(source_a,
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         },
         f'{source_b.SOURCE_PRINT_NAME} Added Value': {
-            x: f'pc_{source_b.SOURCE_NAME}_{GRAPH_PRINT_NAMES[x]}_adds_presence'
+            x: f'pc_{source_b.SOURCE_NAME}_{GRAPH_PRINT_NAMES[x]}_adds_presence_{source_a.SOURCE_NAME}'
             for x in
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         }
