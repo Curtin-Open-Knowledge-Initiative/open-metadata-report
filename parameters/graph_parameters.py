@@ -38,13 +38,26 @@ PRESENCE_COLUMNS_SELF = [
     f'{source_self}_has_{item}' for item in all_data_elems for source_self in SOURCES_SELF
 ]
 
-ADDED_VALUE_COLUMNS = [
-    f'{source.SOURCE_NAME}_{item}_adds_presence' for item in all_data_elems for source in SOURCES
-]
+#ADDED_VALUE_COLUMNS = [
+#    f'{source.SOURCE_NAME}_{item}_adds_presence' for item in all_data_elems for source in SOURCES
+#]
 
 ADDED_VALUE_COUNTS_COLUMNS = [
     f'{source.SOURCE_NAME}_{item}_adds_counts' for item in all_data_elems for source in SOURCES
 ]
+
+ADDED_VALUE_COLUMNS_LIST = []
+for source_a in SOURCES:
+    for source_b in SOURCES:
+        if source_a == source_b: continue
+
+        ADDED_VALUE_COLUMNS_LIST.append(
+            [f'{source_a.SOURCE_NAME}_{item}_adds_presence_{source_b.SOURCE_NAME}' for item in all_data_elems]
+            #    return_added_value_columns(source_a, source_b)
+        )
+
+ADDED_VALUE_COLUMNS = [element for sublist in ADDED_VALUE_COLUMNS_LIST for element in sublist]
+
 
 ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS + ADDED_VALUE_COUNTS_COLUMNS
 
