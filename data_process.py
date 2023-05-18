@@ -229,7 +229,7 @@ def value_add_graphs(af: AnalyticsFunction,
                                     ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'])
 
                 fig = chart.plotly()
-                filename = f'value_add_stacked_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}'
+                filename = f'value_add_stacked_{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}'
                 filepath = GRAPH_DIR / filename
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
@@ -245,7 +245,7 @@ def value_add_graphs(af: AnalyticsFunction,
                                     stackedbar=False)
 
                 fig = chart.plotly()
-                filename = f'value_add_sidebyside_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}'
+                filename = f'value_add_sidebyside_{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}'
                 filepath = GRAPH_DIR / filename
                 fig.write_image(filepath.with_suffix('.png'))
                 af.add_existing_file(filepath.with_suffix('.png'))
@@ -273,7 +273,7 @@ def value_add_graphs(af: AnalyticsFunction,
                     )
 
                     fig = chart.plotly()
-                    filename = f'value_add_stacked_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{GRAPH_PRINT_NAMES[metadata_element]}_by_cr_type'
+                    filename = f'value_add_stacked_{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{GRAPH_PRINT_NAMES[metadata_element]}_by_cr_type'
                     filepath = GRAPH_DIR / filename
                     fig.write_image(filepath.with_suffix('.png'))
                     af.add_existing_file(filepath.with_suffix('.png'))
@@ -294,7 +294,7 @@ def value_add_graphs(af: AnalyticsFunction,
                     )
 
                     fig = chart.plotly()
-                    filename = f'value_add_sidebyside_{source_b.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{GRAPH_PRINT_NAMES[metadata_element]}_by_cr_type'
+                    filename = f'value_add_sidebyside_{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{GRAPH_PRINT_NAMES[metadata_element]}_by_cr_type'
                     filepath = GRAPH_DIR / filename
                     fig.write_image(filepath.with_suffix('.png'))
                     af.add_existing_file(filepath.with_suffix('.png'))
@@ -601,7 +601,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction):
         fig = chart.plotly()
         filename = f'{source.SOURCE_NAME}_coverage_self_by_type'
         filepath = GRAPH_DIR / filename
-        fig.write_image(filepath.with_suffix('.png'))
+        fig.write_image(filepath.withsuffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))
 
 
@@ -718,9 +718,9 @@ def generate_tables(af: AnalyticsFunction):
 
 
 if __name__ == '__main__':
-     source_to_truthtable(af='test',
-                           rerun=False,
-                           verbose=True)
+    # source_to_truthtable(af='test',
+    #                       rerun=False,
+    #                       verbose=True)
     # comparison_categories_query(af='test',
     #                            rerun=False,
     #                            verbose=True)
