@@ -20,7 +20,7 @@ SOURCE_JSON = {
     for source in SOURCES
 }
 
-#COMPARISON = [crossref, openalex, openaire]
+COMPARISON = [openalex, openaire]
 SOURCE_NAMES = [source.SOURCE_NAME for source in SOURCES]
 FORMATTED_SOURCE_NAMES = [source.SOURCE_PRINT_NAME for source in SOURCES]
 BASE_COMPARISON = 'crossref'
