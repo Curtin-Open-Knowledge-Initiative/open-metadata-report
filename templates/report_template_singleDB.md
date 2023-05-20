@@ -1,4 +1,4 @@
-{% set source_a = "crossref" %}
+{% set source_a = "openalex" %}
 {% set source_b = "openaire" %}
 
 {% import "report_macros.md" as helper with context %}
@@ -96,8 +96,8 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <table>
   <tr>
-    <td valign="top"><img src="{{ overall_comparison.files[name_source + name_base + "coverage_all_time.png"].cache_filepath }}"></td>
-    <td valign="top">  <img src="{{overall_comparison.files[name_source + name_base + "coverage_focus_year.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ overall_comparison.files[name_source + "crossref_coverage_all_time.png"].cache_filepath }}"></td>
+    <td valign="top">  <img src="{{overall_comparison.files[name_source + "crossref_coverage_focus_year.png"].cache_filepath }}"></td>
   </tr>
   <tr>
     <td>overall comparison - all time</td>
@@ -110,7 +110,7 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <table>
   <tr>
-    <td valign="top"><img src="{{ source_in_base_by_pubdate.files[ name_source + "in_crossref_by_pubdate.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ source_in_base_by_pubdate.files[name_source + "in_crossref_by_pubdate.png"].cache_filepath }}"></td>
     <td valign="top"><img src="{{ source_coverage_by_crossref_type.files[name_source + "coverage_of_crossref_by_crossref_type.png"].cache_filepath }}"></td>
   </tr>
   <tr>
@@ -157,7 +157,7 @@ Metadata coverage in {{ name_source_print }} and {{ name_base_print }} by public
 {% for data_element in data_element_array %}
 ### {{ data_element }}
 
-{{ helper.value_add_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
+{{ helper.value_add_tableize(name_source, name_base, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
 
 <pdf:nextpage>
 {% endfor %}

@@ -44,7 +44,7 @@
 {% endmacro -%}
 
 
-{% macro value_add_tableize(name_source, data_element, focus_year) -%}
+{% macro value_add_tableize(name_source, name_base, data_element, focus_year) -%}
 
 {% set filename1 = "value_add_sidebyside_" + name_source + name_base + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
 {% set filename2 = "value_add_sidebyside_"  + name_source + name_base + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
