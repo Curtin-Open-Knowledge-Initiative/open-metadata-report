@@ -19,8 +19,7 @@ SOURCE_JSON = {
         {item: getattr(source, item) for item in dir(source) if not item.startswith('__')}
     for source in SOURCES
 }
-
-COMPARISON = [openalex, openaire]
+COMPARISON = [openalex, openaire] #dbs to compare in reports
 SOURCE_NAMES = [source.SOURCE_NAME for source in SOURCES]
 FORMATTED_SOURCE_NAMES = [source.SOURCE_PRINT_NAME for source in SOURCES]
 BASE_COMPARISON = 'crossref'
