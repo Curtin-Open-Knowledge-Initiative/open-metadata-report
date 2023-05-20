@@ -601,7 +601,7 @@ def source_coverage_self_by_type(af: AnalyticsFunction):
         fig = chart.plotly()
         filename = f'{source.SOURCE_NAME}_coverage_self_by_type'
         filepath = GRAPH_DIR / filename
-        fig.write_image(filepath.withsuffix('.png'))
+        fig.write_image(filepath.with_suffix('.png'))
         af.add_existing_file(filepath.with_suffix('.png'))
 
 
