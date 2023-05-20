@@ -20,8 +20,8 @@ SOURCE_JSON = {
     for source in SOURCES
 }
 
-COMPARISON = [crossref, openaire]
-SOURCE_NAMES = [source.SOURCE_NAME for source in COMPARISON]
+#COMPARISON = [crossref, openaire]
+SOURCE_NAMES = [source.SOURCE_NAME for source in SOURCES]
 FORMATTED_SOURCE_NAMES = [source.SOURCE_PRINT_NAME for source in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s.SOURCE_NAME for s in SOURCES if s is not BASE_COMPARISON]
