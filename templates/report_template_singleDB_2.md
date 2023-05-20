@@ -10,8 +10,8 @@
 {% set graph_metadata = load_json(save_data_parameters.files["graph_parameters.json"].cache_filepath) %}
 {% set tables = load_json(generate_tables.files["tables.json"].cache_filepath) %}
 
-{% set source_a = metadata.COMPARISON[0] %}
-{% set source_b = metadata.COMPARISON[1] %}
+{% set source_a = metadata.COMPARISON[1] %}
+{% set source_b = metadata.COMPARISON[0] %}
 
 {% set name_source_print = metadata.SOURCE_JSON[source_b].SOURCE_PRINT_NAME %}
 {% set name_base_print = metadata.SOURCE_JSON[source_a].SOURCE_PRINT_NAME %}
