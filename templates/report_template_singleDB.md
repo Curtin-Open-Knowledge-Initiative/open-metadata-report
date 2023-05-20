@@ -1,5 +1,5 @@
-{% set source_a = "openalex" %}
-{% set source_b = "openaire" %}
+<!-- {% set source_a = "openalex" %} -->
+<!-- {% set source_b = "openaire" %} -->
 
 {% import "report_macros.md" as helper with context %}
 {% include "report_css.html" %}
@@ -9,6 +9,10 @@
 {% set metadata = load_json(save_data_parameters.files["data_parameters.json"].cache_filepath) %}
 {% set graph_metadata = load_json(save_data_parameters.files["graph_parameters.json"].cache_filepath) %}
 {% set tables = load_json(generate_tables.files["tables.json"].cache_filepath) %}
+
+{% set source_a = metadata.COMPARISON[0] %}
+{% set source_b = metadata.COMPARISON[1] %}
+
 {% set name_source_print = metadata.SOURCE_JSON[source_b].SOURCE_PRINT_NAME %}
 {% set name_base_print = metadata.SOURCE_JSON[source_a].SOURCE_PRINT_NAME %}
 {% set name_source_full = metadata.SOURCE_JSON[source_b].SOURCE_NAME %}
