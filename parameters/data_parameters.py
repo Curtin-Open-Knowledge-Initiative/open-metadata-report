@@ -13,7 +13,7 @@ RERUN = False
 VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
-SOURCES = [crossref, openalex, openaire]
+SOURCES = [crossref, openalex, openaire] #curently always needs to include crossref
 SOURCE_JSON = {
     source.SOURCE_NAME:
         {item: getattr(source, item) for item in dir(source) if not item.startswith('__')}
