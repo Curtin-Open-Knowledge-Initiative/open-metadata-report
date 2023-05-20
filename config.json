@@ -21,7 +21,7 @@
         "depends": [
           "source_to_truthtable"
         ],
-        "rerun": true
+        "rerun": false
       }
     ],
     [
@@ -30,7 +30,7 @@
         "depends": [
           "source_to_truthtable"
         ],
-        "rerun": true
+        "rerun": false
       }
     ],
     [
@@ -131,7 +131,7 @@
     ]
   ],
   "templates": [
-  "report_template_singleDB.md"
+  "report_template_singleDB.md","report_template_singleDB_2.md"
   ],
   "filters": [
     [
