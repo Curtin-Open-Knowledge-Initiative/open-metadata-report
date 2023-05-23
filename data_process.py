@@ -228,9 +228,10 @@ def value_add_graphs(af: AnalyticsFunction,
                                     xs=STACKED_BAR_SUMMARY_XS,
                                     ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'])
 
-                #chart.process_data(
-                #    palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME]]
-                #)
+                chart.process_data(
+                    palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME],
+                             SOURCE_PALETTE[source_b.SOURCE_NAME]]
+                )
 
                 fig = chart.plotly()
                 filename = f'value_add_stacked_{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}'
@@ -248,9 +249,9 @@ def value_add_graphs(af: AnalyticsFunction,
                                     ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
                                     stackedbar=False)
 
-                #chart.process_data(
-                #    palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME]]
-                #)
+                chart.process_data(
+                    palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME]]
+                )
 
                 fig = chart.plotly()
                 filename = f'value_add_sidebyside_{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}'
@@ -277,8 +278,8 @@ def value_add_graphs(af: AnalyticsFunction,
 
                     chart.process_data(
                         doc_types=CROSSREF_TYPES,
-                        type_column='cr_type'#,
-                        #palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME]]
+                        type_column='cr_type',
+                        palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME]]
                     )
 
                     fig = chart.plotly()
@@ -299,8 +300,8 @@ def value_add_graphs(af: AnalyticsFunction,
 
                     chart.process_data(
                         doc_types=CROSSREF_TYPES,
-                        type_column='cr_type'#,
-                        #palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME]]
+                        type_column='cr_type',
+                        palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME]]
                     )
 
                     fig = chart.plotly()
