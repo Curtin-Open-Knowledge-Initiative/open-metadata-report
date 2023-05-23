@@ -131,7 +131,9 @@
     ]
   ],
   "templates": [
-  "report_template_singleDB.md","report_template_singleDB_2.md"
+  "report_template_singleDB.md",
+    "report_template_singleDB_2.md",
+    "report_template_multipleDB.md"
   ],
   "filters": [
     [
