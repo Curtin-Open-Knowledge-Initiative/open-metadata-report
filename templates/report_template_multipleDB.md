@@ -157,11 +157,9 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <pdf:nextpage>
 
-## Value Add of {{ name_source_print }} to {{ name_base_print }}
+## Value Add of {{ name_source_print }} and {{ name_base_print }}
 
-### Overview
-
-Comparing coverage of metadata types in {{ name_base_print }} and {{ name_source_print }}
+### Overview - coverage of metadata types in {{ name_source_print }} and {{ name_base_print }}
 
 <table>
   <tr>
@@ -180,13 +178,19 @@ Comparing coverage of metadata types in {{ name_base_print }} and {{ name_source
     <td>coverage added value - all time</td>
     <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
   </tr>
+<tr>
+    <td valign="top"><img src="{{ value_add_graphs.files["value_add_stacked_" + name_base + name_source + "all_time.png"].cache_filepath }}"></td>
+    <td valign="top">  <img src="{{ value_add_graphs.files["value_add_stacked_" + name_base + name_source + "focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
  </table>
 
 <pdf:nextpage>
 
-### Details
-
-Metadata coverage in {{ name_source_print }} and {{ name_base_print }} by publication type
+### Details - metadata coverage in {{ name_source_print }} and {{ name_base_print }} by publication type
 <br>
 
 {% set data_element_array = graph_metadata.VALUE_ADD_META[source_a][source_b]['xs'] %}
