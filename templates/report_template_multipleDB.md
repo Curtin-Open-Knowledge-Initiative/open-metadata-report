@@ -254,6 +254,59 @@ Metadata coverage for DOIs and non-DOIs by publication type
 {% endfor %}
 
 
+# {{ name_base_print }} Coverage Beyond DOIs
+<br>
+## DOIs vs non-DOIs
+
+### By year and publication type
+
+<table>
+  <tr>
+    <td valign="top"><img src="{{ crdois_in_source_by_pubdate.files["crdois_in_" + name_base + "by_pubdate.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ source_coverage_self_by_type.files[name_base + "coverage_self_by_type.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage by publication date - all time</td>
+    <td>coverage by publication type  - all time</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+## Metadata Coverage
+
+### Overview
+
+Comparing coverage of metadata types for DOIs and non-DOIs in {{ name_source_base }}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_self_graphs.files["value_add_self_sidebyside_" + name_base + "all_time.png"].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_self_graphs.files["value_add_self_sidebyside_" + name_base + "focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+### Details
+
+Metadata coverage for DOIs and non-DOIs by publication type
+<br>
+
+{% set data_element_array = graph_metadata.INTERNAL_COMPARISON_META[source_b]['xs'] %}
+{% for data_element in data_element_array %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_base, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
+{{ loop.cycle("", "<pdf:nextpage>") }}
+{% endfor %}
+
+
+
 {# Lines below are not currently run pending refactoring (2023-04-25)
 ## Appendix A - Tables
 
