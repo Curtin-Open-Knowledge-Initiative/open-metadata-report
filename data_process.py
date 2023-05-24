@@ -480,6 +480,10 @@ def source_in_base_by_pubdate(af: AnalyticsFunction):
                         #linename=f'Crossref DOIs in {source_b.SOURCE_PRINT_NAME} (%)')
                         linename=f'Crossref DOIs in {source.SOURCE_PRINT_NAME} (%)')
 
+        chart.process_data(
+            palette=['#C0C0C0', SOURCE_PALETTE[source.SOURCE_NAME]]
+        )
+
         fig = chart.plotly()
         filename = f'{source.SOURCE_NAME}_in_crossref_by_pubdate'
         filepath = GRAPH_DIR / filename
@@ -653,6 +657,10 @@ def crdois_in_source_by_pubdate(af,
                         barname=f'All {source.SOURCE_PRINT_NAME} records',
                         linedata=figdata.pc_crdois_in_source,
                         linename=f'{source.SOURCE_PRINT_NAME} with DOIs (%)')
+
+        chart.process_data(
+            palette=['#C0C0C0', SOURCE_PALETTE[source.SOURCE_NAME]]
+        )
 
         fig = chart.plotly()
         filename = f'crdois_in_{source.SOURCE_NAME}_by_pubdate'
