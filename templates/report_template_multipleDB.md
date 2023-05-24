@@ -253,6 +253,7 @@ Metadata coverage for DOIs and non-DOIs by publication type
 {{ loop.cycle("", "<pdf:nextpage>") }}
 {% endfor %}
 
+<pdf:nextpage>
 
 # {{ name_base_print }} Coverage Beyond DOIs
 <br>
