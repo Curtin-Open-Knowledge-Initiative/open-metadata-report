@@ -27,6 +27,8 @@ class BarLine(AbstractObservatoryChart):
         assert len(self.xdata) == len(self.linedata)
 
         palette = kwargs.get('palette')
+        if palette:
+            self.colorway = palette
 
     def plot(self):
         pass
@@ -58,6 +60,6 @@ class BarLine(AbstractObservatoryChart):
                          range=[0, 100])
         # Update template
         fig.update_layout(template='simple_white',
-                          colorway=palette)
+                          colorway=self.colorway)
 
         return fig
