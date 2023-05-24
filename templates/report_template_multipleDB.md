@@ -157,7 +157,7 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <pdf:nextpage>
 
-## Value Add of {{ name_source_print }} and {{ name_base_print }}
+## Value Add of {{ name_source_print }} and {{ name_base_print }} (Crossref DOIs)
 
 ### Overview - coverage of metadata types in {{ name_source_print }} and {{ name_base_print }}
 
