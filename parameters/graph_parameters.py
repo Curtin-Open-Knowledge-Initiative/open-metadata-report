@@ -259,71 +259,14 @@ INTERNAL_COMPARISON_META = {
     }
 }
 
-#
-# VALUE_ADD_META = {
-#     'crossref': {
-#         'openalex': {
-#             'xs': value_add_meta_xs['crossref']['openalex']['xs'],
-#             'ys': {
-#                 'Crossref': {
-#                     x: f'pc_crossref_has_{graph_print_names[x]}'
-#                     for x in
-#                     value_add_meta_xs['crossref']['openalex']['xs']
-#                 },
-#                 'OpenAlex': {
-#                     x: f'pc_openalex_has_{graph_print_names[x]}'
-#                     for x in
-#                     value_add_meta_xs['crossref']['openalex']['xs']
-#                 },
-#                 'OpenAlex Added Value': {
-#                     x: f'pc_openalex_{graph_print_names[x]}_adds_presence'
-#                     for x in
-#                     value_add_meta_xs['crossref']['openalex']['xs']
-#                 }
-#             }
-#         }
-#     },
-#     'openalex': {
-#         'openalex': {
-#             'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-#                    'References from', 'Journals', 'Journals ISSN', 'Fields'],
-#             'ys': {
-#                 'OpenAlex DOIs': {
-#                     'Affiliations': 'pc_dois_has_affiliations_string',
-#                     'Affiliations ROR': 'pc_dois_has_affiliations_ror',
-#                     'Authors': 'pc_dois_has_authors',
-#                     'Authors ORCIDs': 'pc_dois_has_authors_orcid',
-#                     'Abstracts': 'pc_dois_has_abstract',
-#                     'Citations to': 'pc_dois_has_citations',
-#                     'References from': 'pc_dois_has_references',
-#                     'Journals': 'pc_dois_has_venue',
-#                     'Journals ISSN': 'pc_dois_has_venue_issn',
-#                     'Fields': 'pc_dois_has_fields'
-#                 },
-#                 'OpenAlex non-DOIs': {
-#                     'Affiliations': 'pc_non_dois_has_affiliations_string',
-#                     'Affiliations ROR': 'pc_non_dois_has_affiliations_ror',
-#                     'Authors': 'pc_non_dois_has_authors',
-#                     'Authors ORCIDs': 'pc_non_dois_has_authors_orcid',
-#                     'Abstracts': 'pc_non_dois_has_abstract',
-#                     'Citations to': 'pc_non_dois_has_citations',
-#                     'References from': 'pc_non_dois_has_references',
-#                     'Journals': 'pc_non_dois_has_venue',
-#                     'Journals ISSN': 'pc_non_dois_has_venue_issn',
-#                     'Fields': 'pc_non_dois_has_fields'
-#                 }
-#             }
-#         }
-#     }
-# }
+# These are now replaced by more comprehensive lists in value_add_meta_xs
+#STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
+#                          'Citations to', 'References from',
+#                         'Venue']
 
-STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
-                          'Citations to', 'References from',
-                          'Venue']
-
-SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
-                             'Citations to', 'References from',
-                             'Venue', 'Fields']
+#SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
+#                             'Citations to', 'References from',
+ #                            'Venue', 'Fields']
 
 # SOURCE_TYPES is used to specify which metadata types to include for a given source in charts by metadata type
 # TODO consider moving this to source_params and call from there (but take into account using cr as default mapping for value add comparisons)
