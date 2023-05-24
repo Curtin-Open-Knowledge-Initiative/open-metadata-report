@@ -157,9 +157,11 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <pdf:nextpage>
 
-## Value Add of {{ name_source_print }} and {{ name_base_print }} (Crossref DOIs)
+## Value Add of {{ name_source_print }} and {{ name_base_print }} 
 
-### Overview - coverage of metadata types in {{ name_source_print }} and {{ name_base_print }}
+### Overview 
+
+Coverage of metadata types in {{ name_source_print }} and {{ name_base_print }} (for Crossref DOIs)
 
 <table>
   <tr>
@@ -190,7 +192,9 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <pdf:nextpage>
 
-### Details - metadata coverage in {{ name_source_print }} and {{ name_base_print }} by publication type
+### Details 
+
+Metadata coverage in {{ name_source_print }} and {{ name_base_print }} by publication type (for Crossref DOIs)
 <br>
 
 {% set data_element_array = graph_metadata.VALUE_ADD_META[source_a][source_b]['xs'] %}
