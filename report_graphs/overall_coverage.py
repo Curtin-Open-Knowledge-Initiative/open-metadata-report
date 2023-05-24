@@ -22,13 +22,20 @@ class OverallCoverage(AbstractObservatoryChart):
         self.line_offset = line_offset
         self.column_offset = column_offset
 
-    def process_data(self):
+    def process_data(self,
+                     **kwargs):
+
+        palette = kwargs.get('palette')
+        if palette:
+            self.fillcolor = palette
+
         self.columns = [
             [
                 dict(y0=0,
                      y1=self.datadict['total_dois'],
                      line=dict(width=0),
-                     fillcolor='rgba(100, 100, 100, 0.1)',),
+                     fillcolor='rgba(100, 100, 100, 0.1)'
+                     ),
                 dict(y0=self.datadict['total_dois'],
                      y1=self.datadict['total_objects'],
                      line=dict(width=0),
@@ -38,20 +45,22 @@ class OverallCoverage(AbstractObservatoryChart):
             [
                 dict(y0=0,
                      y1=self.datadict['cr_total'],
-                     line=dict(color='darkgreen'),
-                     fillcolor='rgba(0, 180, 0, 0.2)'#,
+                     line=dict(color='darkgrey'),
+                     fillcolor = 'rgba(100, 100, 100, 0.2)'#,
                      #line_offset=self.line_offset
                      ),
                 dict(y0=self.datadict['cr_not_in_source'],
                      y1=self.datadict['total_objects'],
-                     line=dict(color='darkblue'),
-                     fillcolor='rgba(0, 0, 180, 0.2)',
+                     line=dict(color='darkgrey'),
+                     #fillcolor='rgba(0, 0, 180, 0.2)',
+                     fillcolor=self.fillcolor,
                      line_offset=self.line_offset
                      ),
                 dict(y0=self.datadict['total_dois'],
                      y1=self.datadict['total_objects'],
                      line=dict(width=0),
-                     fillcolor='rgba(0, 0, 180, 0.2)',
+                     #fillcolor='rgba(0, 0, 180, 0.2)',
+                     fillcolor=self.fillcolor,
                      line_offset=self.line_offset
                      )
             ],

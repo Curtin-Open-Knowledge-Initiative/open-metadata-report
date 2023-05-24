@@ -418,6 +418,10 @@ def calculate_overall_coverage(comparison_df: pd.DataFrame,
         source_dois=source_with_doi
     )
 
+#helper function to convert rgb colors into rgba
+def rgb_to_rgba(rgb_value, alpha):
+
+    return f"rgba{rgb_value[3:-1]}, {alpha})"
 
 def overall_comparison(af: AnalyticsFunction):
     """
@@ -440,6 +444,10 @@ def overall_comparison(af: AnalyticsFunction):
             chart = OverallCoverage(source=source.SOURCE_PRINT_NAME,
                                     data_dict=figdata,
                                     line_offset=0.06)
+
+            chart.process_data(
+                palette = rgb_to_rgba(SOURCE_PALETTE[source.SOURCE_NAME], 0.4)
+            )
 
             fig = chart.plotly()
             filename = f'{source.SOURCE_NAME}_crossref_coverage_{timeframe.lower().replace(" ", "_")}'
