@@ -54,6 +54,7 @@ class BarLine(AbstractObservatoryChart):
                          secondary_y=True, position=0, side='left',
                          range=[0, 100])
         # Update template
-        fig.update_layout(template='simple_white')
+        fig.update_layout(template='simple_white',
+                          colorway=['#C0C0C0', '#1f77b4'])
 
         return fig
