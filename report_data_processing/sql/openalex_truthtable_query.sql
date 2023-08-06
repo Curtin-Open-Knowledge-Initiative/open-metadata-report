@@ -116,13 +116,6 @@ SELECT
 
     (SELECT fields.display_name from UNNEST(concepts) as fields WHERE fields.level = 0 LIMIT 1) as top_field,
 
-    CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(mesh) AS fields WHERE fields.descriptor_ui is not null) > 0 THEN TRUE
-        ELSE FALSE
-    END
-    as has_fields_mesh,
-    (SELECT COUNT(1) FROM UNNEST(mesh) AS fields WHERE fields.descriptor_ui is not null) as count_fields_mesh,
-
     -- Venue
     CASE
         WHEN host_venue.id is not null THEN TRUE
