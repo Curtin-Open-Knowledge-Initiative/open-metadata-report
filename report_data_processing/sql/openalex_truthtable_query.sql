@@ -161,7 +161,7 @@ SELECT
         WHEN CHAR_LENGTH(primary_location.source.issn_l) > 0 THEN 1
         ELSE 0
     END
-    as count_venue_id_issnl
+    as count_venue_id_issnl,
 
     -- Funder
     CASE
