@@ -13,7 +13,8 @@ if not GRAPH_DIR.is_dir():
 PALETTE = plotly.colors.DEFAULT_PLOTLY_COLORS
 
 SOURCE_PALETTE = dict(
-    crossref=PALETTE[1], #safety orange #ff7f0e
+    #crossref=PALETTE[1], #safety orange #ff7f0e
+    crossref='rgb(192,192,192)', #silver #C0C0C0
     openalex=PALETTE[0], #muted blue #1f77b4
     openaire=PALETTE[2] #cooked asparagus green #2ca02c
 )
