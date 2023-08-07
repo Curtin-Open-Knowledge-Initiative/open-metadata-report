@@ -174,17 +174,17 @@ SELECT
         ELSE FALSE
     END
     as has_funders_string,
-    (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funders.display_name is not null) as count_funders_string,
+    (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.display_name is not null) as count_funders_string,
     CASE
         WHEN (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.id is not null) > 0 THEN TRUE
         ELSE FALSE
     END as has_funders_id_source,
     (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.id is not null) as count_funders_id_source,
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(funders) AS funders, UNNEST(ids) as id WHERE id.ror is not null) > 0 THEN TRUE
+        WHEN (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.ids.ror is not null) > 0 THEN TRUE
         ELSE FALSE
     END as has_funders_id_ror,
-    (SELECT COUNT(1) FROM UNNEST(funders) AS funder, UNNEST(ids) as id WHERE id.ror is not null) as count_funders_id_ror,
+    (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.ids.ror is not null) as count_funders_id_ror,
 
 
 FROM `{table}`
