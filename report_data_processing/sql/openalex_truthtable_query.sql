@@ -138,12 +138,12 @@ SELECT
     END
     as count_venue_id_source,
     CASE
-        WHEN CHAR_LENGTH(primary_location.source.display_name) > 0 THEN TRUE
+        WHEN primary_location.source.display_name is not null THEN TRUE
         ELSE FALSE
     END
     as has_venue_string,
     CASE
-        WHEN CHAR_LENGTH(primary_location.source.display_name) > 0 THEN 1
+        WHEN primary_location.source.display_name is not null THEN 1
         ELSE 0
     END as count_venue_string,
     CASE
@@ -153,12 +153,12 @@ SELECT
     as has_venue_id_issn,
     ARRAY_LENGTH(primary_location.source.issn) as count_venue_issn,
     CASE
-        WHEN CHAR_LENGTH(primary_location.source.issn_l) > 0 THEN TRUE
+        WHEN primary_location.source.issn_l is not null THEN TRUE
         ELSE FALSE
     END
     as has_venue_id_issnl,
     CASE
-        WHEN CHAR_LENGTH(primary_location.source.issn_l) > 0 THEN 1
+        WHEN primary_location.source.issn_l is not null THEN 1
         ELSE 0
     END
     as count_venue_id_issnl,
