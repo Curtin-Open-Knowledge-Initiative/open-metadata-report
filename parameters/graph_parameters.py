@@ -348,8 +348,8 @@ OPENALEX_TYPES = ['journal-article',
                   'posted-content',
                   'book',
                   'report',
-                  'monograph',
-                  'none']
+                  'monograph']
+                  #'none']
 
 OPENAIRE_TYPES = ['publication',
                   'dataset',
