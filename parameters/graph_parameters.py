@@ -45,27 +45,6 @@ ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS + ADDED_VALUE_COUN
 
 # TODO create values names more dynamically
 
-# graph_print_names = {
-#     'authors': 'Authors',
-#     'authors_id_orcid': 'Author ORCIDs',
-#     'authors_id_source': 'Author Source IDs',
-#     'authors_string': 'Author Strings',
-#     'affiliations_id_source': 'Affiliation Source IDs',
-#     'authors_sequence': 'Authors Sequence',
-#     'affiliations': 'Affiliations',
-#     'affiliations_string': 'Affiliation Strings',
-#     'affiliations_id_ror': 'Affiliation RORs',
-#     'affiliations_id_source': 'Affiliation Source IDs',
-#     'abstract': 'Abstract',
-#     'citations': 'Citations',
-#     'references': 'References',
-#     'fields': 'Fields',
-#     'venue': 'Venue',
-#     'venue_string': 'Venue String',
-#     'venue_id_issn': 'Venue ISSN',
-#     'venue_id_issnl': 'Venue ISSN-L',
-#     'venue_id_source': 'Venue Source ID'
-# }
 
 GRAPH_PRINT_NAMES = {
     'Authors': 'authors',
@@ -286,63 +265,6 @@ INTERNAL_COMPARISON_META = {
     }
 }
 
-#
-# VALUE_ADD_META = {
-#     'crossref': {
-#         'openalex': {
-#             'xs': value_add_meta_xs['crossref']['openalex']['xs'],
-#             'ys': {
-#                 'Crossref': {
-#                     x: f'pc_crossref_has_{graph_print_names[x]}'
-#                     for x in
-#                     value_add_meta_xs['crossref']['openalex']['xs']
-#                 },
-#                 'OpenAlex': {
-#                     x: f'pc_openalex_has_{graph_print_names[x]}'
-#                     for x in
-#                     value_add_meta_xs['crossref']['openalex']['xs']
-#                 },
-#                 'OpenAlex Added Value': {
-#                     x: f'pc_openalex_{graph_print_names[x]}_adds_presence'
-#                     for x in
-#                     value_add_meta_xs['crossref']['openalex']['xs']
-#                 }
-#             }
-#         }
-#     },
-#     'openalex': {
-#         'openalex': {
-#             'xs': ['Affiliations', 'Affiliations ROR', 'Authors', 'Authors ORCIDs', 'Abstracts', 'Citations to',
-#                    'References from', 'Journals', 'Journals ISSN', 'Fields'],
-#             'ys': {
-#                 'OpenAlex DOIs': {
-#                     'Affiliations': 'pc_dois_has_affiliations_string',
-#                     'Affiliations ROR': 'pc_dois_has_affiliations_ror',
-#                     'Authors': 'pc_dois_has_authors',
-#                     'Authors ORCIDs': 'pc_dois_has_authors_orcid',
-#                     'Abstracts': 'pc_dois_has_abstract',
-#                     'Citations to': 'pc_dois_has_citations',
-#                     'References from': 'pc_dois_has_references',
-#                     'Journals': 'pc_dois_has_venue',
-#                     'Journals ISSN': 'pc_dois_has_venue_issn',
-#                     'Fields': 'pc_dois_has_fields'
-#                 },
-#                 'OpenAlex non-DOIs': {
-#                     'Affiliations': 'pc_non_dois_has_affiliations_string',
-#                     'Affiliations ROR': 'pc_non_dois_has_affiliations_ror',
-#                     'Authors': 'pc_non_dois_has_authors',
-#                     'Authors ORCIDs': 'pc_non_dois_has_authors_orcid',
-#                     'Abstracts': 'pc_non_dois_has_abstract',
-#                     'Citations to': 'pc_non_dois_has_citations',
-#                     'References from': 'pc_non_dois_has_references',
-#                     'Journals': 'pc_non_dois_has_venue',
-#                     'Journals ISSN': 'pc_non_dois_has_venue_issn',
-#                     'Fields': 'pc_non_dois_has_fields'
-#                 }
-#             }
-#         }
-#     }
-# }
 
 STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
                           'Citations to', 'References from',
