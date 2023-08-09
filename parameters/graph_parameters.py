@@ -72,10 +72,10 @@ GRAPH_PRINT_NAMES = {
     'Author ORCIDs': 'authors_id_orcid',
     'Author Source IDs': 'authors_id_source',
     'Author Strings': 'authors_string',
-    'Affiliation Source IDs': 'affiliations_id_source',
     'Authors Sequence': 'authors_sequence',
     'Affiliations': 'affiliations',
     'Affiliation Strings': 'affiliations_string',
+    'Affiliation Source IDs': 'affiliations_id_source',
     'Affiliation RORs': 'affiliations_id_ror',
     'Abstract': 'abstract',
     'Citations to': 'citations',
@@ -89,44 +89,44 @@ GRAPH_PRINT_NAMES = {
     'Funders': 'funders',
     'Funder Strings': 'funders_string',
     'Funder Source IDs': 'funders_id_source',
-
+    'Funder RORs': 'funders_id_ror'
 }
 
 value_add_meta_xs = {
     'crossref': {
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Strings', 'Funder Source IDs']
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to','References from',
-                   'Venue', 'Venue ISSN', 'Fields', 'Funders', 'Funder Strings', 'Funder Source IDs']
+                   'Citations to','References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Strings', 'Funder Source IDs']
         }
     },
     'openalex': {
         'crossref': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Strings', 'Funder Source IDs']
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Strings', 'Funder Source IDs']
         }
     },
     'openaire': {
         'crossref': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields', 'Funders', 'Funder Strings', 'Funder Source IDs']
+                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Strings', 'Funder Source IDs']
         },
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Strings', 'Funder Source IDs']
         }
     }
 }
@@ -174,7 +174,8 @@ for source_a in SOURCES:
 INTERNAL_COMPARISON_META = {
     'openalex': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
-               'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields'],
+               'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields',
+               'Funders','Funder Source IDs'],
         'ys': {
             'OpenAlex DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -187,7 +188,9 @@ INTERNAL_COMPARISON_META = {
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
-                'Fields': 'pc_dois_has_fields'
+                'Fields': 'pc_dois_has_fields',
+                'Funders': 'pc_dois_has_funders',
+                'Funder Source IDs': 'pc_dois_has_funders_id_source',
             },
             'OpenAlex non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
@@ -200,7 +203,9 @@ INTERNAL_COMPARISON_META = {
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
-                'Fields': 'pc_non_dois_has_fields'
+                'Fields': 'pc_non_dois_has_fields',
+                'Funders': 'pc_dois_has_funders',
+                'Funder Source IDs': 'pc_dois_has_funders_id_source',
             }
         }
     },
@@ -363,10 +368,13 @@ OPENALEX_TYPES = ['journal-article',
                   'posted-content',
                   'book',
                   'report',
-                  'monograph',
-                  'none']
+                  'monograph']
+                  #'none']
 
-OPENAIRE_TYPES = ['publication']
+OPENAIRE_TYPES = ['publication',
+                  'dataset',
+                  'software',
+                  'other']
 
 SOURCE_TYPES = dict(
     crossref=CROSSREF_TYPES,
@@ -374,8 +382,7 @@ SOURCE_TYPES = dict(
     openaire=OPENAIRE_TYPES
 )
 
-# Tables
-
+# Tables - currently not used, expand when reintroduced in template report
 SUMMARY_TABLE_COLUMNS = {
     'crossref': {
         'column_names': [
