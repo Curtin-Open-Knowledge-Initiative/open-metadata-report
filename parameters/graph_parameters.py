@@ -211,8 +211,8 @@ INTERNAL_COMPARISON_META = {
     },
     'openaire': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-               'Citations to', 'References from',
-               'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields', 'Funders', 'Funder Strings'],
+               'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields',
+               'Funders', 'Funder Strings'],
         'ys': {
             'OpenAIRE DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -249,8 +249,8 @@ INTERNAL_COMPARISON_META = {
     },
     'crossref': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-               'Citations to', 'References from',
-               'Venue', 'Venue ISSN', 'Fields', 'Funders', 'Funder Strings', 'Funder Source IDs'],
+               'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+               'Funders', 'Funder Strings', 'Funder Source IDs'],
         'ys': {
             'Crossref DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
