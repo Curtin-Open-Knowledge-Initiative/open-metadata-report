@@ -116,58 +116,75 @@ SELECT
 
     (SELECT fields.display_name from UNNEST(concepts) as fields WHERE fields.level = 0 LIMIT 1) as top_field,
 
-    CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(mesh) AS fields WHERE fields.descriptor_ui is not null) > 0 THEN TRUE
-        ELSE FALSE
-    END
-    as has_fields_mesh,
-    (SELECT COUNT(1) FROM UNNEST(mesh) AS fields WHERE fields.descriptor_ui is not null) as count_fields_mesh,
-
     -- Venue
     CASE
-        WHEN host_venue.id is not null THEN TRUE
+        WHEN primary_location.source.id is not null THEN TRUE
         ELSE FALSE
     END
     as has_venue,
     CASE
-        WHEN host_venue.id is not null THEN 1
+        WHEN primary_location.source.id is not null THEN 1
         ELSE 0
     END
     as count_venue,
     CASE
-        WHEN host_venue.id is not null THEN TRUE
+        WHEN primary_location.source.id is not null THEN TRUE
         ELSE FALSE
     END
     as has_venue_id_source,
     CASE
-        WHEN host_venue.id is not null THEN 1
+        WHEN primary_location.source.id is not null THEN 1
         ELSE 0
     END
     as count_venue_id_source,
     CASE
-        WHEN CHAR_LENGTH(host_venue.display_name) > 0 THEN TRUE
+        WHEN primary_location.source.display_name is not null THEN TRUE
         ELSE FALSE
     END
     as has_venue_string,
     CASE
-        WHEN CHAR_LENGTH(host_venue.display_name) > 0 THEN 1
+        WHEN primary_location.source.display_name is not null THEN 1
         ELSE 0
     END as count_venue_string,
     CASE
-        WHEN ARRAY_LENGTH(host_venue.issn) > 0 THEN TRUE
+        WHEN ARRAY_LENGTH(primary_location.source.issn) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_venue_id_issn,
-    ARRAY_LENGTH(host_venue.issn) as count_venue_issn,
+    ARRAY_LENGTH(primary_location.source.issn) as count_venue_issn,
     CASE
-        WHEN CHAR_LENGTH(host_venue.issn_l) > 0 THEN TRUE
+        WHEN primary_location.source.issn_l is not null THEN TRUE
         ELSE FALSE
     END
     as has_venue_id_issnl,
     CASE
-        WHEN CHAR_LENGTH(host_venue.issn_l) > 0 THEN 1
+        WHEN primary_location.source.issn_l is not null THEN 1
         ELSE 0
     END
-    as count_venue_id_issnl
+    as count_venue_id_issnl,
+
+    -- Funder
+    CASE
+        WHEN ARRAY_LENGTH(funders) > 0 THEN TRUE
+        ELSE FALSE
+    END as has_funders,
+    ARRAY_LENGTH(funders) as count_funders,
+    CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.display_name is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END
+    as has_funders_string,
+    (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.display_name is not null) as count_funders_string,
+    CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.id is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END as has_funders_id_source,
+    (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.id is not null) as count_funders_id_source,
+    CASE
+        WHEN (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.ids.ror is not null) > 0 THEN TRUE
+        ELSE FALSE
+    END as has_funders_id_ror,
+    (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.ids.ror is not null) as count_funders_id_ror,
+
 
 FROM `{table}`

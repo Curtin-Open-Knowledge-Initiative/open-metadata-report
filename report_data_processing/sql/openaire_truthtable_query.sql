@@ -132,7 +132,7 @@ UNION ALL
    FROM `academic-observatory.openaire.otherresearchproduct` as publications
 ),
 
----- add affiliations and projects
+--- add affiliations and projects
 TABLE_FROM_SOURCE AS (
 
 SELECT

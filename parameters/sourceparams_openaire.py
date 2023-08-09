@@ -31,6 +31,9 @@ SOURCE_DATA_ELEMENTS = [
     'venue',
     'venue_string',
     'venue_id_issn',
-    'venue_id_issnl'
+    'venue_id_issnl',
+    'funders',
+    'funders_string',
+    'funders_id_source'
 ]
 

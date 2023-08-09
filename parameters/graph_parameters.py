@@ -1,23 +1,11 @@
 from pathlib import Path
 import os
-import itertools
-import plotly
 
 from parameters.data_parameters import SOURCES, SOURCES_SELF, CURRENT, FOCUS
 
 GRAPH_DIR = Path('graphs')
 if not GRAPH_DIR.is_dir():
     os.mkdir(GRAPH_DIR)
-
-# Palette tryout
-PALETTE = plotly.colors.DEFAULT_PLOTLY_COLORS
-
-SOURCE_PALETTE = dict(
-    #crossref=PALETTE[1], #safety orange #ff7f0e
-    crossref='rgb(192,192,192)', #silver #C0C0C0
-    openalex=PALETTE[0], #muted blue #1f77b4
-    openaire=PALETTE[2] #cooked asparagus green #2ca02c
-)
 
 # Time Frames
 
@@ -35,10 +23,7 @@ TIME_FRAMES = {
 
 # Value Add Graphs
 
-# TODO add presence and add value columns for overlap.
-
-# only keep unique values in all_data_elems
-all_data_elems = (list(set([element for elems in [source.SOURCE_DATA_ELEMENTS for source in SOURCES] for element in elems])))
+all_data_elems = [element for elems in [source.SOURCE_DATA_ELEMENTS for source in SOURCES] for element in elems]
 
 PRESENCE_COLUMNS = [
     f'{source.SOURCE_NAME}_has_{item}' for item in all_data_elems for source in SOURCES
@@ -48,18 +33,10 @@ PRESENCE_COLUMNS_SELF = [
     f'{source_self}_has_{item}' for item in all_data_elems for source_self in SOURCES_SELF
 ]
 
-ADDED_VALUE_COLUMNS_LIST = []
-for source_a in SOURCES:
-    for source_b in SOURCES:
-        if source_a == source_b: continue
+ADDED_VALUE_COLUMNS = [
+    f'{source.SOURCE_NAME}_{item}_adds_presence' for item in all_data_elems for source in SOURCES
+]
 
-        ADDED_VALUE_COLUMNS_LIST.append(
-            [f'{source_a.SOURCE_NAME}_{item}_adds_presence_{source_b.SOURCE_NAME}' for item in all_data_elems]
-        )
-
-ADDED_VALUE_COLUMNS = [element for sublist in ADDED_VALUE_COLUMNS_LIST for element in sublist]
-
-#TODO convert this to iteration as well when counts are added back in
 ADDED_VALUE_COUNTS_COLUMNS = [
     f'{source.SOURCE_NAME}_{item}_adds_counts' for item in all_data_elems for source in SOURCES
 ]
@@ -68,15 +45,16 @@ ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS + ADDED_VALUE_COUN
 
 # TODO create values names more dynamically
 
+
 GRAPH_PRINT_NAMES = {
     'Authors': 'authors',
     'Author ORCIDs': 'authors_id_orcid',
     'Author Source IDs': 'authors_id_source',
     'Author Strings': 'authors_string',
-    'Affiliation Source IDs': 'affiliations_id_source',
     'Authors Sequence': 'authors_sequence',
     'Affiliations': 'affiliations',
     'Affiliation Strings': 'affiliations_string',
+    'Affiliation Source IDs': 'affiliations_id_source',
     'Affiliation RORs': 'affiliations_id_ror',
     'Abstract': 'abstract',
     'Citations to': 'citations',
@@ -86,44 +64,48 @@ GRAPH_PRINT_NAMES = {
     'Venue String': 'venue_string',
     'Venue ISSN': 'venue_id_issn',
     'Venue ISSN-L': 'venue_id_issnl',
-    'Venue Source ID': 'venue_id_source'
+    'Venue Source ID': 'venue_id_source',
+    'Funders': 'funders',
+    'Funder Strings': 'funders_string',
+    'Funder Source IDs': 'funders_id_source',
+    'Funder RORs': 'funders_id_ror'
 }
 
 value_add_meta_xs = {
     'crossref': {
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Source IDs']
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to','References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Citations to','References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Source IDs']
         }
     },
     'openalex': {
         'crossref': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Strings', 'Funder Source IDs']
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Strings', 'Funder Source IDs']
         }
     },
     'openaire': {
         'crossref': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Strings', 'Funder Source IDs']
         },
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from',
-                   'Venue', 'Venue ISSN', 'Fields']
+                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+                   'Funders', 'Funder Strings', 'Funder Source IDs']
         }
     }
 }
@@ -143,7 +125,7 @@ def return_ys_dict(source_a,
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         },
         f'{source_b.SOURCE_PRINT_NAME} Added Value': {
-            x: f'pc_{source_b.SOURCE_NAME}_{GRAPH_PRINT_NAMES[x]}_adds_presence_{source_a.SOURCE_NAME}'
+            x: f'pc_{source_b.SOURCE_NAME}_{GRAPH_PRINT_NAMES[x]}_adds_presence'
             for x in
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         }
@@ -152,19 +134,27 @@ def return_ys_dict(source_a,
 
 
 VALUE_ADD_META = {}
-for source_a, source_b in itertools.permutations(SOURCES, 2):
+for source_a in SOURCES:
+    for source_b in SOURCES:
+        if source_a == source_b: continue
 
-        if not VALUE_ADD_META.get(source_a.SOURCE_NAME):
-            VALUE_ADD_META[source_a.SOURCE_NAME] = {}
-        VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME] = dict(
-                        xs=value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
-                        ys=return_ys_dict(source_a, source_b)
+        VALUE_ADD_META.update(
+            {
+                source_a.SOURCE_NAME: {
+                    source_b.SOURCE_NAME: {
+                        'xs': value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
+                        'ys': return_ys_dict(source_a, source_b)
+
+                    }
+                }
+            }
         )
 
 INTERNAL_COMPARISON_META = {
     'openalex': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
-               'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields'],
+               'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields',
+               'Funders','Funder Source IDs'],
         'ys': {
             'OpenAlex DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -177,7 +167,9 @@ INTERNAL_COMPARISON_META = {
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
-                'Fields': 'pc_dois_has_fields'
+                'Fields': 'pc_dois_has_fields',
+                'Funders': 'pc_dois_has_funders',
+                'Funder Source IDs': 'pc_dois_has_funders_id_source',
             },
             'OpenAlex non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
@@ -190,14 +182,16 @@ INTERNAL_COMPARISON_META = {
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
-                'Fields': 'pc_non_dois_has_fields'
+                'Fields': 'pc_non_dois_has_fields',
+                'Funders': 'pc_dois_has_funders',
+                'Funder Source IDs': 'pc_dois_has_funders_id_source',
             }
         }
     },
     'openaire': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-               'Citations to', 'References from',
-               'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields'],
+               'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields',
+               'Funders', 'Funder Strings'],
         'ys': {
             'OpenAIRE DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -210,7 +204,10 @@ INTERNAL_COMPARISON_META = {
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
-                'Fields': 'pc_dois_has_fields'
+                'Fields': 'pc_dois_has_fields',
+                'Funders': 'pc_dois_has_funders',
+                'Funder Strings': 'pc_dois_has_funders_string'
+
             },
             'OpenAIRE non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
@@ -223,14 +220,16 @@ INTERNAL_COMPARISON_META = {
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
-                'Fields': 'pc_non_dois_has_fields'
+                'Fields': 'pc_non_dois_has_fields',
+                'Funders': 'pc_non_dois_has_funders',
+                'Funder Strings': 'pc_non_dois_has_funders_string',
             }
         }
     },
     'crossref': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-               'Citations to', 'References from',
-               'Venue', 'Venue ISSN', 'Fields'],
+               'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
+               'Funders', 'Funder Strings', 'Funder Source IDs'],
         'ys': {
             'Crossref DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -242,7 +241,10 @@ INTERNAL_COMPARISON_META = {
                 'References from': 'pc_dois_has_references',
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
-                'Fields': 'pc_dois_has_fields'
+                'Fields': 'pc_dois_has_fields',
+                'Funders': 'pc_dois_has_funders',
+                'Funder Strings': 'pc_dois_has_funders_string',
+                'Funder Source IDs': 'pc_dois_has_funders_id_source',
             },
             'Crossref non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
@@ -254,7 +256,10 @@ INTERNAL_COMPARISON_META = {
                 'References from': 'pc_non_dois_has_references',
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
-                'Fields': 'pc_non_dois_has_fields'
+                'Fields': 'pc_non_dois_has_fields',
+                'Funders': 'pc_non_dois_has_funders',
+                'Funder Strings': 'pc_non_dois_has_funders_string',
+                'Funder Source IDs': 'pc_non_dois_has_funders_id_source',
             }
         }
     }
@@ -263,11 +268,11 @@ INTERNAL_COMPARISON_META = {
 # These are now replaced by more comprehensive lists in value_add_meta_xs
 #STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
 #                          'Citations to', 'References from',
-#                         'Venue']
+#                          'Venue', 'Funders']
 
 #SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
 #                             'Citations to', 'References from',
- #                            'Venue', 'Fields']
+#                            'Venue', 'Fields', 'Funders']
 
 # SOURCE_TYPES is used to specify which metadata types to include for a given source in charts by metadata type
 # TODO consider moving this to source_params and call from there (but take into account using cr as default mapping for value add comparisons)
@@ -285,10 +290,8 @@ OPENALEX_TYPES = ['journal-article',
                   'posted-content',
                   'book',
                   'report',
-                  'monograph'#,
-                  #'none'
-                  #temp fix to prevent error when no 'none' is present
-                  ]
+                  'monograph']
+                  #'none']
 
 OPENAIRE_TYPES = ['publication',
                   'dataset',
@@ -301,8 +304,7 @@ SOURCE_TYPES = dict(
     openaire=OPENAIRE_TYPES
 )
 
-# Tables
-
+# Tables - currently not used, expand when reintroduced in template report
 SUMMARY_TABLE_COLUMNS = {
     'crossref': {
         'column_names': [
