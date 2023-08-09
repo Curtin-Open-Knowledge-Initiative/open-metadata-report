@@ -65,16 +65,16 @@ def source_to_truthtable(af: AnalyticsFunction,
             continue
 
 
-    with bigquery.Client() as client:
-        job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source.SOURCE_NAME],
+            with bigquery.Client() as client:
+                job_config = bigquery.QueryJobConfig(destination=SOURCE_TRUTH_TABLES[source.SOURCE_NAME],
                                              create_disposition='CREATE_IF_NEEDED',
                                              write_disposition=WRITE_DISPOSITION)
 
-        query_job = client.query(query, job_config=job_config)  # Make an API request.
-        query_job.result()  # Wait for the job to complete.
+            query_job = client.query(query, job_config=job_config)  # Make an API request.
+            query_job.result()  # Wait for the job to complete.
 
-    if verbose:
-        print('...completed')
+            if verbose:
+                print('...completed')
 
 
 def source_category_query(af: AnalyticsFunction,
@@ -226,7 +226,7 @@ def value_add_graphs(af: AnalyticsFunction,
                                         source_a.SOURCE_PRINT_NAME,
                                         f'{source_b.SOURCE_PRINT_NAME} Added Value'],
                                     #xs=STACKED_BAR_SUMMARY_XS,
-                                    xs=value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
+                                    xs=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
                                     ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'])
 
                 chart.process_data(
@@ -247,7 +247,7 @@ def value_add_graphs(af: AnalyticsFunction,
                                         source_b.SOURCE_PRINT_NAME
                                     ],
                                     #xs=SIDEBYSIDE_BAR_SUMMARY_XS,
-                                    xs=value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
+                                    xs=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
                                     ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
                                     stackedbar=False)
 
