@@ -1,7 +1,7 @@
 from pathlib import Path
 import os
 
-from parameters.data_parameters import SOURCES, SOURCES_SELF, CURRENT, FOCUS
+from parameters.data_parameters import SOURCES, SOURCES_SELF, COMPARISON, CURRENT, FOCUS
 
 GRAPH_DIR = Path('graphs')
 if not GRAPH_DIR.is_dir():
@@ -134,8 +134,8 @@ def return_ys_dict(source_a,
 
 
 VALUE_ADD_META = {}
-for source_a in SOURCES:
-    for source_b in SOURCES:
+for source_a in COMPARISON:
+    for source_b in COMPARISON:
         if source_a == source_b: continue
 
         VALUE_ADD_META.update(
