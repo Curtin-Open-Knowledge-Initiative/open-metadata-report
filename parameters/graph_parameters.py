@@ -1,11 +1,23 @@
 from pathlib import Path
 import os
+import itertools
+import plotly
 
 from parameters.data_parameters import SOURCES, SOURCES_SELF, CURRENT, FOCUS
 
 GRAPH_DIR = Path('graphs')
 if not GRAPH_DIR.is_dir():
     os.mkdir(GRAPH_DIR)
+
+# Palette tryout
+PALETTE = plotly.colors.DEFAULT_PLOTLY_COLORS
+
+SOURCE_PALETTE = dict(
+    crossref=PALETTE[1], #safety orange #ff7f0e
+    openalex=PALETTE[0], #muted blue #1f77b4
+    openaire=PALETTE[2] #cooked asparagus green #2ca02c
+)
+
 
 # Time Frames
 
