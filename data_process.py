@@ -225,7 +225,8 @@ def value_add_graphs(af: AnalyticsFunction,
                                     categories=[
                                         source_a.SOURCE_PRINT_NAME,
                                         f'{source_b.SOURCE_PRINT_NAME} Added Value'],
-                                    xs=STACKED_BAR_SUMMARY_XS,
+                                    #xs=STACKED_BAR_SUMMARY_XS,
+                                    xs=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
                                     ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'])
 
                 fig = chart.plotly()
@@ -240,7 +241,8 @@ def value_add_graphs(af: AnalyticsFunction,
                                         source_a.SOURCE_PRINT_NAME,
                                         source_b.SOURCE_PRINT_NAME
                                     ],
-                                    xs=SIDEBYSIDE_BAR_SUMMARY_XS,
+                                    #xs=SIDEBYSIDE_BAR_SUMMARY_XS,
+                                    xs=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
                                     ys=VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
                                     stackedbar=False)
 

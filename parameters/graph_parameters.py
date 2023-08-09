@@ -76,12 +76,12 @@ value_add_meta_xs = {
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
-                   'Funders', 'Funder Strings', 'Funder Source IDs']
+                   'Funders', 'Funder Source IDs']
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    'Citations to','References from', 'Venue', 'Venue ISSN', 'Fields',
-                   'Funders', 'Funder Strings', 'Funder Source IDs']
+                   'Funders', 'Funder Source IDs']
         }
     },
     'openalex': {
@@ -265,14 +265,14 @@ INTERNAL_COMPARISON_META = {
     }
 }
 
+# These are now replaced by more comprehensive lists in value_add_meta_xs
+#STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
+#                          'Citations to', 'References from',
+#                          'Venue', 'Funders']
 
-STACKED_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
-                          'Citations to', 'References from',
-                          'Venue', 'Funders']
-
-SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
-                             'Citations to', 'References from',
-                             'Venue', 'Fields', 'Funders']
+#SIDEBYSIDE_BAR_SUMMARY_XS = ['Affiliations', 'Authors', 'Abstract',
+#                             'Citations to', 'References from',
+#                            'Venue', 'Fields', 'Funders']
 
 # SOURCE_TYPES is used to specify which metadata types to include for a given source in charts by metadata type
 # TODO consider moving this to source_params and call from there (but take into account using cr as default mapping for value add comparisons)
