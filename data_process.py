@@ -209,8 +209,8 @@ def value_add_graphs(af: AnalyticsFunction,
     comparison_data = pd.read_csv(CSV_FILE_PATHS['comparison'])
 
     # Force
-    for source_a in COMPARISON:
-        for source_b in COMPARISON:
+    for source_a in SOURCES:
+        for source_b in SOURCES:
             if source_b == source_a:
                 continue
             for timeframe in TIME_FRAMES.keys():
@@ -219,6 +219,8 @@ def value_add_graphs(af: AnalyticsFunction,
                 figdata = collate_value_add_values(filtered_sum,
                                                    ALL_COLLATED_COLUMNS,
                                                    'cr_dois')
+                #temporary check
+                check = SOURCE_JSON
 
                 # Stacked Bar
                 chart = ValueAddBar(df=figdata,
