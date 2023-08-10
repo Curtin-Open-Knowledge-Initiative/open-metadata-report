@@ -302,7 +302,7 @@ Comparing coverage of metadata types for DOIs and non-DOIs in {{ name_source_bas
 Metadata coverage for DOIs and non-DOIs by publication type
 <br>
 
-{% set data_element_array = graph_metadata.INTERNAL_COMPARISON_META[source_b]['xs'] %}
+{% set data_element_array = graph_metadata.INTERNAL_COMPARISON_META[source_a]['xs'] %}
 {% for data_element in data_element_array %}
 ### {{ data_element }}
 
