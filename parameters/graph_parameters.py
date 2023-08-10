@@ -149,7 +149,7 @@ def return_ys_dict(source_a,
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         },
         f'{source_b.SOURCE_PRINT_NAME} Added Value': {
-            x: f'pc_{source_b.SOURCE_NAME}_{GRAPH_PRINT_NAMES[x]}_adds_presence'
+            x: f'pc_{source_b.SOURCE_NAME}_{GRAPH_PRINT_NAMES[x]}_adds_presence_{source_a.SOURCE_NAME}'
             for x in
             value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
         }
