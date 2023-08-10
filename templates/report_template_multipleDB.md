@@ -166,7 +166,7 @@ Coverage of metadata types in {{ name_base_print }} and {{ name_source_print }} 
 <table>
   <tr>
     <td valign="top"> <img src="{{ value_add_graphs.files["value_add_sidebyside_" + name_source + name_base + "all_time.png"].cache_filepath }}"></td>
-    <td valign="top"> <img s"{P-'rc="{{ value_add_graphs.files["value_add_sidebyside_" + name_source + name_base + "focus_year.png"].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_graphs.files["value_add_sidebyside_" + name_source + name_base + "focus_year.png"].cache_filepath }}"></td>
   </tr>
   <tr>
     <td>coverage comparison - all time</td>
