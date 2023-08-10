@@ -32,7 +32,7 @@
 <p class="subtitle">OPEN METADATA SOURCES</p>
 <p class="titlemeta">
 <br>
-COMPARING {{ name_source_print|upper }} TO {{ name_base_print|upper }} <br>
+COMPARING {{ name_base_print|upper }} TO {{ name_source_print|upper }} <br>
 <br>
 DATE: {{ helper.created_at()|upper }}</p>
 <br>
@@ -45,11 +45,11 @@ DATE: {{ helper.created_at()|upper }}</p>
 
 # Executive Summary
 
-In this project, we assess and compare the value added by {{ name_source_print }} to {{ name_base_print }} metadata, both in coverage of publications and other research output 
+In this project, we assess and compare {{ name_base_print }} to {{ name_source_print }} metadata, both in coverage of publications and other research output 
 (with and without DOIs) as well as in coverage of metadata (including identifiers) for authors, institutions, publication venues 
 and disciplines. 
 
-The report currently contains all the graphs comparing metadata coverage of {{ name_source_print }} compared to {{ name_base_print }}, and of DOIs vs non-DOIs in {{ name_source_full }}. 
+The report currently contains all the graphs comparing metadata coverage of {{ name_base_print }} compared to {{ name_source_print }}, and of DOIs vs non-DOIs in {{ name_source_full }}. 
 More explanatory text, tables and interpretation of findings will be added in a later version.
 
 Complete data and code are available on Github:
@@ -73,7 +73,7 @@ Unlike metadata from closed sources, open metadata can be combined and enriched 
 landscape. Transparency and provenance allow identifying and addressing existing gaps and biases in coverage and 
 quality. 
 
-In this project, we assess and compare the value added by {{ name_source_print }} to {{ name_base_print }} metadata, both in coverage of publications and other research output 
+In this project, we assess and compare {{ name_base_print }} to {{ name_source_print }} metadata, both in coverage of publications and other research output 
 (with and without DOIs) as well as in coverage of metadata (including identifiers) for authors, institutions, publication venues 
 and disciplines. 
 
@@ -92,24 +92,9 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <pdf:nextpage> 
 
-# Coverage of {{ name_source_print }} and {{ name_base_print }}
+# Coverage of {{ name_base_print }} and {{ name_source_print }}
 <br>   
 ## Comparing coverage
-
-### Overview - {{ name_source_print }}
-
-<table>
-  <tr>
-    <td valign="top"><img src="{{ overall_comparison.files[name_source + "crossref_coverage_all_time.png"].cache_filepath }}"></td>
-    <td valign="top">  <img src="{{overall_comparison.files[name_source + "crossref_coverage_focus_year.png"].cache_filepath }}"></td>
-  </tr>
-  <tr>
-    <td>overall comparison - all time</td>
-    <td>overall comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
-  </tr>
- </table>
-
-<br>
 
 ### Overview - {{ name_base_print }}
 
@@ -124,8 +109,38 @@ All images and data belonging to this report are located in the directory [{{ me
   </tr>
  </table>
 
+<br>
+
+### Overview - {{ name_source_print }}
+
+<table>
+  <tr>
+    <td valign="top"><img src="{{ overall_comparison.files[name_source + "crossref_coverage_all_time.png"].cache_filepath }}"></td>
+    <td valign="top">  <img src="{{overall_comparison.files[name_source + "crossref_coverage_focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>overall comparison - all time</td>
+    <td>overall comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
 <pdf:nextpage>
 
+
+### By year and publication type - {{ name_base_print }}
+
+<table>
+  <tr>
+    <td valign="top"><img src="{{ source_in_base_by_pubdate.files[name_base + "in_crossref_by_pubdate.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ source_coverage_by_crossref_type.files[name_base + "coverage_of_crossref_by_crossref_type.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage by publication date - all time</td>
+    <td>coverage by publication type  - all time</td>
+  </tr>
+ </table>
+
+<br>
 
 ### By year and publication type - {{ name_source_print }}
 
@@ -140,33 +155,18 @@ All images and data belonging to this report are located in the directory [{{ me
   </tr>
  </table>
 
-<br>
-
-### By year and publication type - {{ name_source_print }}
-
-<table>
-  <tr>
-    <td valign="top"><img src="{{ source_in_base_by_pubdate.files[name_base + "in_crossref_by_pubdate.png"].cache_filepath }}"></td>
-    <td valign="top"><img src="{{ source_coverage_by_crossref_type.files[name_base + "coverage_of_crossref_by_crossref_type.png"].cache_filepath }}"></td>
-  </tr>
-  <tr>
-    <td>coverage by publication date - all time</td>
-    <td>coverage by publication type  - all time</td>
-  </tr>
- </table>
-
 <pdf:nextpage>
 
-## Value Add of {{ name_source_print }} and {{ name_base_print }} 
+## Comparing value add of {{ name_base_print }} and {{ name_source_print }} 
 
 ### Overview 
 
-Coverage of metadata types in {{ name_source_print }} and {{ name_base_print }} (for Crossref DOIs)
+Coverage of metadata types in {{ name_base_print }} and {{ name_source_print }} (for Crossref DOIs)
 
 <table>
   <tr>
     <td valign="top"> <img src="{{ value_add_graphs.files["value_add_sidebyside_" + name_source + name_base + "all_time.png"].cache_filepath }}"></td>
-    <td valign="top"> <img src="{{ value_add_graphs.files["value_add_sidebyside_" + name_source + name_base + "focus_year.png"].cache_filepath }}"></td>
+    <td valign="top"> <img s"{P-'rc="{{ value_add_graphs.files["value_add_sidebyside_" + name_source + name_base + "focus_year.png"].cache_filepath }}"></td>
   </tr>
   <tr>
     <td>coverage comparison - all time</td>
@@ -194,7 +194,7 @@ Coverage of metadata types in {{ name_source_print }} and {{ name_base_print }} 
 
 ### Details 
 
-Metadata coverage in {{ name_source_print }} and {{ name_base_print }} by publication type (for Crossref DOIs)
+Metadata coverage in {{ name_base_print }} and {{ name_source_print }} by publication type (for Crossref DOIs)
 <br>
 
 {% set data_element_array = graph_metadata.VALUE_ADD_META[source_a][source_b]['xs'] %}
@@ -205,59 +205,6 @@ Metadata coverage in {{ name_source_print }} and {{ name_base_print }} by public
 
 <pdf:nextpage>
 {% endfor %}
-
-# {{ name_source_print }} Coverage Beyond DOIs
-<br>
-## DOIs vs non-DOIs
-
-### By year and publication type
-
-<table>
-  <tr>
-    <td valign="top"><img src="{{ crdois_in_source_by_pubdate.files["crdois_in_" + name_source + "by_pubdate.png"].cache_filepath }}"></td>
-    <td valign="top"><img src="{{ source_coverage_self_by_type.files[name_source + "coverage_self_by_type.png"].cache_filepath }}"></td>
-  </tr>
-  <tr>
-    <td>coverage by publication date - all time</td>
-    <td>coverage by publication type  - all time</td>
-  </tr>
- </table>
-
-<pdf:nextpage>
-
-## Metadata Coverage
-
-### Overview
-
-Comparing coverage of metadata types for DOIs and non-DOIs in {{ name_source_print }}
-
-<table>
-  <tr>
-    <td valign="top"> <img src="{{ value_add_self_graphs.files["value_add_self_sidebyside_" + name_source + "all_time.png"].cache_filepath }}"></td>
-    <td valign="top"> <img src="{{ value_add_self_graphs.files["value_add_self_sidebyside_" + name_source + "focus_year.png"].cache_filepath }}"></td>
-  </tr>
-  <tr>
-    <td>coverage comparison - all time</td>
-    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
-  </tr>
- </table>
-
-<pdf:nextpage>
-
-### Details
-
-Metadata coverage for DOIs and non-DOIs by publication type
-<br>
-
-{% set data_element_array = graph_metadata.INTERNAL_COMPARISON_META[source_b]['xs'] %}
-{% for data_element in data_element_array %}
-### {{ data_element }}
-
-{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
-{{ loop.cycle("", "<pdf:nextpage>") }}
-{% endfor %}
-
-<pdf:nextpage>
 
 # {{ name_base_print }} Coverage Beyond DOIs
 <br>
@@ -282,7 +229,7 @@ Metadata coverage for DOIs and non-DOIs by publication type
 
 ### Overview
 
-Comparing coverage of metadata types for DOIs and non-DOIs in {{ name_source_base }}
+Comparing coverage of metadata types for DOIs and non-DOIs in {{ name_base_print }}
 
 <table>
   <tr>
@@ -307,6 +254,59 @@ Metadata coverage for DOIs and non-DOIs by publication type
 ### {{ data_element }}
 
 {{ helper.value_add_self_tableize(name_base, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
+{{ loop.cycle("", "<pdf:nextpage>") }}
+{% endfor %}
+
+<pdf:nextpage>
+
+# {{ name_source_print }} Coverage Beyond DOIs
+<br>
+## DOIs vs non-DOIs
+
+### By year and publication type
+
+<table>
+  <tr>
+    <td valign="top"><img src="{{ crdois_in_source_by_pubdate.files["crdois_in_" + name_source + "by_pubdate.png"].cache_filepath }}"></td>
+    <td valign="top"><img src="{{ source_coverage_self_by_type.files[name_source + "coverage_self_by_type.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage by publication date - all time</td>
+    <td>coverage by publication type  - all time</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+## Metadata Coverage
+
+### Overview
+
+Comparing coverage of metadata types for DOIs and non-DOIs in {{ name_source }}
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_self_graphs.files["value_add_self_sidebyside_" + name_source + "all_time.png"].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_self_graphs.files["value_add_self_sidebyside_" + name_source + "focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+### Details
+
+Metadata coverage for DOIs and non-DOIs by publication type
+<br>
+
+{% set data_element_array = graph_metadata.INTERNAL_COMPARISON_META[source_b]['xs'] %}
+{% for data_element in data_element_array %}
+### {{ data_element }}
+
+{{ helper.value_add_self_tableize(name_source, graph_metadata.GRAPH_PRINT_NAMES[data_element],focus_year) }}
 {{ loop.cycle("", "<pdf:nextpage>") }}
 {% endfor %}
 
