@@ -1,11 +1,23 @@
 from pathlib import Path
 import os
+import itertools
+import plotly
 
 from parameters.data_parameters import SOURCES, SOURCES_SELF, COMPARISON, CURRENT, FOCUS
 
 GRAPH_DIR = Path('graphs')
 if not GRAPH_DIR.is_dir():
     os.mkdir(GRAPH_DIR)
+
+# Palette tryout
+PALETTE = plotly.colors.DEFAULT_PLOTLY_COLORS
+
+SOURCE_PALETTE = dict(
+    crossref=PALETTE[1], #safety orange #ff7f0e
+    openalex=PALETTE[0], #muted blue #1f77b4
+    openaire=PALETTE[2] #cooked asparagus green #2ca02c
+)
+
 
 # Time Frames
 
@@ -23,7 +35,11 @@ TIME_FRAMES = {
 
 # Value Add Graphs
 
-all_data_elems = [element for elems in [source.SOURCE_DATA_ELEMENTS for source in SOURCES] for element in elems]
+# TODO add presence and add value columns for overlap.
+
+# only keep unique values in all_data_elems
+all_data_elems = (list(set([element for elems in [source.SOURCE_DATA_ELEMENTS for source in SOURCES] for element in elems])))
+
 
 PRESENCE_COLUMNS = [
     f'{source.SOURCE_NAME}_has_{item}' for item in all_data_elems for source in SOURCES
@@ -33,10 +49,18 @@ PRESENCE_COLUMNS_SELF = [
     f'{source_self}_has_{item}' for item in all_data_elems for source_self in SOURCES_SELF
 ]
 
-ADDED_VALUE_COLUMNS = [
-    f'{source.SOURCE_NAME}_{item}_adds_presence' for item in all_data_elems for source in SOURCES
-]
+ADDED_VALUE_COLUMNS_LIST = []
+for source_a in SOURCES:
+    for source_b in SOURCES:
+        if source_a == source_b: continue
 
+        ADDED_VALUE_COLUMNS_LIST.append(
+            [f'{source_a.SOURCE_NAME}_{item}_adds_presence_{source_b.SOURCE_NAME}' for item in all_data_elems]
+        )
+
+ADDED_VALUE_COLUMNS = [element for sublist in ADDED_VALUE_COLUMNS_LIST for element in sublist]
+
+#TODO convert this to iteration as well when counts are added back in
 ADDED_VALUE_COUNTS_COLUMNS = [
     f'{source.SOURCE_NAME}_{item}_adds_counts' for item in all_data_elems for source in SOURCES
 ]
