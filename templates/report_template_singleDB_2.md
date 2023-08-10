@@ -92,7 +92,7 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <pdf:nextpage> 
 
-# Coverage of {{ name_source_print }} vs {{ name_base_print }}
+# Coverage of {{ name_source_print }} vs {{ name_base_print }} (for Crossref DOIs)
 <br>   
 ## Comparing coverage
 
