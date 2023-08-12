@@ -42,6 +42,14 @@
       }
     ],
     [
+      "value_add_overlap_graphs",
+      {
+        "depends": [
+          "comparison_categories_query"
+        ]
+      }
+    ],
+    [
       "value_add_self_graphs",
       {
         "depends": [

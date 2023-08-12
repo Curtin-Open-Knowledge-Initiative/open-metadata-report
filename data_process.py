@@ -312,6 +312,124 @@ def value_add_graphs(af: AnalyticsFunction,
                     fig.write_image(filepath.with_suffix('.png'))
                     af.add_existing_file(filepath.with_suffix('.png'))
 
+def value_add_overlap_graphs(af: AnalyticsFunction,
+                     base_comparison: str = BASE_COMPARISON):
+    """
+    Generate graphs that provide information on the value add of a source compared to base_comparison
+
+    :param af: AnalyticsFunction for the precipy run
+    :param source: Lowercase string name of the source being compared
+    :param base_comparison: Lowercase string name of the base_comparison, crossref is generally the default which is
+    set as BASE_COMPARISON in data_parameters.py
+    """
+
+    print('Generating value add graphs...')
+
+    comparison_data = pd.read_csv(CSV_FILE_PATHS['comparison'])
+
+    # Force
+    for source_a in SOURCES:
+        for source_b in SOURCES:
+            if source_b == source_a:
+                continue
+            for timeframe in TIME_FRAMES.keys():
+                filtered = comparison_data[comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
+                filtered_sum = filtered.sum(axis=0, numeric_only=True)
+                figdata = collate_value_add_values(filtered_sum,
+                                                   ALL_COLLATED_COLUMNS,
+                                                   'cr_dois')
+
+                # Stacked Bar
+                chart = ValueAddBar(df=figdata,
+                                    categories=[
+                                        source_a.SOURCE_PRINT_NAME,
+                                        f'{source_b.SOURCE_PRINT_NAME} Added Value'],
+                                    #xs=STACKED_BAR_SUMMARY_XS,
+                                    xs=VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
+                                    ys=VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'])
+
+                chart.process_data(
+                    palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME],
+                             SOURCE_PALETTE[source_b.SOURCE_NAME]]
+                )
+
+                fig = chart.plotly()
+                filename = f'value_add_overlap_stacked_{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}'
+                filepath = GRAPH_DIR / filename
+                fig.write_image(filepath.with_suffix('.png'))
+                af.add_existing_file(filepath.with_suffix('.png'))
+
+                # Side by side bar (including Fields)
+                chart = ValueAddBar(df=figdata,
+                                    categories=[
+                                        source_a.SOURCE_PRINT_NAME,
+                                        source_b.SOURCE_PRINT_NAME
+                                    ],
+                                    #xs=SIDEBYSIDE_BAR_SUMMARY_XS,
+                                    xs=VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
+                                    ys=VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
+                                    stackedbar=False)
+
+                chart.process_data(
+                    palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME]]
+                )
+
+                fig = chart.plotly()
+                filename = f'value_add_overlap_sidebyside_{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}'
+                filepath = GRAPH_DIR / filename
+                fig.write_image(filepath.with_suffix('.png'))
+                af.add_existing_file(filepath.with_suffix('.png'))
+
+                # Details graph for each metadata element
+                for metadata_element in VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']:
+                    sum_by_type = filtered.groupby('cr_type').sum().reset_index()
+                    collated_sum_by_type = collate_value_add_values(sum_by_type,
+                                                                    ALL_COLLATED_COLUMNS,
+                                                                    'crossref_dois')
+
+                    # Stacked Bar
+                    chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                                   metadata_element=metadata_element,
+                                                   ys=VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
+                                                   categories=[
+                                                       source_a.SOURCE_PRINT_NAME,
+                                                       f'{source_b.SOURCE_PRINT_NAME} Added Value'
+                                                   ],
+                                                   )
+
+                    chart.process_data(
+                        doc_types=CROSSREF_TYPES,
+                        type_column='cr_type',
+                        palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME]]
+                    )
+
+                    fig = chart.plotly()
+                    filename = f'value_add_overlap_stacked_{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{GRAPH_PRINT_NAMES[metadata_element]}_by_cr_type'
+                    filepath = GRAPH_DIR / filename
+                    fig.write_image(filepath.with_suffix('.png'))
+                    af.add_existing_file(filepath.with_suffix('.png'))
+
+                    # Side by side bar
+                    chart = ValueAddByCrossrefType(df=collated_sum_by_type,
+                                                   metadata_element=metadata_element,
+                                                   ys=VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['ys'],
+                                                   categories=[
+                                                       source_a.SOURCE_PRINT_NAME,
+                                                       f'{source_b.SOURCE_PRINT_NAME}'],
+                                                   stackedbar=False
+                                                   )
+
+                    chart.process_data(
+                        doc_types=CROSSREF_TYPES,
+                        type_column='cr_type',
+                        palette=[SOURCE_PALETTE[source_a.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME], SOURCE_PALETTE[source_b.SOURCE_NAME]]
+                    )
+
+                    fig = chart.plotly()
+                    filename = f'value_add_overlap_sidebyside_{source_b.SOURCE_NAME}_{source_a.SOURCE_NAME}_{timeframe.lower().replace(" ", "_")}_for_{GRAPH_PRINT_NAMES[metadata_element]}_by_cr_type'
+                    filepath = GRAPH_DIR / filename
+                    fig.write_image(filepath.with_suffix('.png'))
+                    af.add_existing_file(filepath.with_suffix('.png'))
 
 def source_coverage_by_crossref_type(af: AnalyticsFunction,
                                      base_comparison: str = BASE_COMPARISON):
