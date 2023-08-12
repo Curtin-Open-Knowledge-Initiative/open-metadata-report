@@ -169,6 +169,27 @@ def return_ys_dict(source_a,
 
     }
 
+def return_ys_overlap_dict(source_a,
+                           source_b) -> dict:
+    return {
+        source_a.SOURCE_PRINT_NAME: {
+            x: f'pc_{source_a.SOURCE_NAME}_has_{GRAPH_PRINT_NAMES[x]}_in_overlap_{source_b.SOURCE_NAME}'
+            for x in
+            value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
+        },
+        source_b.SOURCE_PRINT_NAME: {
+            x: f'pc_{source_b.SOURCE_NAME}_has_{GRAPH_PRINT_NAMES[x]}_in_overlap_{source_a.SOURCE_NAME}'
+            for x in
+            value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
+        },
+        f'{source_b.SOURCE_PRINT_NAME} Added Value': {
+            x: f'pc_{source_b.SOURCE_NAME}_{GRAPH_PRINT_NAMES[x]}_adds_presence_overlap_{source_a.SOURCE_NAME}'
+            for x in
+            value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
+        }
+
+    }
+
 
 VALUE_ADD_META = {}
 for source_a, source_b in itertools.permutations(SOURCES, 2):
@@ -178,6 +199,17 @@ for source_a, source_b in itertools.permutations(SOURCES, 2):
         VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME] = dict(
                         xs=value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
                         ys=return_ys_dict(source_a, source_b)
+        )
+
+#TODO (perhaps) dynamically set choice for all or overlap
+VALUE_ADD_OVERLAP_META = {}
+for source_a, source_b in itertools.permutations(SOURCES, 2):
+
+        if not VALUE_ADD_META.get(source_a.SOURCE_NAME):
+            VALUE_ADD_META[source_a.SOURCE_NAME] = {}
+        VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME] = dict(
+                        xs=value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
+                        ys=return_ys_overlap_dict(source_a, source_b)
         )
 
 INTERNAL_COMPARISON_META = {
