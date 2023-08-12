@@ -357,8 +357,8 @@ def source_coverage_by_crossref_type(af: AnalyticsFunction,
             #doc_types=SOURCE_TYPES[source_a.SOURCE_NAME],
             doc_types=CROSSREF_TYPES,
             type_column='cr_type',
-            palette=[SOURCE_PALETTE[source.SOURCE_NAME], '#C0C0C0']
-            #palette=['#FF7F0E', '#C0C0C0']
+            palette=[SOURCE_PALETTE[source.SOURCE_NAME], '#E8E8E8']
+            #palette=['#FF7F0E', '#E8E8E8']
         )
         fig = chart.plotly()
 
@@ -493,7 +493,7 @@ def source_in_base_by_pubdate(af: AnalyticsFunction):
                         linename=f'Crossref DOIs in {source.SOURCE_PRINT_NAME} (%)')
 
         chart.process_data(
-            palette=['#C0C0C0', SOURCE_PALETTE[source.SOURCE_NAME]]
+            palette=['#E8E8E8', SOURCE_PALETTE[source.SOURCE_NAME]]
         )
 
         fig = chart.plotly()
@@ -542,8 +542,8 @@ def value_add_self_graphs(af: AnalyticsFunction,
 
             # Modify chart parameters here
             chart.process_data(
-                palette=[SOURCE_PALETTE[source.SOURCE_NAME], '#C0C0C0']
-                #palette=['#FF7F0E', '#C0C0C0']
+                palette=[SOURCE_PALETTE[source.SOURCE_NAME], '#E8E8E8']
+                #palette=['#FF7F0E', '#E8E8E8']
             )
 
             fig = chart.plotly()
@@ -572,8 +572,8 @@ def value_add_self_graphs(af: AnalyticsFunction,
                 chart.process_data(
                     doc_types=SOURCE_TYPES[source.SOURCE_NAME],
                     type_column='type',
-                    palette=[SOURCE_PALETTE[source.SOURCE_NAME],'#C0C0C0']
-                    #palette=['#FF7F0E', '#C0C0C0']
+                    palette=[SOURCE_PALETTE[source.SOURCE_NAME],'#E8E8E8']
+                    #palette=['#FF7F0E', '#E8E8E8']
                 )
 
                 fig = chart.plotly()
@@ -626,8 +626,8 @@ def source_coverage_self_by_type(af: AnalyticsFunction):
         # Modify chart parameters here
         chart.process_data(
             doc_types=SOURCE_TYPES[source.SOURCE_NAME],  # TODO fix this
-            palette=[SOURCE_PALETTE[source.SOURCE_NAME], '#C0C0C0']
-            #palette=['#FF7F0E', '#C0C0C0']
+            palette=[SOURCE_PALETTE[source.SOURCE_NAME], '#E8E8E8']
+            #palette=['#FF7F0E', '#E8E8E8']
         )
         fig = chart.plotly()
         filename = f'{source.SOURCE_NAME}_coverage_self_by_type'
@@ -671,7 +671,7 @@ def crdois_in_source_by_pubdate(af,
                         linename=f'{source.SOURCE_PRINT_NAME} with DOIs (%)')
 
         chart.process_data(
-            palette=['#C0C0C0', SOURCE_PALETTE[source.SOURCE_NAME]]
+            palette=['#E8E8E8', SOURCE_PALETTE[source.SOURCE_NAME]]
         )
 
         fig = chart.plotly()
