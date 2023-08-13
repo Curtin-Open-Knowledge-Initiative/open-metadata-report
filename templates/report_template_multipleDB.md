@@ -157,7 +157,7 @@ All images and data belonging to this report are located in the directory [{{ me
 
 <pdf:nextpage>
 
-## Comparing value add of {{ name_base_print }} and {{ name_source_print }} 
+## Comparing {{ name_base_print }} and {{ name_source_print }} 
 
 ### Overview 
 
