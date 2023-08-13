@@ -139,7 +139,7 @@
     ]
   ],
   "templates": [
-    "report_template_multipleDB_oria.md"
+    "report_template_multipleDB.md"
   ],
   "filters": [
     [
