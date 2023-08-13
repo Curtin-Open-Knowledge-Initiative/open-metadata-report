@@ -206,6 +206,55 @@ Metadata coverage in {{ name_base_print }} and {{ name_source_print }} by public
 <pdf:nextpage>
 {% endfor %}
 
+## Comparing {{ name_base_print }} and {{ name_source_print }} (overlap)
+
+### Overview 
+
+Coverage of metadata types in {{ name_base_print }} and {{ name_source_print }} (overlap only)
+
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_overlap_graphs.files["value_add_overlap_sidebyside_" + name_source + name_base + "all_time.png"].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_overlap_graphs.files["value_add_overlap_sidebyside_" + name_source + name_base + "focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"><img src="{{ value_add_overlap_graphs.files["value_add_overlap_stacked_" + name_source + name_base + "all_time.png"].cache_filepath }}"></td>
+    <td valign="top">  <img src="{{ value_add_overlap_graphs.files["value_add_overlap_stacked_" + name_source + name_base + "focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+<tr>
+    <td valign="top"><img src="{{ value_add_overlap_graphs.files["value_add_overlap_stacked_" + name_base + name_source + "all_time.png"].cache_filepath }}"></td>
+    <td valign="top">  <img src="{{ value_add_overlap_graphs.files["value_add_overlap_stacked_" + name_base + name_source + "focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
+
+<pdf:nextpage>
+
+### Details 
+
+Metadata coverage in {{ name_base_print }} and {{ name_source_print }} by publication type (overlap only)
+<br>
+
+{% set data_element_array = graph_metadata.VALUE_ADD_OVERLAP_META[source_a][source_b]['xs'] %}
+{% for data_element in data_element_array %}
+### {{ data_element }}
+
+{{ helper.value_add_overlap_tableize(name_source, name_base, graph_metadata.GRAPH_PRINT_NAMES[data_element], focus_year) }}
+
+<pdf:nextpage>
+{% endfor %}
+
 # {{ name_base_print }} Coverage Beyond DOIs
 <br>
 ## DOIs vs non-DOIs
