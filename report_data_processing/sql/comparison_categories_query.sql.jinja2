@@ -1,5 +1,6 @@
 WITH
 -- Clean sources to dois only
+-- existing source_id duplicates with multiple dois remain
 {% for source_name, truthtable in sources.items() -%}
 {{ source_name }}_cleaned AS (
     SELECT
