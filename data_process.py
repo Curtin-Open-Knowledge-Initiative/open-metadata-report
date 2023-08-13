@@ -336,7 +336,7 @@ def value_add_overlap_graphs(af: AnalyticsFunction,
                 filtered = comparison_data[comparison_data.cr_published_year.isin(TIME_FRAMES[timeframe])]
                 filtered_sum = filtered.sum(axis=0, numeric_only=True)
                 figdata = collate_value_add_values(filtered_sum,
-                                                   ALL_COLLATED_COLUMNS,
+                                                   ALL_COLLATED_OVERLAP_COLUMNS,
                                                    'cr_dois')
 
                 # Stacked Bar
@@ -384,7 +384,7 @@ def value_add_overlap_graphs(af: AnalyticsFunction,
                 for metadata_element in VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']:
                     sum_by_type = filtered.groupby('cr_type').sum().reset_index()
                     collated_sum_by_type = collate_value_add_values(sum_by_type,
-                                                                    ALL_COLLATED_COLUMNS,
+                                                                    ALL_COLLATED_OVERLAP_COLUMNS,
                                                                     'crossref_dois')
 
                     # Stacked Bar
