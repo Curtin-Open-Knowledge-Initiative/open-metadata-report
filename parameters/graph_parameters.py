@@ -68,6 +68,32 @@ ADDED_VALUE_COUNTS_COLUMNS = [
 
 ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS + ADDED_VALUE_COUNTS_COLUMNS
 
+#similar set for overlap columns
+
+PRESENCE_OVERLAP_COLUMNS_LIST = []
+for source_a in SOURCES:
+    for source_b in SOURCES:
+        if source_a == source_b: continue
+
+        ADDED_VALUE_COLUMNS_LIST.append(
+            [f'{source_a.SOURCE_NAME}_has_{item}_in_overlap_{source_b.SOURCE_NAME}' for item in all_data_elems]
+        )
+
+ADDED_VALUE_OVERLAP_COLUMNS_LIST = []
+for source_a in SOURCES:
+    for source_b in SOURCES:
+        if source_a == source_b: continue
+
+        ADDED_VALUE_COLUMNS_LIST.append(
+            [f'{source_a.SOURCE_NAME}_{item}_adds_presence_overlap_{source_b.SOURCE_NAME}' for item in all_data_elems]
+        )
+
+PRESENCE_OVERLAP_COLUMNS = [element for sublist in PRESENCE_OVERLAP_COLUMNS_LIST for element in sublist]
+
+ADDED_VALUE_OVERLAP_COLUMNS = [element for sublist in ADDED_VALUE_OVERLAP_COLUMNS_LIST for element in sublist]
+
+ALL_COLLATED_OVERLAP_COLUMNS = PRESENCE_OVERLAP_COLUMNS + ADDED_VALUE_OVERLAP_COLUMNS
+
 # TODO create values names more dynamically
 
 
@@ -205,9 +231,9 @@ for source_a, source_b in itertools.permutations(SOURCES, 2):
 VALUE_ADD_OVERLAP_META = {}
 for source_a, source_b in itertools.permutations(SOURCES, 2):
 
-        if not VALUE_ADD_META.get(source_a.SOURCE_NAME):
-            VALUE_ADD_META[source_a.SOURCE_NAME] = {}
-        VALUE_ADD_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME] = dict(
+        if not VALUE_ADD_OVERLAP_META.get(source_a.SOURCE_NAME):
+            VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME] = {}
+        VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME] = dict(
                         xs=value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
                         ys=return_ys_overlap_dict(source_a, source_b)
         )
