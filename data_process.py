@@ -337,7 +337,9 @@ def value_add_overlap_graphs(af: AnalyticsFunction,
                 filtered_sum = filtered.sum(axis=0, numeric_only=True)
                 figdata = collate_value_add_values(filtered_sum,
                                                    ALL_COLLATED_OVERLAP_COLUMNS,
-                                                   'cr_dois')
+                                                   #'cr_dois'
+                                                   f'count_{source_a.SOURCE_NAME}_{source_b.SOURCE_NAME}_overlap'
+                                                   )
 
                 # Stacked Bar
                 chart = ValueAddBar(df=figdata,
