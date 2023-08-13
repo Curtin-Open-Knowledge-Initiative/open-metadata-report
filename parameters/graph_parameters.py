@@ -14,8 +14,8 @@ PALETTE = plotly.colors.DEFAULT_PLOTLY_COLORS
 
 SOURCE_PALETTE = dict(
     crossref=PALETTE[1], #safety orange #ff7f0e
-    openalex=PALETTE[0], #muted blue #1f77b4
-    openaire=PALETTE[2] #cooked asparagus green #2ca02c
+    openaire=PALETTE[0], #muted blue #1f77b4
+    openalex=PALETTE[2] #cooked asparagus green #2ca02c
 )
 
 
