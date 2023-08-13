@@ -42,6 +42,14 @@
       }
     ],
     [
+      "value_add_overlap_graphs",
+      {
+        "depends": [
+          "comparison_categories_query"
+        ]
+      }
+    ],
+    [
       "value_add_self_graphs",
       {
         "depends": [
@@ -131,9 +139,7 @@
     ]
   ],
   "templates": [
-  "report_template_singleDB.md",
-    "report_template_singleDB_2.md",
-    "report_template_multipleDB.md"
+    "report_template_multipleDB_oria.md"
   ],
   "filters": [
     [

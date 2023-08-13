@@ -16,7 +16,8 @@ PALETTE = plotly.colors.DEFAULT_PLOTLY_COLORS
 SOURCE_PALETTE = dict(
     crossref=PALETTE[1], #safety orange #ff7f0e
     openaire=PALETTE[0], #muted blue #1f77b4
-    openalex=PALETTE[2] #cooked asparagus green #2ca02c
+    #openalex=PALETTE[2]  #cooked asparagus green #2ca02c
+    openalex= 'rgb(156, 156, 156)' #9c9c9c # colour for ORIA
 )
 
 
@@ -68,6 +69,32 @@ ADDED_VALUE_COUNTS_COLUMNS = [
 
 ALL_COLLATED_COLUMNS = PRESENCE_COLUMNS + ADDED_VALUE_COLUMNS + ADDED_VALUE_COUNTS_COLUMNS
 
+#similar set for overlap columns
+
+PRESENCE_OVERLAP_COLUMNS_LIST = []
+for source_a in SOURCES:
+    for source_b in SOURCES:
+        if source_a == source_b: continue
+
+        PRESENCE_OVERLAP_COLUMNS_LIST.append(
+            [f'{source_a.SOURCE_NAME}_has_{item}_in_overlap_{source_b.SOURCE_NAME}' for item in all_data_elems]
+        )
+
+ADDED_VALUE_OVERLAP_COLUMNS_LIST = []
+for source_a in SOURCES:
+    for source_b in SOURCES:
+        if source_a == source_b: continue
+
+        ADDED_VALUE_OVERLAP_COLUMNS_LIST.append(
+            [f'{source_a.SOURCE_NAME}_{item}_adds_presence_overlap_{source_b.SOURCE_NAME}' for item in all_data_elems]
+        )
+
+PRESENCE_OVERLAP_COLUMNS = [element for sublist in PRESENCE_OVERLAP_COLUMNS_LIST for element in sublist]
+
+ADDED_VALUE_OVERLAP_COLUMNS = [element for sublist in ADDED_VALUE_OVERLAP_COLUMNS_LIST for element in sublist]
+
+ALL_COLLATED_OVERLAP_COLUMNS = PRESENCE_OVERLAP_COLUMNS + ADDED_VALUE_OVERLAP_COLUMNS
+
 # TODO create values names more dynamically
 
 
@@ -100,37 +127,49 @@ value_add_meta_xs = {
     'crossref': {
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
-                   'Funders', 'Funder Source IDs']
+                   #'Citations to', 'References from',
+                   'Venue', 'Venue ISSN', 'Fields',
+                   #'Funders', 'Funder Source IDs'
+                   ]
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to','References from', 'Venue', 'Venue ISSN', 'Fields',
-                   'Funders', 'Funder Source IDs']
+                   #'Citations to','References from',
+                   'Venue', 'Venue ISSN', 'Fields',
+                   #'Funders', 'Funder Source IDs'
+                   ]
         }
     },
     'openalex': {
         'crossref': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
-                   'Funders', 'Funder Strings', 'Funder Source IDs']
+                   #'Citations to', 'References from',
+                   'Venue', 'Venue ISSN', 'Fields',
+                   #'Funders', 'Funder Strings', 'Funder Source IDs'
+                   ]
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
-                   'Funders', 'Funder Strings', 'Funder Source IDs']
+                   #'Citations to', 'References from',
+                   'Venue', 'Venue ISSN', 'Fields',
+                   #'Funders', 'Funder Strings', 'Funder Source IDs'
+                   ]
         }
     },
     'openaire': {
         'crossref': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
-                   'Funders', 'Funder Strings', 'Funder Source IDs']
+                   #'Citations to', 'References from',
+                   'Venue', 'Venue ISSN', 'Fields',
+                   #'Funders', 'Funder Strings', 'Funder Source IDs'
+                   ]
         },
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
-                   'Funders', 'Funder Strings', 'Funder Source IDs']
+                   #'Citations to', 'References from',
+                   'Venue', 'Venue ISSN', 'Fields',
+                   #'Funders', 'Funder Strings', 'Funder Source IDs'
+                   ]
         }
     }
 }
@@ -157,6 +196,27 @@ def return_ys_dict(source_a,
 
     }
 
+def return_ys_overlap_dict(source_a,
+                           source_b) -> dict:
+    return {
+        source_a.SOURCE_PRINT_NAME: {
+            x: f'pc_{source_a.SOURCE_NAME}_has_{GRAPH_PRINT_NAMES[x]}_in_overlap_{source_b.SOURCE_NAME}'
+            for x in
+            value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
+        },
+        source_b.SOURCE_PRINT_NAME: {
+            x: f'pc_{source_b.SOURCE_NAME}_has_{GRAPH_PRINT_NAMES[x]}_in_overlap_{source_a.SOURCE_NAME}'
+            for x in
+            value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
+        },
+        f'{source_b.SOURCE_PRINT_NAME} Added Value': {
+            x: f'pc_{source_b.SOURCE_NAME}_{GRAPH_PRINT_NAMES[x]}_adds_presence_overlap_{source_a.SOURCE_NAME}'
+            for x in
+            value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs']
+        }
+
+    }
+
 
 VALUE_ADD_META = {}
 for source_a, source_b in itertools.permutations(SOURCES, 2):
@@ -168,11 +228,24 @@ for source_a, source_b in itertools.permutations(SOURCES, 2):
                         ys=return_ys_dict(source_a, source_b)
         )
 
+#TODO (perhaps) dynamically set choice for all or overlap
+VALUE_ADD_OVERLAP_META = {}
+for source_a, source_b in itertools.permutations(SOURCES, 2):
+
+        if not VALUE_ADD_OVERLAP_META.get(source_a.SOURCE_NAME):
+            VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME] = {}
+        VALUE_ADD_OVERLAP_META[source_a.SOURCE_NAME][source_b.SOURCE_NAME] = dict(
+                        xs=value_add_meta_xs[source_a.SOURCE_NAME][source_b.SOURCE_NAME]['xs'],
+                        ys=return_ys_overlap_dict(source_a, source_b)
+        )
+
 INTERNAL_COMPARISON_META = {
     'openalex': {
-        'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract', 'Citations to',
-               'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields',
-               'Funders','Funder Source IDs'],
+        'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
+               #'Citations to', 'References from',
+               'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields',
+               #'Funders','Funder Source IDs'
+               ],
         'ys': {
             'OpenAlex DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -180,14 +253,14 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_dois_has_authors',
                 'Author ORCIDs': 'pc_dois_has_authors_id_orcid',
                 'Abstract': 'pc_dois_has_abstract',
-                'Citations to': 'pc_dois_has_citations',
-                'References from': 'pc_dois_has_references',
+                #'Citations to': 'pc_dois_has_citations',
+                #'References from': 'pc_dois_has_references',
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
                 'Fields': 'pc_dois_has_fields',
-                'Funders': 'pc_dois_has_funders',
-                'Funder Source IDs': 'pc_dois_has_funders_id_source',
+                #'Funders': 'pc_dois_has_funders',
+                #'Funder Source IDs': 'pc_dois_has_funders_id_source',
             },
             'OpenAlex non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
@@ -195,21 +268,23 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_non_dois_has_authors',
                 'Author ORCIDs': 'pc_non_dois_has_authors_id_orcid',
                 'Abstract': 'pc_non_dois_has_abstract',
-                'Citations to': 'pc_non_dois_has_citations',
-                'References from': 'pc_non_dois_has_references',
+                #'Citations to': 'pc_non_dois_has_citations',
+                #'References from': 'pc_non_dois_has_references',
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
                 'Fields': 'pc_non_dois_has_fields',
-                'Funders': 'pc_dois_has_funders',
-                'Funder Source IDs': 'pc_dois_has_funders_id_source',
+                #'Funders': 'pc_dois_has_funders',
+                #'Funder Source IDs': 'pc_dois_has_funders_id_source',
             }
         }
     },
     'openaire': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-               'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields',
-               'Funders', 'Funder Strings'],
+               #'Citations to', 'References from',
+               'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields',
+               'Funders', 'Funder Strings'
+               ],
         'ys': {
             'OpenAIRE DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -217,8 +292,8 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_dois_has_authors',
                 'Author ORCIDs': 'pc_dois_has_authors_id_orcid',
                 'Abstract': 'pc_dois_has_abstract',
-                'Citations to': 'pc_dois_has_citations',
-                'References from': 'pc_dois_has_references',
+                #'Citations to': 'pc_dois_has_citations',
+                #'References from': 'pc_dois_has_references',
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
@@ -233,8 +308,8 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_non_dois_has_authors',
                 'Author ORCIDs': 'pc_non_dois_has_authors_id_orcid',
                 'Abstract': 'pc_non_dois_has_abstract',
-                'Citations to': 'pc_non_dois_has_citations',
-                'References from': 'pc_non_dois_has_references',
+                #'Citations to': 'pc_non_dois_has_citations',
+                #'References from': 'pc_non_dois_has_references',
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
@@ -246,8 +321,10 @@ INTERNAL_COMPARISON_META = {
     },
     'crossref': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-               'Citations to', 'References from', 'Venue', 'Venue ISSN', 'Fields',
-               'Funders', 'Funder Strings', 'Funder Source IDs'],
+               #'Citations to', 'References from',
+               'Venue', 'Venue ISSN', 'Fields',
+               'Funders', 'Funder Strings', 'Funder Source IDs'
+               ],
         'ys': {
             'Crossref DOIs': {
                 'Affiliations': 'pc_dois_has_affiliations_string',
@@ -255,8 +332,8 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_dois_has_authors',
                 'Author ORCIDs': 'pc_dois_has_authors_id_orcid',
                 'Abstract': 'pc_dois_has_abstract',
-                'Citations to': 'pc_dois_has_citations',
-                'References from': 'pc_dois_has_references',
+                #'Citations to': 'pc_dois_has_citations',
+                #'References from': 'pc_dois_has_references',
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Fields': 'pc_dois_has_fields',
@@ -270,8 +347,8 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_non_dois_has_authors',
                 'Author ORCIDs': 'pc_non_dois_has_authors_id_orcid',
                 'Abstract': 'pc_non_dois_has_abstract',
-                'Citations to': 'pc_non_dois_has_citations',
-                'References from': 'pc_non_dois_has_references',
+                #'Citations to': 'pc_non_dois_has_citations',
+                #'References from': 'pc_non_dois_has_references',
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Fields': 'pc_non_dois_has_fields',
@@ -313,8 +390,8 @@ OPENALEX_TYPES = ['journal-article',
 
 OPENAIRE_TYPES = ['publication',
                   'dataset',
-                  'software',
-                  'other']
+                  'software']
+                  #'other'] remove for ORIA as not present in dataset
 
 SOURCE_TYPES = dict(
     crossref=CROSSREF_TYPES,
