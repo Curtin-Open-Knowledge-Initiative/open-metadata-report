@@ -75,7 +75,7 @@ for source_a in SOURCES:
     for source_b in SOURCES:
         if source_a == source_b: continue
 
-        ADDED_VALUE_COLUMNS_LIST.append(
+        PRESENCE_OVERLAP_COLUMNS_LIST.append(
             [f'{source_a.SOURCE_NAME}_has_{item}_in_overlap_{source_b.SOURCE_NAME}' for item in all_data_elems]
         )
 
@@ -84,7 +84,7 @@ for source_a in SOURCES:
     for source_b in SOURCES:
         if source_a == source_b: continue
 
-        ADDED_VALUE_COLUMNS_LIST.append(
+        ADDED_VALUE_OVERLAP_COLUMNS_LIST.append(
             [f'{source_a.SOURCE_NAME}_{item}_adds_presence_overlap_{source_b.SOURCE_NAME}' for item in all_data_elems]
         )
 
