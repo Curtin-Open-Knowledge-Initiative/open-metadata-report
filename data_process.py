@@ -219,8 +219,6 @@ def value_add_graphs(af: AnalyticsFunction,
                 figdata = collate_value_add_values(filtered_sum,
                                                    ALL_COLLATED_COLUMNS,
                                                    'cr_dois')
-                #temporary check
-                check = SOURCE_JSON
 
                 # Stacked Bar
                 chart = ValueAddBar(df=figdata,
