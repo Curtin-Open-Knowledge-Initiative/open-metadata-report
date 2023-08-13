@@ -1,3 +1,25 @@
+WITH
+-- Deduplicate source_ids
+-- existing doi duplicates with multiple source_ids remain
+table_cleaned AS (
+    SELECT
+        papers.*
+    FROM
+    (SELECT source_id, ARRAY_AGG(doi ORDER BY deduplication_rank)[offset(0)] as doi
+    FROM `{{ table }}` as cleaned_ids
+    WHERE cleaned_ids.doi IS NOT NULL
+    GROUP BY source_id) as source_ids
+
+    LEFT JOIN `{{ table }}` as papers ON papers.doi = source_ids.doi
+
+    UNION ALL
+
+    SELECT
+        papers.*
+    FROM `{{ table }}` as papers
+    WHERE papers.doi is NULL
+)
+
 SELECT
     published_year
     , type
@@ -17,6 +39,6 @@ SELECT
    , COUNT(IF(has_{{ item }}, source_id, null)) - COUNT(IF(has_{{ item }}, doi, null)) as non_dois_has_{{ item }}
     {% endfor %}
 
-FROM {{ table }}
+FROM table_cleaned
 GROUP BY published_year, type
 ORDER BY published_year DESC, type ASC
