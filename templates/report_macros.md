@@ -82,6 +82,43 @@
 
 {% endmacro -%}
 
+{% macro value_add_overlap_tableize(name_source, name_base, data_element, focus_year) -%}
+
+{% set filename1a = "value_add_overlap_sidebyside_" + name_source + name_base + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename2a = "value_add_overlap_sidebyside_"  + name_source + name_base + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename3a = "value_add_overlap_stacked_" + name_source + name_base + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename4a = "value_add_overlap_stacked_"  + name_source + name_base + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename5a = "value_add_overlap_stacked_" + name_base + name_source + "all_time_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+{% set filename6a = "value_add_overlap_stacked_"  + name_base + name_source + "focus_year_for_" + data_element.lower().replace(' ', '_') + "_by_cr_type.png" %}
+<table>
+  <tr>
+    <td valign="top"> <img src="{{ value_add_overlap_graphs.files[filename1a].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_overlap_graphs.files[filename2a].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage comparison - all time</td>
+    <td>coverage comparison - {{ focus_year }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_overlap_graphs.files[filename3a].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_overlap_graphs.files[filename4a].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ focus_year }}</td>
+  </tr>
+<tr>
+    <td valign="top"> <img src="{{ value_add_overlap_graphs.files[filename5a].cache_filepath }}"></td>
+    <td valign="top"> <img src="{{ value_add_overlap_graphs.files[filename6a].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ focus_year }}</td>
+  </tr>
+ </table>
+
+{% endmacro -%}
+
 
 {% macro value_add_self_tableize(name_source, data_element, focus_year) -%}
 
