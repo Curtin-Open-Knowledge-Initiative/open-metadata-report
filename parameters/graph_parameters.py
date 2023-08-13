@@ -12,6 +12,7 @@ if not GRAPH_DIR.is_dir():
 # Palette tryout
 PALETTE = plotly.colors.DEFAULT_PLOTLY_COLORS
 
+#TODO Set colours dynamically
 SOURCE_PALETTE = dict(
     crossref=PALETTE[1], #safety orange #ff7f0e
     openaire=PALETTE[0], #muted blue #1f77b4
