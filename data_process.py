@@ -387,7 +387,8 @@ def value_add_overlap_graphs(af: AnalyticsFunction,
                     sum_by_type = filtered.groupby('cr_type').sum().reset_index()
                     collated_sum_by_type = collate_value_add_values(sum_by_type,
                                                                     ALL_COLLATED_OVERLAP_COLUMNS,
-                                                                    'crossref_dois')
+                                                                    #'crossref_dois'
+                                                                    f'count_{source_a.SOURCE_NAME}_{source_b.SOURCE_NAME}_overlap')
 
                     # Stacked Bar
                     chart = ValueAddByCrossrefType(df=collated_sum_by_type,
@@ -871,9 +872,9 @@ def generate_tables(af: AnalyticsFunction):
 
 
 if __name__ == '__main__':
-    # source_to_truthtable(af='test',
-    #                       rerun=False,
-    #                       verbose=True)
+     source_to_truthtable(af='test',
+                           rerun=False,
+                           verbose=True)
     # comparison_categories_query(af='test',
     #                            rerun=False,
     #                            verbose=True)
