@@ -26,8 +26,8 @@ FORMATTED_SOURCE_NAMES = [source.SOURCE_PRINT_NAME for source in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s.SOURCE_NAME for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
-CURRENT = [2020, 2021, 2022]
-FOCUS = 2021
+CURRENT = [2021, 2022, 2023]
+FOCUS = 2022
 # COUNT_COMPARISON = 0 #0 for comparison against base, 1 against source
 
 # Files and Directories
@@ -54,8 +54,8 @@ PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 openaire.DATE = "20221230"
-openalex.DATE = "20230602" #date of partition to use
-crossref.DATE = "20230630" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
+openalex.DATE = "20230709" #date of partition to use
+crossref.DATE = "20230731" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
 
 
 TABLE_DATES = {source.SOURCE_NAME: source.DATE for source in SOURCES}
