@@ -53,8 +53,8 @@ PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 openaire.DATE = "20221230"
-openalex.DATE = "20230602" #date of partition to use
-crossref.DATE = "20230630" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
+openalex.DATE = "20230709" #date of partition to use
+crossref.DATE = "20230731" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
 
 
 TABLE_DATES = {source.SOURCE_NAME: source.DATE for source in SOURCES}
