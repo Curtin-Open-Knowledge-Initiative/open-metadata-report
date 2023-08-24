@@ -722,9 +722,9 @@ if __name__ == '__main__':
     # source_to_truthtable(af='test',
     #                       rerun=False,
     #                       verbose=True)
-     comparison_categories_query(af='test',
-                                rerun=False,
-                                verbose=True)
+    # comparison_categories_query(af='test',
+    #                            rerun=False,
+    #                            verbose=True)
     # source_category_query(af='test',
     #                      rerun=False,
     #                    verbose=True)
