@@ -148,6 +148,15 @@ Comparing coverage of metadata types in {{ name_base_print }} and {{ name_source
     <td>coverage added value - all time</td>
     <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
   </tr>
+  <tr>
+    <td valign="top"><img src="{{ value_add_graphs.files["value_add_stacked_" + name_base + name_source + "all_time.png"].cache_filepath }}"></td>
+    <td valign="top">  <img src="{{ value_add_graphs.files["value_add_stacked_" + name_base + name_source + "focus_year.png"].cache_filepath }}"></td>
+  </tr>
+  <tr>
+    <td>coverage added value - all time</td>
+    <td>coverage added value - {{ graph_metadata.FOCUS_YEAR }}</td>
+  </tr>
+ </table>
  </table>
 
 <pdf:nextpage>
