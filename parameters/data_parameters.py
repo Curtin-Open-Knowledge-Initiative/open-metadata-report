@@ -38,7 +38,6 @@ DATA_DIR = Path('data')
 CSV_FILE_PATHS = {source.SOURCE_NAME: DATA_DIR / f'{source.SOURCE_NAME}_categories.csv' for source in SOURCES}
 CSV_FILE_PATHS.update(dict(comparison=DATA_DIR / 'comparison_categories.csv'))
 ARCHIVE_DIR = Path('reports')
-
 n = 1
 
 output_store_dir = f'run_{TODAY_STR}_{"_".join([source.SOURCE_NAME for source in SOURCES])}_{str(n)}'
