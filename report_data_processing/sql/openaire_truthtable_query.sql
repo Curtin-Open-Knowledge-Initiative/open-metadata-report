@@ -156,15 +156,16 @@ LEFT JOIN (SELECT
 ON publications.id = affiliations.id
 
 --- add projects
+--- currently, more project-result relation pairs with project as sourceType than as targetType - adapt accordingly
 --- note: all relations between results and project have relype.type 'outcome'
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(p.project IGNORE NULLS) as project
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE targetType = 'project') as relations
-  ON publications.id = relations.source
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE sourceType = 'project') as relations
+  ON publications.id = relations.target
   LEFT JOIN PROJECTS as p
-  ON relations.target = p.id
+  ON relations.source = p.id
   GROUP BY publications.id) as projects
 ON publications.id = projects.id
 
