@@ -143,15 +143,16 @@ projects.project as project
 FROM SOURCES as publications
 
 ---- add affiliations and projects
+--- currently, more organization-result relation pairs with organization as sourceType than as targetType - adapt accordingly
 --- note: all relations between result and organization have reltype.type 'affiliation'
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE targetType = 'organization') as relations
-  ON publications.id = relations.source
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE sourceType = 'organization') as relations
+  ON publications.id = relations.target
   LEFT JOIN AFFILIATIONS as organizations
-  ON relations.target = organizations.id
+  ON relations.source = organizations.id
   GROUP BY publications.id) as affiliations
 ON publications.id = affiliations.id
 
