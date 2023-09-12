@@ -14,21 +14,21 @@ VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
 #SOURCES = [crossref, openalex, openaire] #curently always needs to include crossref
-SOURCES = [crossref, openalex] #curently always needs to include crossref
+SOURCES = [crossref, openaire] #curently always needs to include crossref
 SOURCE_JSON = {
     source.SOURCE_NAME:
         {item: getattr(source, item) for item in dir(source) if not item.startswith('__')}
     for source in SOURCES
 }
-#COMPARISON = ['openalex', 'openaire'] #dbs to compare in reports
-COMPARISON = ['crossref', 'openalex'] #dbs to compare in reports
+#COMPARISON = ['openaire', 'openaire'] #dbs to compare in reports
+COMPARISON = ['crossref', 'openaire'] #dbs to compare in reports
 SOURCE_NAMES = [source.SOURCE_NAME for source in SOURCES]
 FORMATTED_SOURCE_NAMES = [source.SOURCE_PRINT_NAME for source in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s.SOURCE_NAME for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
 CURRENT = [2021, 2022, 2023]
-FOCUS = 2022
+FOCUS = 2021
 # COUNT_COMPARISON = 0 #0 for comparison against base, 1 against source
 
 # Files and Directories
@@ -53,7 +53,7 @@ ARCHIVE_REPORT_NAME = output_store_dir
 PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
-openaire.DATE = "20221230"
+openaire.DATE = "20230817"
 openalex.DATE = "20230709" #date of partition to use
 crossref.DATE = "20230731" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
 

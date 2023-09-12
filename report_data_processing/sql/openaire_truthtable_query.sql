@@ -1,4 +1,5 @@
 --- collating information from OpenAIRE tables
+--- currently, sharded table hard-coded should replace by injecting data from parameters
 --- note: currently, an (explicitly declared) subset of relations table is used that contains only relations between results and organizations+projects
 --- #TODO create paths to source tables i.s.o. explicitly declaring them
 --- #TODO replace subset of relations table with the real deal
@@ -12,7 +13,7 @@ WITH RORS_ARRAY AS (
     ARRAY_AGG(rors) as ror
   FROM (
     SELECT DISTINCT id, pid_check.value as rors,
-    FROM `academic-observatory.openaire.organization`,
+    FROM `academic-observatory.openaire.organization20230817`,
     UNNEST (pid) as pid_check
     WHERE pid_check.scheme = 'ROR')
   GROUP BY id
@@ -22,7 +23,7 @@ AFFILIATIONS AS (
 SELECT
 o.id,
 STRUCT(o.id, o.legalname, o.country.code as country, o.pid, r.ror) as organization
-FROM `academic-observatory.openaire.organization` as o
+FROM `academic-observatory.openaire.organization20230817` as o
 LEFT JOIN RORS_ARRAY as r ON o.id = r.id
 ),
 
@@ -35,7 +36,7 @@ PROJECTS AS (
     STRUCT(id, ARRAY_AGG(funder) as funder) as project,
   FROM (
     SELECT DISTINCT id, funding.shortname as funder
-    FROM `academic-observatory.openaire.project`,
+    FROM `academic-observatory.openaire.project20230817`,
     UNNEST(funding) as funding)
   GROUP BY id
 ),
@@ -65,7 +66,7 @@ SOURCES AS (
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
    ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 
-   FROM `academic-observatory.openaire.publication` as publications
+   FROM `academic-observatory.openaire.publication20230817` as publications
 
 UNION ALL
 
@@ -86,7 +87,7 @@ UNION ALL
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
    ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 
-   FROM `academic-observatory.openaire.dataset` as publications
+   FROM `academic-observatory.openaire.dataset20230817` as publications
 
 UNION ALL
 
@@ -107,7 +108,7 @@ UNION ALL
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
    ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 
-   FROM `academic-observatory.openaire.software` as publications
+   FROM `academic-observatory.openaire.software20230817` as publications
 
 
 UNION ALL
@@ -129,7 +130,7 @@ UNION ALL
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
    ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 
-   FROM `academic-observatory.openaire.otherresearchproduct` as publications
+   FROM `academic-observatory.openaire.otherresearchproduct20230817` as publications
 ),
 
 --- add affiliations and projects
@@ -209,7 +210,7 @@ INTERMEDIATE AS (
 --- currently rank arbitrarily by hashing OpenAIRE id - consider choice of hash method?
 --- author.fullname has no empty strings
 --- description can contain, but is not limited to abstracts - proceed to use with caution
---- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future
+--- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future (still true for 20230817)
 --- no empty fields for affiliations, so ARRAY_LENGTH taken as not all affiliations have string field
 --- container is not nested
 --- container.name has no empty strings
