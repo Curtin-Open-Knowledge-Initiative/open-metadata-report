@@ -1,8 +1,6 @@
 --- collating information from OpenAIRE tables
 --- currently, sharded table hard-coded should replace by injecting data from parameters
---- note: currently, an (explicitly declared) subset of relations table is used that contains only relations between results and organizations+projects
 --- #TODO create paths to source tables i.s.o. explicitly declaring them
---- #TODO replace subset of relations table with the real deal
 
 --- Affiliatons
 --- generate column with unique RORs per id from organizations table
