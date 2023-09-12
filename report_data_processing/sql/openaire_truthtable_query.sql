@@ -156,7 +156,6 @@ LEFT JOIN (SELECT
 ON publications.id = affiliations.id
 
 --- add projects
---- use temporary relations table for now
 --- note: all relations between results and project have relype.type 'outcome'
 LEFT JOIN (SELECT
   publications.id as id,
