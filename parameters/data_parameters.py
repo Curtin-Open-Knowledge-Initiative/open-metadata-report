@@ -14,7 +14,7 @@ VERBOSE = True
 TODAY = datetime.date.today()
 TODAY_STR = TODAY.strftime('%Y%m%d')
 #SOURCES = [crossref, openalex, openaire] #curently always needs to include crossref
-SOURCES = [crossref, openaire] #curently always needs to include crossref
+SOURCES = [crossref, openalex] #curently always needs to include crossref
 SOURCE_JSON = {
     source.SOURCE_NAME:
         {item: getattr(source, item) for item in dir(source) if not item.startswith('__')}
@@ -54,8 +54,8 @@ PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 openaire.DATE = "20230817"
-openalex.DATE = "20230709" #date of partition to use
-crossref.DATE = "20230731" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
+openalex.DATE = "20230709" #date of partition to use #20230821 for temporary current table
+crossref.DATE = "20230831" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
 
 
 TABLE_DATES = {source.SOURCE_NAME: source.DATE for source in SOURCES}
