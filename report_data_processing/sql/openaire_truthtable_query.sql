@@ -143,7 +143,6 @@ projects.project as project
 FROM SOURCES as publications
 
 ---- add affiliations and projects
---- use temporary relations table for now
 --- note: all relations between result and organization have reltype.type 'affiliation'
 LEFT JOIN (SELECT
   publications.id as id,
