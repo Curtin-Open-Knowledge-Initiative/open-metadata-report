@@ -151,10 +151,10 @@ LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'organization') as relations
-  ON publications.id = relations.source.id
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE targetType = 'organization') as relations
+  ON publications.id = relations.source
   LEFT JOIN AFFILIATIONS as organizations
-  ON relations.target.id = organizations.id
+  ON relations.target = organizations.id
   GROUP BY publications.id) as affiliations
 ON publications.id = affiliations.id
 
@@ -165,10 +165,10 @@ LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(p.project IGNORE NULLS) as project
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'project') as relations
-  ON publications.id = relations.source.id
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE targetType = 'project') as relations
+  ON publications.id = relations.source
   LEFT JOIN PROJECTS as p
-  ON relations.target.id = p.id
+  ON relations.target = p.id
   GROUP BY publications.id) as projects
 ON publications.id = projects.id
 
