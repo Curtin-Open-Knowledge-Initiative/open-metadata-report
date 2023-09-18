@@ -143,13 +143,13 @@ projects.project as project
 FROM SOURCES as publications
 
 ---- add affiliations and projects
---- currently, more organization-result relation pairs with organization as sourceType than as targetType - adapt accordingly
+--- use temporary relation table that contains all records (pending new Zenodo upload)
 --- note: all relations between result and organization have reltype.type 'affiliation'
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE sourceType = 'organization') as relations
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation_temp` WHERE sourceType = 'organization') as relations
   ON publications.id = relations.target
   LEFT JOIN AFFILIATIONS as organizations
   ON relations.source = organizations.id
@@ -157,13 +157,13 @@ LEFT JOIN (SELECT
 ON publications.id = affiliations.id
 
 --- add projects
---- currently, more project-result relation pairs with project as sourceType than as targetType - adapt accordingly
+---- use temporary relation table that contains all records (pending new Zenodo upload)
 --- note: all relations between results and project have relype.type 'outcome'
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(p.project IGNORE NULLS) as project
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE sourceType = 'project') as relations
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation_temp` WHERE sourceType = 'project') as relations
   ON publications.id = relations.target
   LEFT JOIN PROJECTS as p
   ON relations.source = p.id
