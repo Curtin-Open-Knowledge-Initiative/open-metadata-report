@@ -391,8 +391,8 @@ OPENALEX_TYPES = ['journal-article',
 
 OPENAIRE_TYPES = ['publication',
                   'dataset',
-                  'software']
-                  #'other'] remove for ORIA as not present in dataset
+                  'software',
+                  'other'] #remove for ORIA as not present in dataset
 
 SOURCE_TYPES = dict(
     crossref=CROSSREF_TYPES,
