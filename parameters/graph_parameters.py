@@ -137,7 +137,7 @@ value_add_meta_xs = {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    #'Citations to','References from',
                    'Venue', 'Venue ISSN', 'Fields',
-                   #'Funders', 'Funder Source IDs'
+                   'Funders', 'Funder Source IDs'
                    ]
         }
     },
@@ -162,7 +162,7 @@ value_add_meta_xs = {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    #'Citations to', 'References from',
                    'Venue', 'Venue ISSN', 'Fields',
-                   #'Funders', 'Funder Strings', 'Funder Source IDs'
+                   'Funders', 'Funder Strings', 'Funder Source IDs'
                    ]
         },
         'openalex': {
