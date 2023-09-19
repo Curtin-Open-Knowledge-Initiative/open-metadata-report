@@ -32,7 +32,7 @@ TIME_FRAMES = {
     'All Time': range(1980, 2023),  # NB Range does not include last number!
     # TODO align with SOURCE_IN_BASE_YEAR_RANGE
     # All time here effects value add graphs, venn graph, but not bar/line graph or coverage bar graph!
-    'Crossref Current': CROSSREF_CURRENT,
+    #'Crossref Current': CROSSREF_CURRENT, #hide for ORIA
     'Focus Year': [FOCUS_YEAR]
 }
 
