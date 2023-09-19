@@ -380,13 +380,13 @@ CROSSREF_TYPES = ['journal-article',
                   'report',
                   'monograph']
 
-OPENALEX_TYPES = ['journal-article',
-                  'proceedings-article',
+OPENALEX_TYPES = ['article', #article instead of journal_article
+                  #'proceedings-article', #no longer in active use
                   'book-chapter',
                   'posted-content',
                   'book',
-                  'report',
-                  'monograph']
+                  'report']
+                  #'monograph'] #no longer in use
                   #'none']
 
 OPENAIRE_TYPES = ['publication',
