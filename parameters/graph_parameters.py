@@ -16,15 +16,15 @@ PALETTE = plotly.colors.DEFAULT_PLOTLY_COLORS
 SOURCE_PALETTE = dict(
     crossref=PALETTE[1], #safety orange #ff7f0e
     openaire=PALETTE[0], #muted blue #1f77b4
-    #openalex=PALETTE[2] #cooked asparagus green #2ca02c
-    openalex= 'rgb(156, 156, 156)' #9c9c9c # colour for ORIA
+    openalex=PALETTE[2] #cooked asparagus green #2ca02c
+    #openalex= 'rgb(156, 156, 156)' #9c9c9c # colour for ORIA
 
 )
 
 
 # Time Frames
 
-CROSSREF_CURRENT = CURRENT
+#CROSSREF_CURRENT = CURRENT
 FOCUS_YEAR = FOCUS
 
 TIME_FRAMES = {
@@ -128,9 +128,9 @@ value_add_meta_xs = {
     'crossref': {
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   #'Citations to', 'References from',
+                   'Citations to', 'References from',
                    'Venue', 'Venue ISSN', 'Fields',
-                   #'Funders', 'Funder Source IDs'
+                   'Funders', 'Funder Source IDs'
                    ]
         },
         'openaire': {
@@ -144,16 +144,16 @@ value_add_meta_xs = {
     'openalex': {
         'crossref': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   #'Citations to', 'References from',
+                   'Citations to', 'References from',
                    'Venue', 'Venue ISSN', 'Fields',
-                   #'Funders', 'Funder Strings', 'Funder Source IDs'
+                   'Funders', 'Funder Strings', 'Funder Source IDs'
                    ]
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    #'Citations to', 'References from',
                    'Venue', 'Venue ISSN', 'Fields',
-                   #'Funders', 'Funder Strings', 'Funder Source IDs'
+                   'Funders', 'Funder Strings', 'Funder Source IDs'
                    ]
         }
     },
@@ -169,7 +169,7 @@ value_add_meta_xs = {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    #'Citations to', 'References from',
                    'Venue', 'Venue ISSN', 'Fields',
-                   #'Funders', 'Funder Strings', 'Funder Source IDs'
+                   'Funders', 'Funder Strings', 'Funder Source IDs'
                    ]
         }
     }
@@ -243,9 +243,9 @@ for source_a, source_b in itertools.permutations(SOURCES, 2):
 INTERNAL_COMPARISON_META = {
     'openalex': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-               #'Citations to', 'References from',
+               'Citations to', 'References from',
                'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields',
-               #'Funders','Funder Source IDs'
+               'Funders','Funder Source IDs'
                ],
         'ys': {
             'OpenAlex DOIs': {
@@ -254,14 +254,14 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_dois_has_authors',
                 'Author ORCIDs': 'pc_dois_has_authors_id_orcid',
                 'Abstract': 'pc_dois_has_abstract',
-                #'Citations to': 'pc_dois_has_citations',
-                #'References from': 'pc_dois_has_references',
+                'Citations to': 'pc_dois_has_citations',
+                'References from': 'pc_dois_has_references',
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
                 'Fields': 'pc_dois_has_fields',
-                #'Funders': 'pc_dois_has_funders',
-                #'Funder Source IDs': 'pc_dois_has_funders_id_source',
+                'Funders': 'pc_dois_has_funders',
+                'Funder Source IDs': 'pc_dois_has_funders_id_source',
             },
             'OpenAlex non-DOIs': {
                 'Affiliations': 'pc_non_dois_has_affiliations_string',
@@ -269,14 +269,14 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_non_dois_has_authors',
                 'Author ORCIDs': 'pc_non_dois_has_authors_id_orcid',
                 'Abstract': 'pc_non_dois_has_abstract',
-                #'Citations to': 'pc_non_dois_has_citations',
-                #'References from': 'pc_non_dois_has_references',
+                'Citations to': 'pc_non_dois_has_citations',
+                'References from': 'pc_non_dois_has_references',
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
                 'Fields': 'pc_non_dois_has_fields',
-                #'Funders': 'pc_dois_has_funders',
-                #'Funder Source IDs': 'pc_dois_has_funders_id_source',
+                'Funders': 'pc_dois_has_funders',
+                'Funder Source IDs': 'pc_dois_has_funders_id_source',
             }
         }
     },
@@ -322,7 +322,7 @@ INTERNAL_COMPARISON_META = {
     },
     'crossref': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-               #'Citations to', 'References from',
+               'Citations to', 'References from',
                'Venue', 'Venue ISSN', 'Fields',
                'Funders', 'Funder Strings', 'Funder Source IDs'
                ],
@@ -333,8 +333,8 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_dois_has_authors',
                 'Author ORCIDs': 'pc_dois_has_authors_id_orcid',
                 'Abstract': 'pc_dois_has_abstract',
-                #'Citations to': 'pc_dois_has_citations',
-                #'References from': 'pc_dois_has_references',
+                'Citations to': 'pc_dois_has_citations',
+                'References from': 'pc_dois_has_references',
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Fields': 'pc_dois_has_fields',
@@ -348,8 +348,8 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_non_dois_has_authors',
                 'Author ORCIDs': 'pc_non_dois_has_authors_id_orcid',
                 'Abstract': 'pc_non_dois_has_abstract',
-                #'Citations to': 'pc_non_dois_has_citations',
-                #'References from': 'pc_non_dois_has_references',
+                'Citations to': 'pc_non_dois_has_citations',
+                'References from': 'pc_non_dois_has_references',
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Fields': 'pc_non_dois_has_fields',

@@ -21,13 +21,13 @@ SOURCE_JSON = {
     for source in SOURCES
 }
 #COMPARISON = ['openaire', 'openaire'] #dbs to compare in reports
-COMPARISON = ['openalex', 'openaire'] #dbs to compare in reports
+COMPARISON = ['openalex', 'crossref'] #dbs to compare in reports
 SOURCE_NAMES = [source.SOURCE_NAME for source in SOURCES]
 FORMATTED_SOURCE_NAMES = [source.SOURCE_PRINT_NAME for source in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s.SOURCE_NAME for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
-CURRENT = [2021, 2022, 2023]
+#CURRENT = [2021, 2022, 2023] #not used in reports, so leave out
 FOCUS = 2021
 # COUNT_COMPARISON = 0 #0 for comparison against base, 1 against source
 
@@ -54,8 +54,8 @@ PROJECT_ID = 'utrecht-university'
 WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 openaire.DATE = "20230817"
-openalex.DATE = "20230821" #date of partition to use #20230821 for temporary current table
-crossref.DATE = "20230731" #date of partition to use #NB 20230107 is actually up to 20230131 (so should read 20230207)
+openalex.DATE = "20231002" #not partitioned, so not used for generating truthtable
+crossref.DATE = "20230831" #date of partition to use
 
 
 TABLE_DATES = {source.SOURCE_NAME: source.DATE for source in SOURCES}
