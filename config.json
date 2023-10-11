@@ -141,7 +141,7 @@
     ]
   ],
   "templates": [
-    "report_template_singleDB_source_a.md"
+    "report_template_multipleDB_overlap.md"
   ],
   "filters": [
     [
