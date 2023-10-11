@@ -130,14 +130,14 @@ value_add_meta_xs = {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    'Citations to', 'References from',
                    'Venue', 'Venue ISSN', 'Fields',
-                   'Funders', 'Funder Source IDs'
+                   'Funders', 'Funder Strings', 'Funder Source IDs'
                    ]
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
                    #'Citations to','References from',
                    'Venue', 'Venue ISSN', 'Fields',
-                   'Funders', 'Funder Source IDs'
+                   'Funders', 'Funder Strings', 'Funder Source IDs'
                    ]
         }
     },
@@ -383,9 +383,11 @@ CROSSREF_TYPES = ['journal-article',
 OPENALEX_TYPES = ['article', #article instead of journal_article
                   #'proceedings-article', #no longer in active use
                   'book-chapter',
-                  'posted-content',
+                  #'posted-content', #no longer in use
                   'book',
-                  'report']
+                  'dataset',
+                  'report',
+                  'other']
                   #'monograph'] #no longer in use
                   #'none']
 

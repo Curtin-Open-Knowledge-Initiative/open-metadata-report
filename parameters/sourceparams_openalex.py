@@ -33,6 +33,6 @@ SOURCE_DATA_ELEMENTS = [
     'funders',
     'funders_string',
     'funders_id_source',
-    'funders_id_ror'
+    #'funders_id_ror' not in Works table
 
 ]
