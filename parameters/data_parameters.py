@@ -21,13 +21,13 @@ SOURCE_JSON = {
     for source in SOURCES
 }
 #COMPARISON = ['openaire', 'openaire'] #dbs to compare in reports
-COMPARISON = ['openalex', 'crossref'] #dbs to compare in reports
+COMPARISON = ['openalex', 'openaire'] #dbs to compare in reports
 SOURCE_NAMES = [source.SOURCE_NAME for source in SOURCES]
 FORMATTED_SOURCE_NAMES = [source.SOURCE_PRINT_NAME for source in SOURCES]
 BASE_COMPARISON = 'crossref'
 NON_BASE_SOURCES = [s.SOURCE_NAME for s in SOURCES if s is not BASE_COMPARISON]
 SOURCES_SELF = ['dois', 'non_dois']
-#CURRENT = [2021, 2022, 2023] #not used in reports, so leave out
+CURRENT = [2021, 2022, 2023] #not used in reports
 FOCUS = 2021
 # COUNT_COMPARISON = 0 #0 for comparison against base, 1 against source
 
