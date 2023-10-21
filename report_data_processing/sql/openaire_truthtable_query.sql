@@ -375,4 +375,4 @@ SELECT
   (SELECT COUNT(1) FROM UNNEST(project) AS  funders WHERE funders.funder is not null) as count_funders_id_source
 
 FROM INTERMEDIATE
----FROM `utrecht-university.openaire_intermediate20230817`
+---FROM `utrecht-university.openaire.openaire_intermediate20230817`
