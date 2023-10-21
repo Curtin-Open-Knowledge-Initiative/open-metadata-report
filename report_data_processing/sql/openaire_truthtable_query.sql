@@ -296,9 +296,17 @@ SELECT
   LENGTH(description) as count_abstract,
   ---
   --- Citations
-  false as has_citations, --- revisit how missing columns are handled
+  CASE
+    WHEN (citations > 0) THEN TRUE
+    ELSE FALSE
+  END as has_citations,
+  citations as count_citations,
   --- References
-  false as has_references, --- revisit how missing columns are handled
+  CASE
+    WHEN (references > 0) THEN TRUE
+    ELSE FALSE
+  END as has_references,
+  references as count_references,
   ---
   --- Fields
   CASE
