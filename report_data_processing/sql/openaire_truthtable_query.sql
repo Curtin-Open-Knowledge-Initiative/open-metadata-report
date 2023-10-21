@@ -138,7 +138,9 @@ SELECT
 
 publications.*,
 affiliations.organization as organization,
-projects.project as project
+projects.project as project,
+citation.citations as citations,
+citation.references as references,
 
 FROM SOURCES as publications
 
@@ -169,6 +171,18 @@ LEFT JOIN (SELECT
   ON relations.source = p.id
   GROUP BY publications.id) as projects
 ON publications.id = projects.id
+
+--- add citations and references
+---- use temporary relation table that contains all records (pending new Zenodo upload)
+--- note: all citation relations between results and results are unique
+LEFT JOIN (SELECT
+  source as id,
+  COUNTIF(reltype.name = "Cites") as references,
+  COUNTIF(reltype.name = "IsCitedBy") as citations
+  FROM `academic-observatory.openaire.relation_temp`
+  WHERE sourceType = "result" AND targetType = "result"
+  GROUP BY id) as citation
+ON publications.id = citation.id
 
 ),
 
