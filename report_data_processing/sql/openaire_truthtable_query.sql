@@ -145,13 +145,12 @@ citation.references as references,
 FROM SOURCES as publications
 
 ---- add affiliations and projects
---- use temporary relation table that contains all records (pending new Zenodo upload)
 --- note: all relations between result and organization have reltype.type 'affiliation'
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation_temp` WHERE sourceType = 'organization') as relations
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE sourceType = 'organization') as relations
   ON publications.id = relations.target
   LEFT JOIN AFFILIATIONS as organizations
   ON relations.source = organizations.id
@@ -159,13 +158,12 @@ LEFT JOIN (SELECT
 ON publications.id = affiliations.id
 
 --- add projects
----- use temporary relation table that contains all records (pending new Zenodo upload)
 --- note: all relations between results and project have relype.type 'outcome'
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(p.project IGNORE NULLS) as project
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation_temp` WHERE sourceType = 'project') as relations
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE sourceType = 'project') as relations
   ON publications.id = relations.target
   LEFT JOIN PROJECTS as p
   ON relations.source = p.id
@@ -173,13 +171,12 @@ LEFT JOIN (SELECT
 ON publications.id = projects.id
 
 --- add citations and references
----- use temporary relation table that contains all records (pending new Zenodo upload)
 --- note: all citation relations between results and results are unique
 LEFT JOIN (SELECT
   source as id,
   COUNTIF(reltype.name = "Cites") as references,
   COUNTIF(reltype.name = "IsCitedBy") as citations
-  FROM `academic-observatory.openaire.relation_temp`
+  FROM `academic-observatory.openaire.relation20230817`
   WHERE sourceType = "result" AND targetType = "result"
   GROUP BY id) as citation
 ON publications.id = citation.id
