@@ -165,26 +165,20 @@ SELECT
 
     -- Funder
     CASE
-        WHEN ARRAY_LENGTH(funders) > 0 THEN TRUE
+        WHEN ARRAY_LENGTH(grants) > 0 THEN TRUE
         ELSE FALSE
     END as has_funders,
-    ARRAY_LENGTH(funders) as count_funders,
+    ARRAY_LENGTH(grants) as count_funders,
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.display_name is not null) > 0 THEN TRUE
+        WHEN (SELECT COUNT(1) FROM UNNEST(grants) AS grant WHERE grant.funder_display_name is not null) > 0 THEN TRUE
         ELSE FALSE
     END
     as has_funders_string,
-    (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.display_name is not null) as count_funders_string,
+    (SELECT COUNT(1) FROM UNNEST(grants) AS grant WHERE grant.funder_display_name is not null) as count_funders_string,
     CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.id is not null) > 0 THEN TRUE
+        WHEN (SELECT COUNT(1) FROM UNNEST(grants) AS grant WHERE grant.funder is not null) > 0 THEN TRUE
         ELSE FALSE
     END as has_funders_id_source,
-    (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.id is not null) as count_funders_id_source,
-    CASE
-        WHEN (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.ids.ror is not null) > 0 THEN TRUE
-        ELSE FALSE
-    END as has_funders_id_ror,
-    (SELECT COUNT(1) FROM UNNEST(funders) AS funder WHERE funder.ids.ror is not null) as count_funders_id_ror,
-
+    (SELECT COUNT(1) FROM UNNEST(grants) AS grant WHERE grant.funder is not null) as count_funders_id_source,
 
 FROM `{table}`

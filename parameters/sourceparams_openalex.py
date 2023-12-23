@@ -7,7 +7,7 @@ To create a new source, make a copy of the sourceparams_template.py file and ins
 SOURCE_NAME = "openalex"
 SOURCE_PRINT_NAME = "OpenAlex"
 SOURCE_GBQ_LOCATION = "academic-observatory.openalex"
-SOURCE_TABLE_NAME = "works_snapshot"
+SOURCE_TABLE_NAME = "works" #not works_snapshot anymore
 SOURCE_TABLE_LOCATION = f"{SOURCE_GBQ_LOCATION}.{SOURCE_TABLE_NAME}"
 
 SOURCE_DATA_ELEMENTS = [
@@ -33,6 +33,6 @@ SOURCE_DATA_ELEMENTS = [
     'funders',
     'funders_string',
     'funders_id_source',
-    'funders_id_ror'
+    #'funders_id_ror' not in Works table
 
 ]

@@ -1,7 +1,6 @@
 --- collating information from OpenAIRE tables
---- note: currently, an (explicitly declared) subset of relations table is used that contains only relations between results and organizations+projects
+--- currently, sharded table hard-coded should replace by injecting data from parameters
 --- #TODO create paths to source tables i.s.o. explicitly declaring them
---- #TODO replace subset of relations table with the real deal
 
 --- Affiliatons
 --- generate column with unique RORs per id from organizations table
@@ -12,7 +11,7 @@ WITH RORS_ARRAY AS (
     ARRAY_AGG(rors) as ror
   FROM (
     SELECT DISTINCT id, pid_check.value as rors,
-    FROM `academic-observatory.openaire.organization`,
+    FROM `academic-observatory.openaire.organization20230817`,
     UNNEST (pid) as pid_check
     WHERE pid_check.scheme = 'ROR')
   GROUP BY id
@@ -22,7 +21,7 @@ AFFILIATIONS AS (
 SELECT
 o.id,
 STRUCT(o.id, o.legalname, o.country.code as country, o.pid, r.ror) as organization
-FROM `academic-observatory.openaire.organization` as o
+FROM `academic-observatory.openaire.organization20230817` as o
 LEFT JOIN RORS_ARRAY as r ON o.id = r.id
 ),
 
@@ -35,7 +34,7 @@ PROJECTS AS (
     STRUCT(id, ARRAY_AGG(funder) as funder) as project,
   FROM (
     SELECT DISTINCT id, funding.shortname as funder
-    FROM `academic-observatory.openaire.project`,
+    FROM `academic-observatory.openaire.project20230817`,
     UNNEST(funding) as funding)
   GROUP BY id
 ),
@@ -65,7 +64,7 @@ SOURCES AS (
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
    ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 
-   FROM `academic-observatory.openaire.publication` as publications
+   FROM `academic-observatory.openaire.publication20230817` as publications
 
 UNION ALL
 
@@ -86,7 +85,7 @@ UNION ALL
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
    ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 
-   FROM `academic-observatory.openaire.dataset` as publications
+   FROM `academic-observatory.openaire.dataset20230817` as publications
 
 UNION ALL
 
@@ -107,7 +106,7 @@ UNION ALL
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
    ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 
-   FROM `academic-observatory.openaire.software` as publications
+   FROM `academic-observatory.openaire.software20230817` as publications
 
 
 UNION ALL
@@ -129,7 +128,7 @@ UNION ALL
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
    ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
 
-   FROM `academic-observatory.openaire.otherresearchproduct` as publications
+   FROM `academic-observatory.openaire.otherresearchproduct20230817` as publications
 ),
 
 --- add affiliations and projects
@@ -139,37 +138,51 @@ SELECT
 
 publications.*,
 affiliations.organization as organization,
-projects.project as project
+projects.project as project,
+citation.citations as citations,
+citation.references as references,
 
 FROM SOURCES as publications
 
 ---- add affiliations and projects
---- use temporary relations table for now
+--- use temporary relation table that contains all records (pending new Zenodo upload)
 --- note: all relations between result and organization have reltype.type 'affiliation'
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'organization') as relations
-  ON publications.id = relations.source.id
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation_temp` WHERE sourceType = 'organization') as relations
+  ON publications.id = relations.target
   LEFT JOIN AFFILIATIONS as organizations
-  ON relations.target.id = organizations.id
+  ON relations.source = organizations.id
   GROUP BY publications.id) as affiliations
 ON publications.id = affiliations.id
 
 --- add projects
---- use temporary relations table for now
+---- use temporary relation table that contains all records (pending new Zenodo upload)
 --- note: all relations between results and project have relype.type 'outcome'
 LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(p.project IGNORE NULLS) as project
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `utrecht-university.OpenAIRE_20221230.relation_result_organization_project`WHERE target.type = 'project') as relations
-  ON publications.id = relations.source.id
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation_temp` WHERE sourceType = 'project') as relations
+  ON publications.id = relations.target
   LEFT JOIN PROJECTS as p
-  ON relations.target.id = p.id
+  ON relations.source = p.id
   GROUP BY publications.id) as projects
 ON publications.id = projects.id
+
+--- add citations and references
+---- use temporary relation table that contains all records (pending new Zenodo upload)
+--- note: all citation relations between results and results are unique
+LEFT JOIN (SELECT
+  source as id,
+  COUNTIF(reltype.name = "Cites") as references,
+  COUNTIF(reltype.name = "IsCitedBy") as citations
+  FROM `academic-observatory.openaire.relation_temp`
+  WHERE sourceType = "result" AND targetType = "result"
+  GROUP BY id) as citation
+ON publications.id = citation.id
 
 ),
 
@@ -209,7 +222,7 @@ INTERMEDIATE AS (
 --- currently rank arbitrarily by hashing OpenAIRE id - consider choice of hash method?
 --- author.fullname has no empty strings
 --- description can contain, but is not limited to abstracts - proceed to use with caution
---- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future
+--- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future (still true for 20230817)
 --- no empty fields for affiliations, so ARRAY_LENGTH taken as not all affiliations have string field
 --- container is not nested
 --- container.name has no empty strings
@@ -283,9 +296,17 @@ SELECT
   LENGTH(description) as count_abstract,
   ---
   --- Citations
-  false as has_citations, --- revisit how missing columns are handled
+  CASE
+    WHEN (citations > 0) THEN TRUE
+    ELSE FALSE
+  END as has_citations,
+  citations as count_citations,
   --- References
-  false as has_references, --- revisit how missing columns are handled
+  CASE
+    WHEN (references > 0) THEN TRUE
+    ELSE FALSE
+  END as has_references,
+  references as count_references,
   ---
   --- Fields
   CASE
@@ -362,4 +383,4 @@ SELECT
   (SELECT COUNT(1) FROM UNNEST(project) AS  funders WHERE funders.funder is not null) as count_funders_id_source
 
 FROM INTERMEDIATE
----FROM `utrecht-university.TEMP.openaire_publications_intermediate`
+---FROM `utrecht-university.openaire.openaire_intermediate20230817`
