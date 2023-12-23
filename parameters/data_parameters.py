@@ -55,7 +55,7 @@ WRITE_DISPOSITION = 'WRITE_TRUNCATE'
 
 openaire.DATE = "20230817"
 openalex.DATE = "20231002" #not partitioned, so not used for generating truthtable
-crossref.DATE = "20230831" #date of partition to use
+crossref.DATE = "20230930" #date of partition to use
 
 
 TABLE_DATES = {source.SOURCE_NAME: source.DATE for source in SOURCES}
