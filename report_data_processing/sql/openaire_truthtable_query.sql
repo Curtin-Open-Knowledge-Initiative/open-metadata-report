@@ -172,6 +172,7 @@ ON publications.id = projects.id
 
 --- add citations and references
 --- note: all citation relations between results and results are unique
+--- note: References/IsReferencedBy not used here - might need to revisit
 LEFT JOIN (SELECT
   source as id,
   COUNTIF(reltype.name = "Cites") as references,
