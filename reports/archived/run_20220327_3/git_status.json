@@ -1,1 +1,0 @@
-{"sha": "2f44db95eba4278cda5d32bacc93fab574e83704", "changedfiles": ["config.json", "data/crossref_categories.csv", "data/local_data.hd5", "data/mag_categories.csv", "data/openalex_categories.csv", "data_parameters.py", "main.py", "templates/report_template_singleDB_mag.md"], "branch": "main"}

@@ -9,7 +9,7 @@ NOTE: TODO for OpenAIRE, also tables "organization", "relation" and "project" ar
 
 SOURCE_NAME = "openaire"
 SOURCE_PRINT_NAME = "OpenAIRE"
-SOURCE_GBQ_LOCATION = "academic-observatory.openaire"
+SOURCE_GBQ_LOCATION = "utrecht-university.OPENAIRE_INGEST"
 SOURCE_TABLE_NAME = "publication"
 SOURCE_TABLE_LOCATION = f"{SOURCE_GBQ_LOCATION}.{SOURCE_TABLE_NAME}"
 
