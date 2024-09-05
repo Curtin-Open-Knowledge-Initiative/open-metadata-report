@@ -29,10 +29,10 @@ FOCUS_YEAR = FOCUS
 
 TIME_FRAMES = {
 
-    'All Time': range(1980, 2023),  # NB Range does not include last number!
+    'All Time': range(1980, 2025),  # NB Range does not include last number!
     # TODO align with SOURCE_IN_BASE_YEAR_RANGE
     # All time here effects value add graphs, venn graph, but not bar/line graph or coverage bar graph!
-    #'Crossref Current': CROSSREF_CURRENT, #hide for ORIA
+    'Crossref Current': CROSSREF_CURRENT
     'Focus Year': [FOCUS_YEAR]
 }
 
@@ -135,7 +135,7 @@ value_add_meta_xs = {
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   #'Citations to','References from',
+                   'Citations to','References from',
                    'Venue', 'Venue ISSN', 'Fields',
                    'Funders', 'Funder Strings', 'Funder Source IDs'
                    ]
@@ -151,7 +151,7 @@ value_add_meta_xs = {
         },
         'openaire': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   #'Citations to', 'References from',
+                   'Citations to', 'References from',
                    'Venue', 'Venue ISSN', 'Fields',
                    'Funders', 'Funder Strings', 'Funder Source IDs'
                    ]
@@ -160,14 +160,14 @@ value_add_meta_xs = {
     'openaire': {
         'crossref': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   #'Citations to', 'References from',
+                   'Citations to', 'References from',
                    'Venue', 'Venue ISSN', 'Fields',
                    'Funders', 'Funder Strings', 'Funder Source IDs'
                    ]
         },
         'openalex': {
             'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-                   #'Citations to', 'References from',
+                   'Citations to', 'References from',
                    'Venue', 'Venue ISSN', 'Fields',
                    'Funders', 'Funder Strings', 'Funder Source IDs'
                    ]
@@ -282,7 +282,7 @@ INTERNAL_COMPARISON_META = {
     },
     'openaire': {
         'xs': ['Affiliations', 'Affiliation RORs', 'Authors', 'Author ORCIDs', 'Abstract',
-               #'Citations to', 'References from',
+               'Citations to', 'References from',
                'Venue', 'Venue ISSN', 'Venue ISSN-L', 'Fields',
                'Funders', 'Funder Strings'
                ],
@@ -293,8 +293,8 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_dois_has_authors',
                 'Author ORCIDs': 'pc_dois_has_authors_id_orcid',
                 'Abstract': 'pc_dois_has_abstract',
-                #'Citations to': 'pc_dois_has_citations',
-                #'References from': 'pc_dois_has_references',
+                'Citations to': 'pc_dois_has_citations',
+                'References from': 'pc_dois_has_references',
                 'Venue': 'pc_dois_has_venue',
                 'Venue ISSN': 'pc_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_dois_has_venue_id_issnl',
@@ -309,8 +309,8 @@ INTERNAL_COMPARISON_META = {
                 'Authors': 'pc_non_dois_has_authors',
                 'Author ORCIDs': 'pc_non_dois_has_authors_id_orcid',
                 'Abstract': 'pc_non_dois_has_abstract',
-                #'Citations to': 'pc_non_dois_has_citations',
-                #'References from': 'pc_non_dois_has_references',
+                'Citations to': 'pc_non_dois_has_citations',
+                'References from': 'pc_non_dois_has_references',
                 'Venue': 'pc_non_dois_has_venue',
                 'Venue ISSN': 'pc_non_dois_has_venue_id_issn',
                 'Venue ISSN-L': 'pc_non_dois_has_venue_id_issnl',
@@ -387,6 +387,7 @@ OPENALEX_TYPES = ['article', #article instead of journal_article
                   'book',
                   'dataset',
                   'report',
+                  'review' #TO DO: merge with 'article'
                   'other']
                   #'monograph'] #no longer in use
                   #'none']
