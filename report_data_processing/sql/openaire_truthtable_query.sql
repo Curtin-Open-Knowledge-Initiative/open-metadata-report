@@ -11,8 +11,8 @@ WITH RORS_ARRAY AS (
     ARRAY_AGG(rors) as ror
   FROM (
     SELECT DISTINCT id, pid_check.value as rors,
-    FROM `academic-observatory.openaire.organization20230817`,
-    UNNEST (pid) as pid_check
+    FROM `academic-observatory.openaire.organization20250211`,
+    UNNEST (pids) as pid_check
     WHERE pid_check.scheme = 'ROR')
   GROUP BY id
 ),
@@ -20,8 +20,8 @@ WITH RORS_ARRAY AS (
 AFFILIATIONS AS (
 SELECT
 o.id,
-STRUCT(o.id, o.legalname, o.country.code as country, o.pid, r.ror) as organization
-FROM `academic-observatory.openaire.organization20230817` as o
+STRUCT(o.id, o.legalname, o.country.code as country, o.pids, r.ror) as organization
+FROM `academic-observatory.openaire.organization20250211` as o
 LEFT JOIN RORS_ARRAY as r ON o.id = r.id
 ),
 
@@ -34,8 +34,8 @@ PROJECTS AS (
     STRUCT(id, ARRAY_AGG(funder) as funder) as project,
   FROM (
     SELECT DISTINCT id, funding.shortname as funder
-    FROM `academic-observatory.openaire.project20230817`,
-    UNNEST(funding) as funding)
+    FROM `academic-observatory.openaire.project20250211`,
+    UNNEST(fundings) as funding)
   GROUP BY id
 ),
 
@@ -45,10 +45,10 @@ SOURCES AS (
    SELECT
 
    publications.id,
-   pid,
+   pids,
    type, --- publication, dataset, software or other
    publicationdate,
-   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
+   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(authors)) as author,
    STRUCT(
       container.name as name,
       container.issnOnline as issnOnline,
@@ -57,56 +57,56 @@ SOURCES AS (
    ) as container,
    publisher,
    CASE
-      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
+      WHEN ARRAY_LENGTH(descriptions) > 0 THEN ARRAY_TO_STRING(descriptions, '')
       ELSE NULL
    END
    as description,
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
+   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pids FROM unnest(instances)) as instance,
 
-   FROM `academic-observatory.openaire.publication20230817` as publications
+   FROM `academic-observatory.openaire.publication20250211` as publications
 
 UNION ALL
 
    SELECT
 
    publications.id,
-   pid,
+   pids,
    type, --- publication, dataset, software or other
    publicationdate,
-   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
+   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(authors)) as author,
    null as container, --- tables dataset, software, otherresearchproduct have no variable container
    publisher,
    CASE
-      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
+      WHEN ARRAY_LENGTH(descriptions) > 0 THEN ARRAY_TO_STRING(descriptions, '')
       ELSE NULL
    END
    as description,
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
+   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pids FROM unnest(instances)) as instance,
 
-   FROM `academic-observatory.openaire.dataset20230817` as publications
+   FROM `academic-observatory.openaire.dataset20250211` as publications
 
 UNION ALL
 
    SELECT
 
    publications.id,
-   pid,
+   pids,
    type, --- publication, dataset, software or other
    publicationdate,
-   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
+   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(authors)) as author,
    null as container, --- tables dataset, software, otherresearchproduct have no variable container
    publisher,
    CASE
-      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
+      WHEN ARRAY_LENGTH(descriptions) > 0 THEN ARRAY_TO_STRING(descriptions, '')
       ELSE NULL
    END
    as description,
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
+   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pids FROM unnest(instances)) as instance,
 
-   FROM `academic-observatory.openaire.software20230817` as publications
+   FROM `academic-observatory.openaire.software20250211` as publications
 
 
 UNION ALL
@@ -114,21 +114,21 @@ UNION ALL
    SELECT
 
    publications.id,
-   pid,
+   pids,
    type, --- publication, dataset, software or other
    publicationdate,
-   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(author)) as author,
+   ARRAY(SELECT AS STRUCT fullname, rank, pid.id FROM unnest(authors)) as author,
    null as container, --- tables dataset, software, otherresearchproduct have no variable container
    publisher,
    CASE
-      WHEN ARRAY_LENGTH(description) > 0 THEN ARRAY_TO_STRING(description, '')
+      WHEN ARRAY_LENGTH(descriptions) > 0 THEN ARRAY_TO_STRING(descriptions, '')
       ELSE NULL
    END
    as description,
    ARRAY(SELECT AS STRUCT subject.value, subject.scheme FROM unnest(subjects)) as subject,
-   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pid FROM unnest(instance)) as instance,
+   ARRAY(SELECT AS STRUCT GENERATE_UUID() as uuid, publicationdate, type, pids FROM unnest(instances)) as instance,
 
-   FROM `academic-observatory.openaire.otherresearchproduct20230817` as publications
+   FROM `academic-observatory.openaire.otherresearchproduct20250211` as publications
 ),
 
 --- add affiliations and projects
@@ -150,7 +150,7 @@ LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(organizations.organization IGNORE NULLS) as organization
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE sourceType = 'organization') as relations
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20250211` WHERE sourceType = 'organization') as relations
   ON publications.id = relations.target
   LEFT JOIN AFFILIATIONS as organizations
   ON relations.source = organizations.id
@@ -163,7 +163,7 @@ LEFT JOIN (SELECT
   publications.id as id,
   ARRAY_AGG(p.project IGNORE NULLS) as project
   FROM SOURCES as publications
-  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20230817` WHERE sourceType = 'project') as relations
+  LEFT JOIN (SELECT * FROM `academic-observatory.openaire.relation20250211` WHERE sourceType = 'project') as relations
   ON publications.id = relations.target
   LEFT JOIN PROJECTS as p
   ON relations.source = p.id
@@ -171,14 +171,15 @@ LEFT JOIN (SELECT
 ON publications.id = projects.id
 
 --- add citations and references
---- note: all citation relations between results and results are unique
+--- note: all citation relations between results and results are unique -- not confirmed for 20250211
+--- Cites n=2,280,339.298, IsCitedBy n=155,785,607 ?
 --- note: References/IsReferencedBy not used here - might need to revisit
 LEFT JOIN (SELECT
   source as id,
-  COUNTIF(reltype.name = "Cites") as references,
-  COUNTIF(reltype.name = "IsCitedBy") as citations
-  FROM `academic-observatory.openaire.relation20230817`
-  WHERE sourceType = "result" AND targetType = "result"
+  COUNTIF(relType.name = "Cites") as references,
+  COUNTIF(relType.name = "IsCitedBy") as citations
+  FROM `academic-observatory.openaire.relation20250211`
+  WHERE sourceType = "product" AND targetType = "product"
   GROUP BY id) as citation
 ON publications.id = citation.id
 
@@ -196,7 +197,7 @@ DOIS AS (
     ELSE null
   END as doi
  FROM TABLE_FROM_SOURCE,
- UNNEST (pid) as pid_check
+ UNNEST (pids) as pid_check
  --- WHERE clause below is probably superfluous now
  WHERE pid_check.scheme = 'doi' OR pid_check.value = 'doi'
  ),
@@ -220,7 +221,7 @@ INTERMEDIATE AS (
 --- currently rank arbitrarily by hashing OpenAIRE id - consider choice of hash method?
 --- author.fullname has no empty strings
 --- description can contain, but is not limited to abstracts - proceed to use with caution
---- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future (still true for 20230817)
+--- currently, only ids are orcid/orcid_pending, and id field is not nested. This may change in future (still true for 20250211)
 --- no empty fields for affiliations, so ARRAY_LENGTH taken as not all affiliations have string field
 --- container is not nested
 --- container.name has no empty strings
@@ -381,4 +382,3 @@ SELECT
   (SELECT COUNT(1) FROM UNNEST(project) AS  funders WHERE funders.funder is not null) as count_funders_id_source
 
 FROM INTERMEDIATE
----FROM `utrecht-university.openaire.openaire_intermediate20230817`
